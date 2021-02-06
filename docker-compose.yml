@@ -1,0 +1,10 @@
+version: '3'
+services:
+  # This is the java application service
+  # Currently commented out as the service is not built yet
+#  app:
+#    build: .
+  db:
+    build: db/.
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
