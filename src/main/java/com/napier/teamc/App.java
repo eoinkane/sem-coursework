@@ -8,11 +8,15 @@ import java.sql.*;
  */
 public class App
 {
-    /** main method
-     * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
-     * @param args a
+    /** con (Connection)
+     * An object to hold a Connection to MySQL database.
      */
-    public static void main(String[] args)
+    private Connection con = null;
+
+    /** connect (method)
+     * Connect to the MySQL database through the SQL driver.
+     */
+    public void connect()
     {
         /*  try catch statement to gather the required SQL driver
             application will exit if driver cannot be loaded
@@ -28,11 +32,9 @@ public class App
             System.exit(-1);
         }
 
-        // Connection to the database
-        Connection con = null;
-        // Allow 100 retries as the MySQL DB can take some time to start up
-        int retries = 100;
-        // A retry loop to connect to the
+        // Allow 10 retries as the MySQL DB can take some time to start up
+        int retries = 10;
+        // A retry loop to connect to the DB
         for (int i = 0; i < retries; ++i)
         {
             System.out.println("Connecting to database...");
@@ -40,12 +42,9 @@ public class App
             {
                 // Wait a bit for db to start
                 Thread.sleep(30000);
-                // Connect to database on the world table
+                // Connect to database
                 con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
-                // Wait a bit
-                Thread.sleep(10000);
-                // Exit for loop
                 break;
             }
             catch (SQLException sqle)
@@ -58,7 +57,13 @@ public class App
                 System.out.println("Thread interrupted? Should not happen.");
             }
         }
+    }
 
+    /** disconnect (method)
+     * To allow the application to safely disconnect from the MySQL database.
+     */
+    public void disconnect()
+    {
         /* An if statement to handle the application shutting down
            The application will only try to disconnect from the DB if a successful connection was made
          */
@@ -66,7 +71,7 @@ public class App
         {
             try
             {
-                // Close connection through the Java SQL Connection objects close method
+                // Close connection
                 con.close();
             }
             catch (Exception e)
@@ -74,5 +79,21 @@ public class App
                 System.out.println("Error closing connection to database");
             }
         }
+    }
+
+    /** main method
+     * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
+     * @param args an array that requires no entries
+     */
+    public static void main(String[] args)
+    {
+        // Create new Application as the App class holds the connection methods
+        App a = new App();
+
+        // Connect to database
+        a.connect();
+
+        // Disconnect from database
+        a.disconnect();
     }
 }
