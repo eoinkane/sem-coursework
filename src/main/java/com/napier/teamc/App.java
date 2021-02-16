@@ -1,6 +1,7 @@
 package com.napier.teamc;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /** Application Class
  * Holds the main logic of the program
@@ -81,6 +82,38 @@ public class App
         }
     }
 
+    public ArrayList<Country> getCountry()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Population, Name "
+                            + "FROM country "
+                            + "ORDER BY Population desc";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+           ArrayList<Country> countries = new ArrayList<Country>();
+           while (rset.next()) {
+               Country cntry = new Country();
+               cntry.population = rset.getInt("population");
+               cntry.name = rset.getString("name");
+               countries.add(cntry);
+           }
+            return countries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get country details");
+            return null;
+        }
+    }
+
     /** main method
      * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
      * @param args an array that requires no entries
@@ -92,6 +125,14 @@ public class App
 
         // Connect to database
         a.connect();
+
+        // Call country
+        ArrayList<Country> countries = a.getCountry();
+
+        // Display
+        countries.forEach(C -> {
+            System.out.println(C);
+        });
 
         // Disconnect from database
         a.disconnect();
