@@ -82,7 +82,7 @@ public class App
         }
     }
 
-    public ArrayList<Country> getCountry()
+    public ArrayList<Country> getCountryLargestToSmallest()
     {
         try
         {
@@ -127,7 +127,7 @@ public class App
         a.connect();
 
         // Call country
-        ArrayList<Country> countries = a.getCountry();
+        ArrayList<Country> countries = a.getCountryLargestToSmallest();
 
         // Display
         countries.forEach(C -> {
