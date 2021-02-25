@@ -11,6 +11,21 @@ public class Country
      */
     public Country() {}
 
+    /**
+     * Country Constructor
+     * A public constructor to initialise an instance of a Country object with a Name, Region and Population
+     * @param name_local: the name of the country to be initialised (string).
+     * @param region_local: the name of the country to be initialised (string).
+     * @param population_local: the name of the country to be initialised (integer).
+     * Added by Eoin K:25/02/21
+     */
+    public Country(String name_local, String region_local, int population_local)
+    {
+        name = name_local;
+        region = region_local;
+        population = population_local;
+    }
+
     // Country population
     public int population;
 
