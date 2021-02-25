@@ -165,6 +165,7 @@ public class App
         // Connect to database
         a.connect();
 
+        // #5
         // Call country
         ArrayList<Country> countries = a.getCountryLargestToSmallest();
 
