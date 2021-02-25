@@ -17,6 +17,12 @@ public class Country
     // Country name
     public String name;
 
+    /**
+     * public attribute to store a Country's region
+     * Added by Eoin K:25/02/21
+     */
+    public String region;
+
     // Write output
     public String toString()
     {
