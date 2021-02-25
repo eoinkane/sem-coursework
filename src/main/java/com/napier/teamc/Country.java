@@ -4,6 +4,13 @@ package com.napier.teamc;
  */
 public class Country
 {
+    /**
+     * Default Country Constructor
+     * This constructor takes no parameters. Properties can be set manually.
+     * Added by Eoin K:25/02/21
+     */
+    public Country() {}
+
     // Country population
     public int population;
 
