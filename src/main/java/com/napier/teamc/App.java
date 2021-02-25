@@ -192,8 +192,10 @@ public class App
         // # 9
         // Generate population information of Countries In A Region Ordered By Population
         ArrayList<Country> countries9 = a.getCountriesInARegionByPopulation();
-        // Display population information of Countries In A Region Ordered By Population
-        a.displayCountriesInARegionByPopulation(countries9);
+        // Display amount of population information of Countries In A Region Ordered By Population
+        // Full Information can be displayed by uncommenting the line below
+        // a.displayCountriesInARegionByPopulation(countries9);
+        System.out.println(countries9.size()); // Should be 239
 
         // Disconnect from database
         a.disconnect();
