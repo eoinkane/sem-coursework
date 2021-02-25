@@ -189,6 +189,12 @@ public class App
             System.out.println(C);
         });
 
+        // # 9
+        // Generate population information of Countries In A Region Ordered By Population
+        ArrayList<Country> countries9 = a.getCountriesInARegionByPopulation();
+        // Display population information of Countries In A Region Ordered By Population
+        a.displayCountriesInARegionByPopulation(countries9);
+
         // Disconnect from database
         a.disconnect();
     }
