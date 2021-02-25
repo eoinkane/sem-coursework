@@ -114,6 +114,45 @@ public class App
         }
     }
 
+    /**
+     * getCountriesInARegionByPopulation generates all the countries,
+     *      in a region organised by largest population to smallest.
+     * @return An array of countries, each country has a name, region and population attribute (ArrayList<Country>)
+     * Added by Eoin K:25/02/21
+     */
+    public ArrayList<Country> getCountriesInARegionByPopulation()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Name, Region, Population FROM country "
+                            + "ORDER BY Region, Population DESC;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country cntry = new Country(
+                        rset.getString("name"),
+                        rset.getString("region"),
+                        rset.getInt("population")
+                );
+                countries.add(cntry);
+            }
+            return countries;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get countries in a region by population");
+            return null;
+        }
+    }
+
     /** main method
      * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
      * @param args an array that requires no entries
