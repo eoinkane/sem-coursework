@@ -117,8 +117,8 @@ public class App
     /**
      * getCountriesInARegionByPopulation generates all the countries,
      *      in a region organised by largest population to smallest.
-     * @return An array of countries, each country has a name, region and population attribute (ArrayList<Country>)
      * Added by Eoin K:25/02/21
+     * @return An array of countries, each country has a name, region and population attribute (ArrayList<Country>)
      */
     public ArrayList<Country> getCountriesInARegionByPopulation()
     {
