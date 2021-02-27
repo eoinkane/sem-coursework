@@ -1,0 +1,19 @@
+@startuml
+
+actor Member as "Member of the
+organisation"
+
+rectangle Database
+
+rectangle "Population Information System" {
+    usecase UC19 as "Get the Top N Populated Countries
+    in a Region where N is Provided by the User."
+
+    usecase UCa as "Output the report."
+
+    Member - UC19
+    UC19 ..> UCa : include
+    UC19 - Database
+}
+
+@enduml
