@@ -1,4 +1,8 @@
 package com.napier.teamc;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Represents a Country
  */
@@ -56,6 +60,19 @@ public class Country
             }
         }
     }
+
+    /**
+     * fieldLengths is an array that holds the maximum lengths of each Country object field value
+     * These fieldLengths can be generated from the world DB using the following query
+     * SELECT MAX(LENGTH(Name)), MAX(LENGTH(Continent)), MAX(LENGTH(Region)), MAX(LENGTH(Population)) FROM country;
+     * Added by Eoin K:27/02/21
+     */
+    public static  ArrayList<String> fieldLengths = new ArrayList<String>(Arrays.asList(
+            "44", // The largest Country Name value length is 44.
+            "13", // The largest Country Continent value length is 13.
+            "25", // The largest Country Region value length is 25.
+            "10"  // The largest Country Population value length is 10.
+    ));
 
     /**
      * Default Country Constructor
