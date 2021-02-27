@@ -331,7 +331,7 @@ public class App
         //      in a Region where N is Provided by the User.
         // Full Information can be displayed by uncommenting the line below
         // a.displayFormattedCountries(countries19);
-        System.out.println(countries15.size()); // Should be 49
+        System.out.println(countries19.size()); // Should be 49
 
         // Disconnect from database
         a.disconnect();
