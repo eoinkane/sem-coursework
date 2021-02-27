@@ -267,7 +267,7 @@ public class App
         ArrayList<Country> countries9 = a.getCountriesInARegionByPopulation();
         // Display amount of population information of Countries In A Region Ordered By Population
         // Full Information can be displayed by uncommenting the line below
-        // a.displayCountriesInARegionByPopulation(countries9);
+        // a.displayFormattedCountries(countries9);
         System.out.println(countries9.size()); // Should be 239
 
         // # 15
@@ -277,7 +277,7 @@ public class App
         // Display amount of population information of the Top N Populated Countries,
         //      in a Continent where N is Provided by the User.
         // Full Information can be displayed by uncommenting the line below
-        // a.displayTopNPopulatedCountriesInAContinent(countries15);
+        // a.displayFormattedCountries(countries15);
         System.out.println(countries15.size()); // Should be 21
 
         // Disconnect from database
