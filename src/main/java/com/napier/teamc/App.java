@@ -257,6 +257,14 @@ public class App
         // a.displayCountriesInARegionByPopulation(countries9);
         System.out.println(countries9.size()); // Should be 239
 
+        // # 15
+        // Generate population information of the Top N Populated Countries,
+        //      in a Continent where N is Provided by the User.
+        ArrayList<Country> countries15 = a.getTopNPopulatedCountriesInAContinent(3);
+        // Display population information of the Top N Populated Countries,
+        //      in a Continent where N is Provided by the User.
+        a.displayTopNPopulatedCountriesInAContinent(countries15);
+
         // Disconnect from database
         a.disconnect();
     }
