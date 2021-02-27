@@ -199,6 +199,49 @@ public class App
     }
 
     /**
+     * getTopNPopulatedCountriesInARegion generates the top N populated countries,
+     *      in a region where N is given.
+     * Added by Eoin K:27/02/21
+     * @param n the given number of N populated countries to generate
+     * @return An array of countries, each country has a name, region and population attribute (ArrayList<Country>)
+     */
+    public ArrayList<Country> getTopNPopulatedCountriesInARegion(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_countries AS (SELECT Name, Region, Population, ROW_NUMBER() OVER "
+                            + "(PARTITION BY Region ORDER BY Population DESC) row_num FROM country) "
+                            + "SELECT Name, Region, Population FROM grouped_countries WHERE row_num <= <N>;";
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country cntry = new Country(
+                        rset.getString("name"),
+                        null,
+                        rset.getString("region"),
+                        rset.getInt("population")
+                );
+                countries.add(cntry);
+            }
+            // return results
+            return countries;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the top N populated countries in a region");
+            return null;
+        }
+    }
+
+    /**
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
      * Added by Eoin K:27/02/21
