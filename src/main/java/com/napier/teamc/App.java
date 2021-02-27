@@ -166,7 +166,7 @@ public class App
     {
         System.out.println(String.format("%-44s %-25s %-10s", "Name", "Region", "Population"));
         countries.forEach(C -> {
-            System.out.println(String.format("%-44s %-25s %-10s", C.name, C.region, C.population));
+            System.out.println(C.toFormattedString());
         });
     }
 
@@ -224,7 +224,7 @@ public class App
     {
         System.out.println(String.format("%-44s %-13s %-10s", "Name", "Continent", "Population"));
         countries.forEach(C -> {
-            System.out.println(String.format("%-44s %-13s %-10s", C.name, C.continent, C.population));
+            System.out.println(C.toFormattedString());
         });
     }
 

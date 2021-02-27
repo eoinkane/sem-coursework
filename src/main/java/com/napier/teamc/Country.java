@@ -130,5 +130,36 @@ public class Country
     {
         return "name " + this.name + " population " + this.population;
     }
+
+    /**
+     * toFormattedString concatenates the initialised attributes in the current Country instance to a string.
+     * toFormattedString uses the static attribute fieldLengths to space the values out by maximum field length.
+     * Added by Eoin K:27/02/21
+     * @return a string containing all the initialised attributes of the Country instance.
+     */
+    public String toFormattedString()
+    {
+        String format = "";
+        ArrayList<String> arguments = new ArrayList<String>();
+
+        if (this.name != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
+            arguments.add(this.name);
+        }
+        if (this.continent != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
+            arguments.add(this.continent.toString());
+        }
+        if (this.region != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
+            arguments.add(this.region);
+        }
+        if (this.population != -1) {
+            format = format.concat("%-" + Country.fieldLengths.get(3) + "s");
+            arguments.add(String.valueOf(this.population));
+        }
+
+        return format != "" ? String.format(format, arguments.toArray()) : null;
+    }
 }
 
