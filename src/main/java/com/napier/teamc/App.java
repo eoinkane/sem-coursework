@@ -44,7 +44,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -241,6 +241,42 @@ public class App
         }
     }
 
+    public ArrayList<City> getTopNPopulatedCitiesintheWorld(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_cities AS (SELECT Name, District, Population, ROW_NUMBER() OVER "
+                            + "(ORDER BY Population DESC) row_num FROM city) "
+                            + "SELECT Name, District, Population FROM grouped_cities WHERE row_num <= <N>;";
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("name"),
+                        rset.getString("district"),
+                        rset.getInt("population")
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the top N populated cities in the world.");
+            return null;
+        }
+    }
+
+
     /**
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -284,6 +320,38 @@ public class App
         });
     }
 
+    public void displayFormattedCities(ArrayList<City> cities)
+    {
+        // Use the first country in the ArrayList to generate the headers
+        // This method presumes that all countries in the ArrayList are identical in format.
+        City firstCity = cities.get(0);
+        String format = "";
+        ArrayList<String> arguments = new ArrayList<String>();
+
+        // If countries ArrayList contains country names then display a Name heading.
+        if (firstCity.name != null) {
+            format = format.concat("%-" + City.fieldLengths.get(0) + "s ");
+            arguments.add("Name");
+        }
+        // If countries ArrayList contains country regions then display a Region heading.
+        if (firstCity.district != null) {
+            format = format.concat("%-" + City.fieldLengths.get(1) + "s ");
+            arguments.add("District");
+        }
+        // If countries ArrayList contains country populations then display a Population heading.
+        if (firstCity.population != -1) {
+            format = format.concat("%-" + City.fieldLengths.get(2) + "s");
+            arguments.add("Population");
+        }
+
+        // Print the headers
+        System.out.println(String.format(format, arguments.toArray()));
+        // Print the values
+        cities.forEach(CI -> {
+            System.out.println(String.format(CI.toFormattedString()));
+        });
+    }
+
     /** main method
      * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
      * @param args an array that requires no entries
@@ -302,7 +370,7 @@ public class App
 
         // Display
         countries.forEach(C -> {
-            System.out.println(C);
+           System.out.println(C);
         });
 
         // # 9
@@ -332,6 +400,10 @@ public class App
         // Full Information can be displayed by uncommenting the line below
         // a.displayFormattedCountries(countries19);
         System.out.println(countries19.size()); // Should be 49
+
+        // # 26
+        ArrayList<City> cities26 = a.getTopNPopulatedCitiesintheWorld(6);
+        a.displayFormattedCities(cities26);
 
         // Disconnect from database
         a.disconnect();
