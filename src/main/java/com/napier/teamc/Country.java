@@ -78,8 +78,16 @@ public class Country
      * Default Country Constructor
      * This constructor takes no parameters. Properties can be set manually.
      * Added by Eoin K:25/02/21
+     * Updated by Eoin K:27/02/21 (population initialisation)
      */
-    public Country() {}
+    public Country() {
+        /*
+         * As int is a primitive data type it cannot be null. This makes detecting uninitialised values difficult.
+         * To allow distinction between an uninitialised Country.population attribute,
+         *      and a Country.population attribute with a value of 0 set population to -1.
+         */
+        population = -1;
+    }
 
     /**
      * Country Constructor
