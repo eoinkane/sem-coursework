@@ -5,6 +5,59 @@ package com.napier.teamc;
 public class Country
 {
     /**
+     * public enum to store the available choices for the continent attribute
+     * @attribute DbValue: maps to the database representation of each continent
+     * Added by Eoin K:27/02/21
+     */
+    public enum Continents {
+        ASIA("Asia"),
+        EUROPE("Europe"),
+        NORTH_AMERICA("North America"),
+        AFRICA("Africa"),
+        OCEANIA("Oceania"),
+        ANTARCTICA("Antarctica"),
+        SOUTH_AMERICA("South America");
+
+        /**
+         * This constructor creates a Continents enum
+         * Added by Eoin K:27/02/21
+         * @param dbValue: how the database represents the continent (string).
+         */
+        Continents(String dbValue){
+            DbValue = dbValue;
+        }
+
+        /**
+         * public attribute to store how the database stores the continent
+         * Added by Eoin K:27/02/21
+         */
+        private String DbValue;
+
+        @Override public String toString() { return DbValue; }
+
+        /**
+         * customValueOf is a wrapper on enum.ValueOf(String name)
+         * customValueOf handles converting database values to enum values
+         * Added by Eoin K:27/02/21
+         * @param name the name of the continent enum return (string)
+         *             Must be one of 'Asia','Europe','North America','Africa','Oceania','Antarctica','South America'
+         * @return a Continents enum.
+         */
+        public static Continents customValueOf(String name) {
+            name = name.toUpperCase();
+            switch (name)
+            {
+                case "NORTH AMERICA":
+                    return Continents.valueOf("NORTH_AMERICA");
+                case "SOUTH AMERICA":
+                    return Continents.valueOf("SOUTH_AMERICA");
+                default:
+                    return Continents.valueOf(name);
+            }
+        }
+    }
+
+    /**
      * Default Country Constructor
      * This constructor takes no parameters. Properties can be set manually.
      * Added by Eoin K:25/02/21
