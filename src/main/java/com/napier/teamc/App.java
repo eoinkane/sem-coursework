@@ -156,21 +156,6 @@ public class App
     }
 
     /**
-     * displayCountriesInARegionByPopulation displays all the information,
-     *      generated in getCountriesInARegionByPopulation
-     * Added by Eoin K:25/02/21
-     * @param countries An array of countries,
-     *                  each country needs a name, region and population attribute (ArrayList<Country>)
-     */
-    public void displayCountriesInARegionByPopulation(ArrayList<Country> countries)
-    {
-        System.out.println(String.format("%-44s %-25s %-10s", "Name", "Region", "Population"));
-        countries.forEach(C -> {
-            System.out.println(C.toFormattedString());
-        });
-    }
-
-    /**
      * getTopNPopulatedCountriesInAContinent generates the top N populated countries,
      *      in a continent where N is given.
      * Added by Eoin K:27/02/21
@@ -214,17 +199,45 @@ public class App
     }
 
     /**
-     * displayTopNPopulatedCountriesInAContinent displays all the information,
-     *      generated in getTopNPopulatedCountriesInAContinent
+     * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
+     * Removes duplication of display methods. This method can handle results from all get methods.
      * Added by Eoin K:27/02/21
-     * @param countries An array of countries,
-     *                  each country needs a name, continent and population attribute (ArrayList<Country>)
+     * @param countries An array of countries, each country should be identical in attribute format.
      */
-    public void displayTopNPopulatedCountriesInAContinent(ArrayList<Country> countries)
+    public void displayFormattedCountries(ArrayList<Country> countries)
     {
-        System.out.println(String.format("%-44s %-13s %-10s", "Name", "Continent", "Population"));
+        // Use the first country in the ArrayList to generate the headers
+        // This method presumes that all countries in the ArrayList are identical in format.
+        Country firstCountry = countries.get(0);
+        String format = "";
+        ArrayList<String> arguments = new ArrayList<String>();
+
+        // If countries ArrayList contains country names then display a Name heading.
+        if (firstCountry.name != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
+            arguments.add("Name");
+        }
+        // If countries ArrayList contains country continents then display a Continent heading.
+        if (firstCountry.continent != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
+            arguments.add("Continent");
+        }
+        // If countries ArrayList contains country regions then display a Region heading.
+        if (firstCountry.region != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
+            arguments.add("Region");
+        }
+        // If countries ArrayList contains country populations then display a Population heading.
+        if (firstCountry.population != -1) {
+            format = format.concat("%-" + Country.fieldLengths.get(3) + "s");
+            arguments.add("Population");
+        }
+
+        // Print the headers
+        System.out.println(String.format(format, arguments.toArray()));
+        // Print the values
         countries.forEach(C -> {
-            System.out.println(C.toFormattedString());
+            System.out.println(String.format(C.toFormattedString()));
         });
     }
 
