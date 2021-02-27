@@ -323,6 +323,14 @@ public class App
         // a.displayFormattedCountries(countries15);
         System.out.println(countries15.size()); // Should be 21
 
+        // # 19
+        // Generate population information of the Top N Populated Countries,
+        //      in a Region where N is Provided by the User.
+        ArrayList<Country> countries19 = a.getTopNPopulatedCountriesInARegion(2);
+        // Display population information of the Top N Populated Countries,
+        //      in a Region where N is Provided by the User.
+        a.displayFormattedCountries(countries19);
+
         // Disconnect from database
         a.disconnect();
     }
