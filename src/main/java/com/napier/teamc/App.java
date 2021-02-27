@@ -261,9 +261,11 @@ public class App
         // Generate population information of the Top N Populated Countries,
         //      in a Continent where N is Provided by the User.
         ArrayList<Country> countries15 = a.getTopNPopulatedCountriesInAContinent(3);
-        // Display population information of the Top N Populated Countries,
+        // Display amount of population information of the Top N Populated Countries,
         //      in a Continent where N is Provided by the User.
-        a.displayTopNPopulatedCountriesInAContinent(countries15);
+        // Full Information can be displayed by uncommenting the line below
+        // a.displayTopNPopulatedCountriesInAContinent(countries15);
+        System.out.println(countries15.size()); // Should be 21
 
         // Disconnect from database
         a.disconnect();
