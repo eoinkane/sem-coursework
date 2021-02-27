@@ -94,6 +94,10 @@ public class Country
      */
     public String region;
 
+    /**
+     * public attribute to store a Country's continent
+     * Added by Eoin K:27/02/21
+     */
     public Continents continent;
 
     // Write output
