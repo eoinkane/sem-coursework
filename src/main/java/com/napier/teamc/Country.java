@@ -68,13 +68,16 @@ public class Country
      * Country Constructor
      * A public constructor to initialise an instance of a Country object with a Name, Region and Population
      * Added by Eoin K:25/02/21
+     * Modified by Eoin K:27/02/21 (Added continent_local parameter)
      * @param name_local: the name of the country to be initialised (string).
+     * @param continent_local: the continent of the country to be initialised (continents enum).
      * @param region_local: the name of the country to be initialised (string).
      * @param population_local: the name of the country to be initialised (integer).
      */
-    public Country(String name_local, String region_local, int population_local)
+    public Country(String name_local, Continents continent_local, String region_local, int population_local)
     {
         name = name_local;
+        continent = continent_local;
         region = region_local;
         population = population_local;
     }
@@ -90,6 +93,8 @@ public class Country
      * Added by Eoin K:25/02/21
      */
     public String region;
+
+    public Continents continent;
 
     // Write output
     public String toString()
