@@ -170,6 +170,49 @@ public class App
         });
     }
 
+    /**
+     * getTopNPopulatedCountriesInAContinent generates the top N populated countries,
+     *      in a continent where N is given.
+     * Added by Eoin K:27/02/21
+     * @param n the given number of N populated countries to generate
+     * @return An array of countries, each country has a name, continent and population attribute (ArrayList<Country>)
+     */
+    public ArrayList<Country> getTopNPopulatedCountriesInAContinent(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_countries AS (SELECT Name, Continent, Population, ROW_NUMBER() OVER "
+                            + "(PARTITION BY Continent ORDER BY Population DESC) row_num FROM country) "
+                            + "SELECT Name, Continent, Population FROM grouped_countries WHERE row_num <= <N>;";
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country cntry = new Country(
+                        rset.getString("name"),
+                        Country.Continents.customValueOf(rset.getString("continent")),
+                        null,
+                        rset.getInt("population")
+                );
+                countries.add(cntry);
+            }
+            return countries;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get countries in a region by population");
+            return null;
+        }
+    }
+
     /** main method
      * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
      * @param args an array that requires no entries
