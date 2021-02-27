@@ -213,6 +213,21 @@ public class App
         }
     }
 
+    /**
+     * displayTopNPopulatedCountriesInAContinent displays all the information,
+     *      generated in getTopNPopulatedCountriesInAContinent
+     * Added by Eoin K:27/02/21
+     * @param countries An array of countries,
+     *                  each country needs a name, continent and population attribute (ArrayList<Country>)
+     */
+    public void displayTopNPopulatedCountriesInAContinent(ArrayList<Country> countries)
+    {
+        System.out.println(String.format("%-44s %-13s %-10s", "Name", "Continent", "Population"));
+        countries.forEach(C -> {
+            System.out.println(String.format("%-44s %-13s %-10s", C.name, C.continent, C.population));
+        });
+    }
+
     /** main method
      * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
      * @param args an array that requires no entries
