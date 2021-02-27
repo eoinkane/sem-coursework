@@ -208,7 +208,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get countries in a region by population");
+            System.out.println("Failed to get the top N populated countries in a continent");
             return null;
         }
     }
