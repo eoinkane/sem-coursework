@@ -327,9 +327,11 @@ public class App
         // Generate population information of the Top N Populated Countries,
         //      in a Region where N is Provided by the User.
         ArrayList<Country> countries19 = a.getTopNPopulatedCountriesInARegion(2);
-        // Display population information of the Top N Populated Countries,
+        // Display amount of population information of the Top N Populated Countries,
         //      in a Region where N is Provided by the User.
-        a.displayFormattedCountries(countries19);
+        // Full Information can be displayed by uncommenting the line below
+        // a.displayFormattedCountries(countries19);
+        System.out.println(countries15.size()); // Should be 49
 
         // Disconnect from database
         a.disconnect();
