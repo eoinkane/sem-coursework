@@ -66,7 +66,7 @@ public class Country
 
     /**
      * Country Constructor
-     * A public constructor to initialise an instance of a Country object with a Name, Region and Population
+     * A public constructor to initialise an instance of a Country object with a Name, Continent, Region and Population
      * Added by Eoin K:25/02/21
      * Modified by Eoin K:27/02/21 (Added continent_local parameter)
      * @param name_local: the name of the country to be initialised (string).
