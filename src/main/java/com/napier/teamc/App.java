@@ -118,7 +118,7 @@ public class App
      * getCountriesInARegionByPopulation generates all the countries,
      *      in a region organised by largest population to smallest.
      * Added by Eoin K:25/02/21
-     * Updated by Eoin K:27/02/21 (Changed Exception to SQLException)
+     * Updated by Eoin K:27/02/21 (Updated Country constructor to use null continent)
      * @return An array of countries, each country has a name, region and population attribute (ArrayList<Country>)
      */
     public ArrayList<Country> getCountriesInARegionByPopulation()
@@ -139,6 +139,7 @@ public class App
             while (rset.next()) {
                 Country cntry = new Country(
                         rset.getString("name"),
+                        null,
                         rset.getString("region"),
                         rset.getInt("population")
                 );
