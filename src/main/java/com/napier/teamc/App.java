@@ -401,9 +401,17 @@ public class App
         // a.displayFormattedCountries(countries19);
         System.out.println(countries19.size()); // Should be 49
 
-        // # 26
+        // # 26 - Added by Joe B 27/02/2021
+        // Generate population information of the Top N Populated Cities,
+        //      in the World where N is Provided by the User.
         ArrayList<City> cities26 = a.getTopNPopulatedCitiesintheWorld(6);
-        a.displayFormattedCities(cities26);
+        // Display amount of population information of the Top N Populated Cities,
+        //      in the World where N is Provided by the User.
+        // Full information can be displayed by uncommenting the line below
+        // a.displayFormattedCities(cities26);
+        System.out.println(cities26.size()); // Should be 6
+
+
 
         // Disconnect from database
         a.disconnect();
