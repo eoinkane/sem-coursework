@@ -319,6 +319,46 @@ public class App
         }
     }
 
+    /**
+     * getCountriesInContinentByPopulation generates all the countries,
+     *      in a continent organised by largest population to smallest.
+     * Added by Jackson A:01/03/21
+     * @return An array of countries, each country has a name, continent and population attribute (ArrayList<Country>)
+     */
+    public ArrayList<Country> getCountriesInAContinentByPopulation()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Name, Continent, Population FROM country "
+                            + "ORDER BY Continent, Population DESC;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country cntry = new Country(
+                        rset.getString("name"),
+                        Country.Continents.customValueOf(rset.getString("continent")),
+                        null,
+                        rset.getInt("population")
+                );
+                countries.add(cntry);
+            }
+            return countries;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get countries in a continent by population");
+            return null;
+        }
+    }
+
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -463,6 +503,14 @@ public class App
         // Full information can be displayed by uncommenting the line below
         //a.displayFormattedCountries(countries12);
         System.out.println(countries12.size()); // Should be N
+
+        // # 7 - Added by Jackson A 01/03/21
+        // Generate population information of Countries In A Continent Ordered By Population
+        ArrayList<Country> countries7 = a.getCountriesInAContinentByPopulation();
+        // Display amount of population information of Countries In A Continent Ordered By Population
+        // Full Information can be displayed by uncommenting the line below
+        //a.displayFormattedCountries(countries7);
+        System.out.println(countries7.size()); // Should be 239
 
         // Disconnect from database
         a.disconnect();
