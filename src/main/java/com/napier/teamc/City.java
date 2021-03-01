@@ -28,7 +28,9 @@ public class City {
      * @param name_local:       the name of the city to be initialised (string).
      * @param district_local:   the district of the city to be initialised (district enum).
      * @param population_local: the population of the city to be initialised (integer).
-     * @param continent_local: the continent of the city to be initialised (string)
+     * @param continent_local: the continent of the city to be initialised (string).
+     * @param country_local: the country of the city to be initialised (string).
+     * @param region_local: the region of the city to be initialised (string).
      */
 
     public City(String name_local, String district_local, int population_local, String continent_local, String country_local, String region_local) {

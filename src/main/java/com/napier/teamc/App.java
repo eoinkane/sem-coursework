@@ -418,6 +418,44 @@ public class App
         }
     }
 
+    public ArrayList<City> getAllCitiesinADistrictLargetoSmall()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Name, District, Population FROM city "
+                    + "ORDER BY District, Population DESC;";
+
+
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract city information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("name"),
+                        rset.getString("district"),
+                        rset.getInt("population"),
+                        null,
+                        null,
+                        null
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get all cities in a district.");
+            return null;
+        }
+    }
+
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -602,6 +640,17 @@ public class App
         // Full information can be displayed by uncommenting the line below
         // a.displayFormattedCities(cities25);
         System.out.println(cities25.size()); //Should be 6 x n (6 Continents x the number of cities to be displayed)
+
+        // #27 - Added by Joe B: 01/03/21
+        // Generate population information of all the cities,
+        //      in a District from largest to smallest population.
+        ArrayList<City> cities27 = a.getAllCitiesinADistrictLargetoSmall();
+        // Display amount of population information of all the cities,
+        //      in a District from largest to smallest population.
+        // Full information can be displayed by uncommenting the line below
+        //a.displayFormattedCities(cities27);
+        System.out.println(cities27.size()); //should be 4079
+
 
         // Disconnect from database
         a.disconnect();
