@@ -14,7 +14,9 @@ public class City {
             "50", // The largest City Name value length is 44.
             "50", // The largest District value length is 25.
             "10", // The largest Population value length is 10.
-            "13"  //The largest Continent value length is 13.
+            "13", //The largest Continent value length is 13.
+            "44", //The largest Country value length is 44.
+            "25"  //The largest Region value is 25.
     ));
 
     /**
@@ -29,12 +31,14 @@ public class City {
      * @param continent_local: the continent of the city to be initialised (string)
      */
 
-    public City(String name_local, String district_local, int population_local, String continent_local) {
+    public City(String name_local, String district_local, int population_local, String continent_local, String country_local, String region_local) {
 
         name = name_local;
         district = district_local;
         population = population_local;
         continent = continent_local;
+        country = country_local;
+        region = region_local;
 
     }
 
@@ -62,9 +66,21 @@ public class City {
      */
     public String continent;
 
+    /**
+     * public attribute to store a Cities country
+     * Added by Joe B: 01/03/21
+     */
+    public String country;
+
+    /**
+     * public attribute to store a Cities region
+     * Added by Joe B: 01/03/21
+     */
+    public String region;
+
 
     public String toString() {
-        return "name " + this.name + "district" + this.district + " population " + this.population + " continent " + this.continent;
+        return "name " + this.name + "district" + this.district + " population " + this.population + " continent " + this.continent + " country " + this.country + " region " + this.region;
     }
 
     /**
@@ -92,8 +108,16 @@ public class City {
             arguments.add(String.valueOf(this.population));
         }
         if (this.continent != null) {
-            format = format.concat("%-" + City.fieldLengths.get(3) + "s");
+            format = format.concat("%-" + City.fieldLengths.get(3) + "s ");
             arguments.add(this.continent);
+        }
+        if (this.country != null) {
+            format = format.concat("%-" + City.fieldLengths.get(4) + "s ");
+            arguments.add(this.country);
+        }
+        if (this.region != null) {
+            format = format.concat("%-" + City.fieldLengths.get(5) + "s");
+            arguments.add(this.region);
         }
             return format != "" ? String.format(format, arguments.toArray()) : null;
         }

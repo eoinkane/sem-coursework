@@ -270,6 +270,8 @@ public class App
                         rset.getString("name"),
                         rset.getString("district"),
                         rset.getInt("population"),
+                        null,
+                        null,
                         null
                 );
                 cities.add(cty);
@@ -398,7 +400,9 @@ public class App
                         rset.getString("city_name"),
                         null,
                         rset.getInt("population"),
-                        rset.getString("continent")
+                        rset.getString("continent"),
+                        null,
+                        null
 
                 );
                 cities.add(cty);
@@ -462,36 +466,46 @@ public class App
      * displayFormattedCities outputs city details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
      * Added by Joe B: 28/02/21
+     * Modified by Joe B: 01/03/21
      * @param countries An array of cities, each city should be identical in attribute format.
      */
-
     public void displayFormattedCities(ArrayList<City> cities)
     {
-        // Use the first country in the ArrayList to generate the headers
-        // This method presumes that all countries in the ArrayList are identical in format.
+        // Use the first city in the ArrayList to generate the headers
+        // This method presumes that all cities in the ArrayList are identical in format.
         City firstCity = cities.get(0);
         String format = "";
         ArrayList<String> arguments = new ArrayList<String>();
 
-        // If countries ArrayList contains country names then display a Name heading.
+        // If cities ArrayList contains city names then display a Name heading.
         if (firstCity.name != null) {
             format = format.concat("%-" + City.fieldLengths.get(0) + "s ");
             arguments.add("Name");
         }
-        // If countries ArrayList contains country regions then display a Region heading.
+        // If cities ArrayList contains city districts then display a District heading.
         if (firstCity.district != null) {
             format = format.concat("%-" + City.fieldLengths.get(1) + "s ");
             arguments.add("District");
         }
-        // If countries ArrayList contains country populations then display a Population heading.
+        // If cities ArrayList contains cities populations then display a Population heading.
         if (firstCity.population != -1) {
-            format = format.concat("%-" + City.fieldLengths.get(2) + "s");
+            format = format.concat("%-" + City.fieldLengths.get(2) + "s ");
             arguments.add("Population");
         }
-        // If countries ArrayList contains country regions then display a Region heading.
+        // If cities ArrayList contains cities continent then display a Continent heading.
         if (firstCity.continent != null) {
             format = format.concat("%-" + City.fieldLengths.get(3) + "s ");
             arguments.add("Continent");
+        }
+        // If cities ArrayList contains cities country then display a Country heading.
+        if (firstCity.country!= null) {
+            format = format.concat("%-" + City.fieldLengths.get(4) + "s ");
+            arguments.add("Country");
+        }
+        // If cities ArrayList contains cities regions then display a Region heading.
+        if (firstCity.region!= null) {
+            format = format.concat("%-" + City.fieldLengths.get(5) + "s");
+            arguments.add("Region");
         }
 
         // Print the headers
