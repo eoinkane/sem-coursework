@@ -455,7 +455,44 @@ public class App
             return null;
         }
     }
+    public ArrayList<City> getAllCitiesInACountry()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name AS city_name, country.name AS country_name, city.Population AS population FROM city "
+            + "JOIN country ON city.CountryCode = country.Code "
+            + "ORDER BY country_name, population DESC; ";
 
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("city_name"),
+                        null,
+                        rset.getInt("population"),
+                        null,
+                        rset.getString("country_name"),
+                        null
+
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get all cities in a country");
+            return null;
+        }
+    }
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -651,6 +688,15 @@ public class App
         //a.displayFormattedCities(cities27);
         System.out.println(cities27.size()); //should be 4079
 
+        // #29 - Added by Robbie M: 01/03/21
+        // Generating population information of all the cities,
+        //  in a Country from largest to smallest population.
+        ArrayList<City> cities29 = a.getAllCitiesInACountry();
+        // Display amount of population information of all the cities,
+        // in a Country from largest to smallest population.
+        // Full information can be displayed by uncommenting the line below
+        //a.displayFormattedCities(cities29);
+         System.out.println(cities29.size()); //should be 4079
 
         // Disconnect from database
         a.disconnect();
