@@ -241,6 +241,14 @@ public class App
         }
     }
 
+    /**
+     * getTopNPopulatedCitiesInTheWorld generates the top N populated cities,
+     *      in the World where N is given.
+     * Added by Joe B: 27/02/21
+     * @param n the given number of N populated cities to generate
+     * @return An array of cities, each city has a name, district and population attribute (ArrayList<City>)
+     */
+
     public ArrayList<City> getTopNPopulatedCitiesintheWorld(int n)
     {
         try
@@ -261,7 +269,8 @@ public class App
                 City cty = new City(
                         rset.getString("name"),
                         rset.getString("district"),
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 cities.add(cty);
             }
@@ -359,6 +368,14 @@ public class App
         }
     }
 
+    /**
+     * getTopNPopulatedCitiesInAContinent generates the top N populated cities,
+     *      in a Continent where N is given.
+     * Added by Joe B: 01/03/21
+     * @param n the given number of N populated cities to generate
+     * @return An array of cities, each city has a name population and continent attribute (ArrayList<City>)
+     */
+
     public ArrayList<City> getTopNPopulatedCitiesinaContinent(int n)
     {
         try
@@ -367,10 +384,10 @@ public class App
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String strSelect =
-                    "WITH grouped_cities AS (SELECT city.Name AS City, country.Continent, city.Population, ROW_NUMBER() OVER "
+                    "WITH grouped_cities AS (SELECT city.Name AS city_name, country.Continent AS Continent, city.Population, ROW_NUMBER() OVER "
                             + "(PARTITION BY Continent ORDER BY Population DESC) row_num FROM city "
                             + "JOIN country ON city.CountryCode = country.Code) "
-                            + "SELECT City, Continent, Population FROM grouped_cities WHERE row_num <= <N>;";
+                            + "SELECT city_name, Continent, Population FROM grouped_cities WHERE row_num <= <N>;";
             strSelect = strSelect.replace("<N>", String.valueOf(n));
             // Execute SQL
             ResultSet rset = stmt.executeQuery(strSelect);
@@ -378,9 +395,11 @@ public class App
             ArrayList<City> cities = new ArrayList<City>();
             while (rset.next()) {
                 City cty = new City(
-                        rset.getString("name"),
+                        rset.getString("city_name"),
                         null,
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        rset.getString("continent")
+
                 );
                 cities.add(cty);
             }
@@ -394,8 +413,6 @@ public class App
             return null;
         }
     }
-
-
 
 
     /*
@@ -441,6 +458,13 @@ public class App
         });
     }
 
+    /*
+     * displayFormattedCities outputs city details. It automatically hides uninitialised attributes.
+     * Removes duplication of display methods. This method can handle results from all get methods.
+     * Added by Joe B: 28/02/21
+     * @param countries An array of cities, each city should be identical in attribute format.
+     */
+
     public void displayFormattedCities(ArrayList<City> cities)
     {
         // Use the first country in the ArrayList to generate the headers
@@ -463,6 +487,11 @@ public class App
         if (firstCity.population != -1) {
             format = format.concat("%-" + City.fieldLengths.get(2) + "s");
             arguments.add("Population");
+        }
+        // If countries ArrayList contains country regions then display a Region heading.
+        if (firstCity.continent != null) {
+            format = format.concat("%-" + City.fieldLengths.get(3) + "s ");
+            arguments.add("Continent");
         }
 
         // Print the headers
@@ -550,9 +579,15 @@ public class App
         //a.displayFormattedCountries(countries7);
         System.out.println(countries7.size()); // Should be 239
 
+        // # 25 - Added by Joe B 01/03/21
+        // Generate population information of the Top N Populated Cities,
+        //      in a Continent where N is Provided by the User.
         ArrayList<City> cities25 = a.getTopNPopulatedCitiesinaContinent(5);
-        System.out.println(cities25.size());
-    //    a.displayFormattedCities(cities25);
+        // Display amount of population information of the Top N Populated Cities,
+        //      in a Continent where N is Provided by the User.
+        // Full information can be displayed by uncommenting the line below
+        // a.displayFormattedCities(cities25);
+        System.out.println(cities25.size()); //Should be 6 x n (6 Continents x the number of cities to be displayed)
 
         // Disconnect from database
         a.disconnect();
