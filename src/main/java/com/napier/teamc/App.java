@@ -44,7 +44,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -494,6 +494,45 @@ public class App
         }
     }
 
+    public ArrayList<City> getAllCitiesInAContinent()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name AS city_name, country.continent AS continent, city.Population AS population FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "ORDER BY continent, population DESC; ";
+
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("city_name"),
+                        null,
+                        rset.getInt("population"),
+                        rset.getString("continent"),
+                        null,
+                        null
+
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get all cities in a country");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -697,6 +736,16 @@ public class App
         // Full information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities29);
          System.out.println(cities29.size()); //should be 4079
+
+        // #24 - Added by Robbie M: 01/03/21
+        // Generating population information of all the cities,
+        //  in a Continent from largest to smallest population.
+        ArrayList<City> cities24 = a.getAllCitiesInAContinent();
+        // Display amount of population information of all the cities,
+        // in a Continent from largest to smallest population.
+        // Full information can be displayed by uncommenting the line below
+        //a.displayFormattedCities(cities24);
+        System.out.println(cities24.size()); //should be 4079
 
         // Disconnect from database
         a.disconnect();
