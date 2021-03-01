@@ -359,6 +359,44 @@ public class App
         }
     }
 
+    public ArrayList<City> getTopNPopulatedCitiesinaContinent(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_cities AS (SELECT city.Name AS City, country.Continent, city.Population, ROW_NUMBER() OVER "
+                            + "(PARTITION BY Continent ORDER BY Population DESC) row_num FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code) "
+                            + "SELECT City, Continent, Population FROM grouped_cities WHERE row_num <= <N>;";
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("name"),
+                        null,
+                        rset.getInt("population")
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the top N populated cities in a continent.");
+            return null;
+        }
+    }
+
+
+
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -511,6 +549,10 @@ public class App
         // Full Information can be displayed by uncommenting the line below
         //a.displayFormattedCountries(countries7);
         System.out.println(countries7.size()); // Should be 239
+
+        ArrayList<City> cities25 = a.getTopNPopulatedCitiesinaContinent(5);
+        System.out.println(cities25.size());
+    //    a.displayFormattedCities(cities25);
 
         // Disconnect from database
         a.disconnect();
