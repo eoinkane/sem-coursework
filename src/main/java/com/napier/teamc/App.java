@@ -276,8 +276,51 @@ public class App
         }
     }
 
-
     /**
+     * getTopNPopulatedCountriesInTheWorld generates the top N populated countries,
+     *      in the world where N is given.
+     * Added by Jackson A:01/03/21
+     * @param n the given number of N populated countries to generate
+     * @return An array of countries, each country has a name and population attribute (ArrayList<Country>)
+     */
+    public ArrayList<Country> getTopNPopulatedCountriesInTheWorld(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH all_countries AS (SELECT Name, Population, ROW_NUMBER() OVER "
+                            + "(ORDER BY Population DESC) row_num FROM country) "
+                            + "SELECT Name, Population FROM all_countries WHERE row_num <= <N>;";
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                Country cntry = new Country(
+                        rset.getString("name"),
+                        null,
+                        null,
+                        rset.getInt("population")
+                );
+                countries.add(cntry);
+            }
+            // return results
+            return countries;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the top N populated countries in the World.");
+            return null;
+        }
+    }
+
+
+    /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
      * Added by Eoin K:27/02/21
@@ -411,7 +454,15 @@ public class App
         // a.displayFormattedCities(cities26);
         System.out.println(cities26.size()); // Should be 6
 
-
+        // # 12 - Added by Jackson A 01/03/2021
+        // Generate population information of the Top N Populated Countries,
+        //      in the World where N is Provided by the User.
+        ArrayList<Country> countries12 = a.getTopNPopulatedCountriesInTheWorld(5);
+        // Display amount of population information of the Top N Populated Countries,
+        //      in the World where N is Provided by the User.
+        // Full information can be displayed by uncommenting the line below
+        //a.displayFormattedCountries(countries12);
+        System.out.println(countries12.size()); // Should be N
 
         // Disconnect from database
         a.disconnect();
