@@ -606,7 +606,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get all cities in a region");
+            System.out.println("Failed to get all cities in the world");
             return null;
         }
     }
