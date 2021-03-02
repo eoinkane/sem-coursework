@@ -44,7 +44,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/world?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -533,7 +533,7 @@ public class App
         }
     }
 
-    
+
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -746,8 +746,8 @@ public class App
         // Display amount of population information of all the cities,
         // in a Continent from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
-        //a.displayFormattedCities(cities24);
-        System.out.println(cities24.size()); //should be 4079
+        a.displayFormattedCities(cities24);
+        //System.out.println(cities24.size()); //should be 4079
 
         // Disconnect from database
         a.disconnect();
