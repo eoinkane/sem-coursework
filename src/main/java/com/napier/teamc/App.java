@@ -528,13 +528,49 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get all cities in a country");
+            System.out.println("Failed to get all cities in a continent");
             return null;
         }
     }
 
+    public ArrayList<City> getAllCitiesInARegion()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name AS city_name, country.region AS region, city.Population AS population FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "ORDER BY region, population DESC; ";
 
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("city_name"),
+                        null,
+                        rset.getInt("population"),
+                        null,
+                        null,
+                        rset.getString("region")
 
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get all cities in a region");
+            return null;
+        }
+    }
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -746,8 +782,18 @@ public class App
         // Display amount of population information of all the cities,
         // in a Continent from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
-        a.displayFormattedCities(cities24);
-        //System.out.println(cities24.size()); //should be 4079
+        //a.displayFormattedCities(cities24);
+        System.out.println(cities24.size()); //should be 4079
+
+        // #28 - Added by Robbie M: 01/03/21
+        // Generating population information of all the cities,
+        //  in a region from largest to smallest population.
+        ArrayList<City> cities28 = a.getAllCitiesInARegion();
+        // Display amount of population information of all the cities,
+        // in a region from largest to smallest population.
+        // Full information can be displayed by uncommenting the line below
+        //a.displayFormattedCities(cities28);
+        System.out.println(cities28.size()); //should be 4079
 
         // Disconnect from database
         a.disconnect();
