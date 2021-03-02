@@ -82,6 +82,12 @@ public class App
         }
     }
 
+    /**
+     * getCountryLargestToSmallest generates populated countries from largest to smallest,
+     *      in the world.
+     * Added by Jackson A:01/03/21
+     * @return An array of countries, each country has a name and population attribute (ArrayList<Country>)
+     */
     public ArrayList<Country> getCountryLargestToSmallest()
     {
         try
@@ -99,9 +105,12 @@ public class App
             // Extract country information.
            ArrayList<Country> countries = new ArrayList<Country>();
            while (rset.next()) {
-               Country cntry = new Country();
-               cntry.population = rset.getInt("population");
-               cntry.name = rset.getString("name");
+               Country cntry = new Country(
+                       rset.getString("name"),
+                       null,
+                       null,
+                       rset.getInt("population")
+               );
                countries.add(cntry);
            }
             return countries;
@@ -719,14 +728,14 @@ public class App
         // Connect to database
         a.connect();
 
-        // #5
-        // Call country
-        ArrayList<Country> countries = a.getCountryLargestToSmallest();
-
-        // Display
-        countries.forEach(C -> {
-           System.out.println(C);
-        });
+        // # 5 - Added by Jackson A 23/02/2021
+        // Refactored by Jackson A 02/03/2021
+        // Generate population information of Countries In the World ordered by population.
+        ArrayList<Country> countries5 = a.getCountryLargestToSmallest();
+        // Display amount of population information of Countries In the World ordered by population
+        // Full Information can be displayed by uncommenting the line below
+        //a.displayFormattedCountries(countries5);
+        System.out.println(countries5.size()); // Should be 239
 
         // # 9
         // Generate population information of Countries In A Region Ordered By Population
