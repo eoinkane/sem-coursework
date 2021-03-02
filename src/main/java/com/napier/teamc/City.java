@@ -11,9 +11,9 @@ import java.util.Arrays;
 public class City {
 
     public static ArrayList<String> fieldLengths = new ArrayList<String>(Arrays.asList(
-            "50", // The largest City Name value length is 44.
-            "50", // The largest District value length is 25.
-            "10", // The largest Population value length is 10.
+            "34", // The largest City Name value length is 34.
+            "22", // The largest District value length is 22.
+            "8", // The largest Population value length is 8.
             "13", //The largest Continent value length is 13.
             "44", //The largest Country value length is 44.
             "25"  //The largest Region value is 25.
