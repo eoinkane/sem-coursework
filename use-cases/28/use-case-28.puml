@@ -1,0 +1,19 @@
+@startuml
+
+actor Member as "Member of the
+organisation"
+
+rectangle Database
+
+rectangle "Population Information System" {
+    usecase UC28 as "Get all the cities in a
+    region organised by largest population to smallest."
+
+    usecase UCa as "Output the report."
+
+    Member - UC28
+    UC28 ..> UCa : include
+    UC28 - Database
+}
+
+@enduml

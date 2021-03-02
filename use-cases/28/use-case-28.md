@@ -1,10 +1,10 @@
-# USE CASE: 24 Produce a Report on the All the Cities in a continent organised by Largest Population to Smallest
+# USE CASE: 28 Produce a Report on the All the Cities in a region organised by Largest Population to Smallest
 
 ## CHARACTERISTIC INFORMATION
 
 ### Goal in Context
 
-As an *organisation that requires reporting on population information.* I want *a report of all the cities in a continent organised by largest population to smallest.* So that *we have easy access to population information*
+As an *organisation that requires reporting on population information.* I want *a report of all the cities in a region organised by largest population to smallest.* So that *we have easy access to population information*
 
 ### Scope
 
@@ -37,7 +37,7 @@ The member of the organisation requires access to this population information.
 ## MAIN SUCCESS SCENARIO
 
 1. The member of the organisation requires access to this population information.
-2. The member of the organisation extracts a report of all the cities in a continent organised by largest population to smallest.
+2. The member of the organisation extracts a report of all the cities in a region organised by largest population to smallest.
 3. The member of the organisation now has the information available to them in a report.
 
 ## EXTENSIONS
