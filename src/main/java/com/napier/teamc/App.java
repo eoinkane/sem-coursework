@@ -571,6 +571,45 @@ public class App
             return null;
         }
     }
+
+    public ArrayList<City> getAllCitiesInTheWorld()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name AS city_name, city.Population AS population FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code "
+                            + "ORDER BY population DESC; ";
+
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("city_name"),
+                        null,
+                        rset.getInt("population"),
+                        null,
+                        null,
+                        null
+
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get all cities in a region");
+            return null;
+        }
+    }
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -794,6 +833,16 @@ public class App
         // Full information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities28);
         System.out.println(cities28.size()); //should be 4079
+
+        // #22 - Added by Robbie M: 01/03/21
+        // Generating population information of all the cities,
+        //  in the world from largest to smallest population.
+        ArrayList<City> cities22 = a.getAllCitiesInTheWorld();
+        // Display amount of population information of all the cities,
+        // in the world from largest to smallest population.
+        // Full information can be displayed by uncommenting the line below
+        //a.displayFormattedCities(cities22);
+        System.out.println(cities22.size()); //should be 4079
 
         // Disconnect from database
         a.disconnect();
