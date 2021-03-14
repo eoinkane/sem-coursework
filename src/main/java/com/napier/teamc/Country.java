@@ -64,12 +64,12 @@ public class Country
     /**
      * fieldLengths is an array that holds the maximum lengths of each Country object field value
      * These fieldLengths can be generated from the world DB using the following query
-     * SELECT MAX(LENGTH(Code)), MAX(LENGTH(Name)), MAX(LENGTH(Continent)), MAX(LENGTH(Region)), MAX(LENGTH(Population)) FROM country;
+     * SELECT MAX(LENGTH(Name)), MAX(LENGTH(Continent)), MAX(LENGTH(Region)), MAX(LENGTH(Population)) FROM country;
      * Added by Eoin K:27/02/21
-     * Updated by Eoin K:14/03/21 (added Code value length)
+     * Updated by Eoin K:14/03/21 (updated Code value length)
      */
     public static  ArrayList<String> fieldLengths = new ArrayList<String>(Arrays.asList(
-            "3", // The largest Country Code value length is 3.
+            "12", // The header for Country Code, 'Country Code' is longer than the max value length of 3 use the length of the header.
             "44", // The largest Country Name value length is 44.
             "13", // The largest Country Continent value length is 13.
             "25", // The largest Country Region value length is 25.
