@@ -95,19 +95,21 @@ public class Country
      * Country Constructor
      * A public constructor to initialise an instance of a Country object with a Name, Continent, Region and Population
      * Added by Eoin K:25/02/21
-     * Modified by Eoin K:14/03/21 (Added country_code_local parameter)
+     * Modified by Eoin K:14/03/21 (Added capital_city_local parameter)
      * @param country_code_local: the code of the country to be initialised (string).
      * @param name_local: the name of the country to be initialised (string).
      * @param continent_local: the continent of the country to be initialised (continents enum).
      * @param region_local: the name of the country to be initialised (string).
      * @param population_local: the name of the country to be initialised (integer).
+     * @param capital_city_local: the capital city of the country to be initialised (city).
      */
     public Country(
             String country_code_local,
             String name_local,
             Continents continent_local,
             String region_local,
-            int population_local
+            int population_local,
+            City capital_city_local
     )
     {
         country_code = country_code_local;
@@ -115,6 +117,7 @@ public class Country
         continent = continent_local;
         region = region_local;
         population = population_local;
+        capital_city = capital_city_local;
     }
 
     /**
@@ -140,6 +143,12 @@ public class Country
      * Added by Eoin K:27/02/21
      */
     public Continents continent;
+
+    /**
+     * public attribute to store a Country's capital city
+     * Added by Eoin K:14/03/21
+     */
+    public City capital_city;
 
     // Write output
     public String toString()
@@ -175,8 +184,12 @@ public class Country
             arguments.add(this.region);
         }
         if (this.population != -1) {
-            format = format.concat("%-" + Country.fieldLengths.get(4) + "s");
+            format = format.concat("%-" + Country.fieldLengths.get(4) + "s ");
             arguments.add(String.valueOf(this.population));
+        }
+        if (this.capital_city != null && this.capital_city.name != null) {
+            format = format.concat("%-" + City.fieldLengths.get(0) + "s");
+            arguments.add(String.valueOf(this.capital_city.name));
         }
 
         return format != "" ? String.format(format, arguments.toArray()) : null;
