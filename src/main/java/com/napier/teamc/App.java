@@ -633,6 +633,58 @@ public class App
             return null;
         }
     }
+
+    /**
+     * getCountryReports generates all the countries and collates them into an ArrayList<Country>
+     * Added by Eoin K:14/03/21
+     * @return An array of countries, each country has a country code, name, continent, region, population
+     *      and capital city attribute (ArrayList<Country>)
+     */
+    public ArrayList<Country> getCountryReports()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Code, country.Name, country.Continent, country.Region, country.Population, "
+                            + "capital_city.Name as `capital_city_name` FROM country JOIN city capital_city ON "
+                            + "capital_city.ID = country.Capital";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                City capital_city = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        -1,
+                        null,
+                        rset.getString("name"),
+                        null
+                );
+                Country cntry = new Country(
+                        rset.getString("code"),
+                        rset.getString("name"),
+                        Country.Continents.customValueOf(rset.getString("continent")),
+                        rset.getString("region"),
+                        rset.getInt("population"),
+                        capital_city
+                );
+                countries.add(cntry);
+            }
+            return countries;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get countries report");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
