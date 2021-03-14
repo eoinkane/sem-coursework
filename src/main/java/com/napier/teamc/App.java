@@ -2,6 +2,7 @@ package com.napier.teamc;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /** Application Class
  * Holds the main logic of the program
@@ -723,6 +724,38 @@ public class App
         {
             System.out.println(e.getMessage());
             System.out.println("Failed to get city reports");
+            return null;
+        }
+    }
+
+    /**
+     * getWorldPopulation generates the population of the world
+     * Added by Eoin K:14/03/21
+     * @return An hashmap containing one item, key: "world" value: <Long world population from database>
+     */
+    public HashMap<String, Number> getWorldPopulation()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT SUM(Population) AS `world_population` FROM country;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            HashMap<String, Number> worldPopulation = new HashMap<String, Number>();
+            if (rset.next()) {
+                worldPopulation.put("World", rset.getLong("world_population"));
+            }
+            return worldPopulation;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get world population");
             return null;
         }
     }
