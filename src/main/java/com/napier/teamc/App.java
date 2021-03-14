@@ -940,8 +940,10 @@ public class App
         // # 41 - Added by Eoin K: 14/03/21
         // Generate country report of all the countries in the world
         ArrayList<Country> countries41 = a.getCountryReports();
-        // Display the countries report generated.
-        a.displayFormattedCountries(countries41);
+        // Display size of country report generated.
+        // Full Information can be displayed by uncommenting the line below
+        // a.displayFormattedCountries(countries41);
+        System.out.println(countries41.size()); // Should be 232
 
         // Disconnect from database
         a.disconnect();
