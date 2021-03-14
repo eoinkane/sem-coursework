@@ -17,4 +17,10 @@ public class AppIntegrationTest {
         app = new App();
         app.connect("localhost:33060");
     }
+
+    @Test
+    void integrationTest()
+    {
+        assertEquals(5,5);
+    }
 }
