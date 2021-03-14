@@ -1,10 +1,66 @@
 package com.napier.teamc;
 
 import org.junit.jupiter.api.*;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest
 {
+    /**
+     * Country Test - toFormattedString method - empty input
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryToFormattedStringEmpty()
+    {
+        Country cntry = new Country(
+                null,
+                null,
+                null,
+                null,
+                -1,
+                null
+        );
+
+        String formattedString = cntry.toFormattedString();
+
+        assertNull(formattedString);
+    }
+
+    /**
+     * Country Test - toFormattedString method - full input
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryToFormattedStringFull()
+    {
+        City capital_city = new City(
+                "Oranjestad",
+                null,
+                -1,
+                null,
+                "Aruba",
+                null
+        );
+
+        Country cntry = new Country(
+                "ABW",
+                "Aruba",
+                Country.Continents.customValueOf("North America"),
+                "Caribbean",
+                103000,
+                capital_city
+        );
+
+        String formattedString = cntry.toFormattedString();
+        String expected = "ABW          Aruba                                        North America Caribbean       "
+                + "          103000     Oranjestad                        ";
+
+        assertEquals(expected, formattedString);
+    }
+
     /**
      * Country Test - Continents Enum method - customValueOf Asia
      * Test the method customValueOf in Country.Continents
