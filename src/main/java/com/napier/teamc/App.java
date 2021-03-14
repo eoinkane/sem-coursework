@@ -15,9 +15,11 @@ public class App
     private Connection con = null;
 
     /** connect (method)
+     * Updated by Eoin K 14/03/21
      * Connect to the MySQL database through the SQL driver.
+     * @param location database host section of URL
      */
-    public void connect()
+    public void connect(String location)
     {
         /*  try catch statement to gather the required SQL driver
             application will exit if driver cannot be loaded
@@ -25,7 +27,7 @@ public class App
         try
         {
             // Load Database driver
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         }
         catch (ClassNotFoundException e)
         {
@@ -44,7 +46,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://" + location + "/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -726,7 +728,14 @@ public class App
         App a = new App();
 
         // Connect to database
-        a.connect();
+        if (args.length < 1)
+        {
+            a.connect("localhost:3306");
+        }
+        else
+        {
+            a.connect(args[0]);
+        }
 
         // # 5 - Added by Jackson A 23/02/2021
         // Refactored by Jackson A 02/03/2021
