@@ -90,4 +90,89 @@ class AppTest
         assertSame(Country.Continents.SOUTH_AMERICA, continent);
     }
 
+    /**
+     * Country Test - Continents Enum method - ToString Asia
+     * Test the method ToString in Country.Continents
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryContinentsToStringAsia()
+    {
+        String continent_string = Country.Continents.customValueOf("Asia").toString();
+
+        assertSame("Asia", continent_string);
+    }
+    /**
+     * Country Test - Continents Enum method - ToString Europe
+     * Test the method ToString in Country.Continents
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryContinentsToStringEurope()
+    {
+        String continent_string = Country.Continents.customValueOf("Europe").toString();
+
+        assertSame("Europe", continent_string);
+    }
+    /**
+     * Country Test - Continents Enum method - ToString North America
+     * Test the method ToString in Country.Continents
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryContinentsToStringNorthAmerica()
+    {
+        String continent_string = Country.Continents.customValueOf("North America").toString();
+
+        assertSame("North America", continent_string);
+    }
+    /**
+     * Country Test - Continents Enum method - ToString Africa
+     * Test the method ToString in Country.Continents
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryContinentsToStringAfrica()
+    {
+        String continent_string = Country.Continents.customValueOf("Africa").toString();
+
+        assertSame("Africa", continent_string);
+    }
+    /**
+     * Country Test - Continents Enum method - ToString Oceania
+     * Test the method ToString in Country.Continents
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryContinentsToStringOceania()
+    {
+        String continent_string = Country.Continents.customValueOf("Oceania").toString();
+
+        assertSame("Oceania", continent_string);
+    }
+    /**
+     * Country Test - Continents Enum method - customValueOf Antarctica
+     * Test the method customValueOf in Country.Continents
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryContinentsToStringAntarctica()
+    {
+        String continent_string = Country.Continents.customValueOf("Antarctica").toString();
+
+        assertSame("Antarctica", continent_string);
+    }
+    /**
+     * Country Test - Continents Enum method - ToString South America
+     * Test the method ToString in Country.Continents
+     * Added by Eoin K:14/03/21
+     */
+    @Test
+    void countryContinentsToStringSouthAmerica()
+    {
+        String continent_string = Country.Continents.customValueOf("South America").toString();
+
+        assertSame("South America", continent_string);
+    }
+
 }
