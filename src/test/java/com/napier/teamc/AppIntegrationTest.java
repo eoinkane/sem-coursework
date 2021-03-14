@@ -38,4 +38,23 @@ public class AppIntegrationTest {
             assertTrue(C.capital_city instanceof City);
         });
     }
+
+    /**
+     * Integration Test for getCityReports method in App.java
+     * Added by Eoin K: 14/03/21
+     */
+    @Test
+    void CityReportIntegrationTest()
+    {
+        ArrayList<City> cities = app.getCityReports();
+
+        assertEquals(4079, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.country);
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+        });
+    }
 }
