@@ -685,6 +685,48 @@ public class App
         }
     }
 
+    /**
+     * getCityReports generates all the cities and collates them into an ArrayList<City>
+     * Added by Eoin K:14/03/21
+     * @return An array of countries, each country has a name, country, district and population (ArrayList<City>)
+     */
+    public ArrayList<City> getCityReports()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT city.Name, cntry.name as `country`, city.district, city.population FROM city JOIN country "
+                            + "cntry ON cntry.Code = city.CountryCode";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City city = new City(
+                        rset.getString("name"),
+                        rset.getString("district"),
+                        rset.getInt("population"),
+                        null,
+                        rset.getString("country"),
+                        null
+                );
+
+                cities.add(city);
+            }
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get city reports");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
