@@ -169,7 +169,7 @@ public class Country
 
         if (this.country_code != null) {
             format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
-            arguments.add(this.name);
+            arguments.add(this.country_code);
         }
         if (this.name != null) {
             format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
