@@ -108,10 +108,12 @@ public class App
            ArrayList<Country> countries = new ArrayList<Country>();
            while (rset.next()) {
                Country cntry = new Country(
+                       null,
                        rset.getString("name"),
                        null,
                        null,
-                       rset.getInt("population")
+                       rset.getInt("population"),
+                       null
                );
                countries.add(cntry);
            }
@@ -149,10 +151,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         null,
                         rset.getString("region"),
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -192,10 +196,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         Country.Continents.customValueOf(rset.getString("continent")),
                         null,
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -234,10 +240,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         null,
                         rset.getString("region"),
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -323,10 +331,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         null,
                         null,
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -364,10 +374,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         Country.Continents.customValueOf(rset.getString("continent")),
                         null,
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -621,10 +633,63 @@ public class App
             return null;
         }
     }
+
+    /**
+     * getCountryReports generates all the countries and collates them into an ArrayList<Country>
+     * Added by Eoin K:14/03/21
+     * @return An array of countries, each country has a country code, name, continent, region, population
+     *      and capital city attribute (ArrayList<Country>)
+     */
+    public ArrayList<Country> getCountryReports()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Code, country.Name, country.Continent, country.Region, country.Population, "
+                            + "capital_city.Name as `capital_city_name` FROM country JOIN city capital_city ON "
+                            + "capital_city.ID = country.Capital";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            while (rset.next()) {
+                City capital_city = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        -1,
+                        null,
+                        rset.getString("name"),
+                        null
+                );
+                Country cntry = new Country(
+                        rset.getString("code"),
+                        rset.getString("name"),
+                        Country.Continents.customValueOf(rset.getString("continent")),
+                        rset.getString("region"),
+                        rset.getInt("population"),
+                        capital_city
+                );
+                countries.add(cntry);
+            }
+            return countries;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get countries report");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
      * Added by Eoin K:27/02/21
+     * Updated by Eoin K:14/03/21
      * @param countries An array of countries, each country should be identical in attribute format.
      */
     public void displayFormattedCountries(ArrayList<Country> countries)
@@ -635,25 +700,35 @@ public class App
         String format = "";
         ArrayList<String> arguments = new ArrayList<String>();
 
+        // If countries ArrayList contains country codes then display a Country Code heading.
+        if (firstCountry.country_code != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
+            arguments.add("Country Code");
+        }
         // If countries ArrayList contains country names then display a Name heading.
         if (firstCountry.name != null) {
-            format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
+            format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
             arguments.add("Name");
         }
         // If countries ArrayList contains country continents then display a Continent heading.
         if (firstCountry.continent != null) {
-            format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
+            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
             arguments.add("Continent");
         }
         // If countries ArrayList contains country regions then display a Region heading.
         if (firstCountry.region != null) {
-            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
+            format = format.concat("%-" + Country.fieldLengths.get(3) + "s ");
             arguments.add("Region");
         }
         // If countries ArrayList contains country populations then display a Population heading.
         if (firstCountry.population != -1) {
-            format = format.concat("%-" + Country.fieldLengths.get(3) + "s");
+            format = format.concat("%-" + Country.fieldLengths.get(4) + "s ");
             arguments.add("Population");
+        }
+        // If countries ArrayList contains country populations then display a Capital City heading.
+        if (firstCountry.capital_city != null && firstCountry.capital_city.name != null) {
+            format = format.concat("%-" + City.fieldLengths.get(0) + "s");
+            arguments.add("Capital City");
         }
 
         // Print the headers
@@ -861,6 +936,14 @@ public class App
         // Full information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities22);
         System.out.println(cities22.size()); //should be 4079
+
+        // # 41 - Added by Eoin K: 14/03/21
+        // Generate country report of all the countries in the world
+        ArrayList<Country> countries41 = a.getCountryReports();
+        // Display size of country report generated.
+        // Full Information can be displayed by uncommenting the line below
+        // a.displayFormattedCountries(countries41);
+        System.out.println(countries41.size()); // Should be 232
 
         // Disconnect from database
         a.disconnect();
