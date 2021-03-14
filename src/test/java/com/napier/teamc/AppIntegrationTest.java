@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,5 +57,21 @@ public class AppIntegrationTest {
             assertNotNull(C.district);
             assertNotEquals(-1, C.population);
         });
+    }
+
+    /**
+     * Integration Test for getWorldPopulation method in App.java
+     * Added by Eoin K: 14/03/21
+     */
+    @Test
+    void WorldPopulationIntegrationTest()
+    {
+        Map<String, Number> worldPopulation = app.getWorldPopulation();
+
+        assertEquals(1, worldPopulation.size());
+        for (String i : worldPopulation.keySet()) {
+            assertEquals("World", i);
+            assertEquals(6078749450L, worldPopulation.get(i));
+        }
     }
 }
