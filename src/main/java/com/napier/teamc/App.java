@@ -637,6 +637,7 @@ public class App
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
      * Added by Eoin K:27/02/21
+     * Updated by Eoin K:14/03/21
      * @param countries An array of countries, each country should be identical in attribute format.
      */
     public void displayFormattedCountries(ArrayList<Country> countries)
@@ -647,25 +648,35 @@ public class App
         String format = "";
         ArrayList<String> arguments = new ArrayList<String>();
 
+        // If countries ArrayList contains country codes then display a Country Code heading.
+        if (firstCountry.country_code != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
+            arguments.add("Country Code");
+        }
         // If countries ArrayList contains country names then display a Name heading.
         if (firstCountry.name != null) {
-            format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
+            format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
             arguments.add("Name");
         }
         // If countries ArrayList contains country continents then display a Continent heading.
         if (firstCountry.continent != null) {
-            format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
+            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
             arguments.add("Continent");
         }
         // If countries ArrayList contains country regions then display a Region heading.
         if (firstCountry.region != null) {
-            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
+            format = format.concat("%-" + Country.fieldLengths.get(3) + "s ");
             arguments.add("Region");
         }
         // If countries ArrayList contains country populations then display a Population heading.
         if (firstCountry.population != -1) {
-            format = format.concat("%-" + Country.fieldLengths.get(3) + "s");
+            format = format.concat("%-" + Country.fieldLengths.get(4) + "s ");
             arguments.add("Population");
+        }
+        // If countries ArrayList contains country populations then display a Capital City heading.
+        if (firstCountry.capital_city != null && firstCountry.capital_city.name != null) {
+            format = format.concat("%-" + City.fieldLengths.get(0) + "s");
+            arguments.add("Capital City");
         }
 
         // Print the headers
