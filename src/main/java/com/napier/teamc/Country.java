@@ -64,10 +64,12 @@ public class Country
     /**
      * fieldLengths is an array that holds the maximum lengths of each Country object field value
      * These fieldLengths can be generated from the world DB using the following query
-     * SELECT MAX(LENGTH(Name)), MAX(LENGTH(Continent)), MAX(LENGTH(Region)), MAX(LENGTH(Population)) FROM country;
+     * SELECT MAX(LENGTH(Code)), MAX(LENGTH(Name)), MAX(LENGTH(Continent)), MAX(LENGTH(Region)), MAX(LENGTH(Population)) FROM country;
      * Added by Eoin K:27/02/21
+     * Updated by Eoin K:14/03/21 (added Code value length)
      */
     public static  ArrayList<String> fieldLengths = new ArrayList<String>(Arrays.asList(
+            "3", // The largest Country Code value length is 3.
             "44", // The largest Country Name value length is 44.
             "13", // The largest Country Continent value length is 13.
             "25", // The largest Country Region value length is 25.
@@ -93,19 +95,33 @@ public class Country
      * Country Constructor
      * A public constructor to initialise an instance of a Country object with a Name, Continent, Region and Population
      * Added by Eoin K:25/02/21
-     * Modified by Eoin K:27/02/21 (Added continent_local parameter)
+     * Modified by Eoin K:14/03/21 (Added country_code_local parameter)
+     * @param country_code_local: the code of the country to be initialised (string).
      * @param name_local: the name of the country to be initialised (string).
      * @param continent_local: the continent of the country to be initialised (continents enum).
      * @param region_local: the name of the country to be initialised (string).
      * @param population_local: the name of the country to be initialised (integer).
      */
-    public Country(String name_local, Continents continent_local, String region_local, int population_local)
+    public Country(
+            String country_code_local,
+            String name_local,
+            Continents continent_local,
+            String region_local,
+            int population_local
+    )
     {
+        country_code = country_code_local;
         name = name_local;
         continent = continent_local;
         region = region_local;
         population = population_local;
     }
+
+    /**
+     * public attribute to store a Country's code
+     * Added by Eoin K:14/03/21
+     */
+    public String country_code;
 
     // Country population
     public int population;
@@ -142,20 +158,24 @@ public class Country
         String format = "";
         ArrayList<String> arguments = new ArrayList<String>();
 
-        if (this.name != null) {
+        if (this.country_code != null) {
             format = format.concat("%-" + Country.fieldLengths.get(0) + "s ");
             arguments.add(this.name);
         }
-        if (this.continent != null) {
+        if (this.name != null) {
             format = format.concat("%-" + Country.fieldLengths.get(1) + "s ");
+            arguments.add(this.name);
+        }
+        if (this.continent != null) {
+            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
             arguments.add(this.continent.toString());
         }
         if (this.region != null) {
-            format = format.concat("%-" + Country.fieldLengths.get(2) + "s ");
+            format = format.concat("%-" + Country.fieldLengths.get(3) + "s ");
             arguments.add(this.region);
         }
         if (this.population != -1) {
-            format = format.concat("%-" + Country.fieldLengths.get(3) + "s");
+            format = format.concat("%-" + Country.fieldLengths.get(4) + "s");
             arguments.add(String.valueOf(this.population));
         }
 
