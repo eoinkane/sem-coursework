@@ -108,10 +108,12 @@ public class App
            ArrayList<Country> countries = new ArrayList<Country>();
            while (rset.next()) {
                Country cntry = new Country(
+                       null,
                        rset.getString("name"),
                        null,
                        null,
-                       rset.getInt("population")
+                       rset.getInt("population"),
+                       null
                );
                countries.add(cntry);
            }
@@ -149,10 +151,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         null,
                         rset.getString("region"),
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -192,10 +196,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         Country.Continents.customValueOf(rset.getString("continent")),
                         null,
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -234,10 +240,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         null,
                         rset.getString("region"),
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -323,10 +331,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         null,
                         null,
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
@@ -364,10 +374,12 @@ public class App
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
                 Country cntry = new Country(
+                        null,
                         rset.getString("name"),
                         Country.Continents.customValueOf(rset.getString("continent")),
                         null,
-                        rset.getInt("population")
+                        rset.getInt("population"),
+                        null
                 );
                 countries.add(cntry);
             }
