@@ -987,6 +987,12 @@ public class App
         // a.displayFormattedCountries(countries41);
         System.out.println(countries41.size()); // Should be 232
 
+        // # 42 - Added by Eoin K: 14/03/21
+        // Generate city report of all the cities in the world
+        ArrayList<City> countries42 = a.getCityReports();
+        // Display the city report generated.
+        a.displayFormattedCities(countries42);
+
         // Disconnect from database
         a.disconnect();
     }
