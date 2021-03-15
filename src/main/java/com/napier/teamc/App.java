@@ -760,6 +760,44 @@ public class App
         }
     }
 
+    /**
+     * getWorldPopulation generates the population of the world
+     * Added by Eoin K:14/03/21
+     * @return An hashmap containing one item, key: "world" value: <Long world population from database>
+     */
+    public HashMap<String, Number> getContinentPopulation()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Continent, SUM(Population) AS `continent_population` FROM country GROUP BY Continent;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            HashMap<String, Number> worldPopulation = new HashMap<String, Number>();
+            while (rset.next()) {
+                Number value;
+                if (rset.getLong("continent_population") <= Integer.MAX_VALUE) {
+                    value = rset.getInt("continent_population");
+                } else {
+                    value = rset.getLong("continent_population");
+                }
+                worldPopulation.put(rset.getString("continent"), value);
+            }
+            return worldPopulation;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get world population");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1077,6 +1115,14 @@ public class App
         // Formatted Information can be displayed by uncommenting the line below
         // a.displayFormattedPopulations(locations32);
         System.out.println(locations32.get("World"));
+
+        // # 35 - Added by Eoin K: 14/03/21
+        // Generate the continents population
+        HashMap<String, Number> locations35 = a.getContinentPopulation();
+        // Display the size of continents population information.
+        // Formatted Information can be displayed by uncommenting the line below
+        // a.displayFormattedPopulations(locations35);
+        System.out.println(locations35.size()); // Should be 7
 
         // Disconnect from database
         a.disconnect();

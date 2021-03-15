@@ -74,4 +74,19 @@ public class AppIntegrationTest {
             assertEquals(6078749450L, worldPopulation.get(i));
         }
     }
+
+    /**
+     * Integration Test for getContinentPopulation method in App.java
+     * Added by Eoin K: 14/03/21
+     */
+    @Test
+    void ContinentPopulationIntegrationTest()
+    {
+        Map<String, Number> continentPopulation = app.getContinentPopulation();
+
+        assertEquals(7, continentPopulation.size());
+        for (String i : continentPopulation.keySet()) {
+            assertTrue(continentPopulation.get(i) instanceof Number);
+        }
+    }
 }
