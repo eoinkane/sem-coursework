@@ -2,6 +2,7 @@ package com.napier.teamc;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /** Application Class
  * Holds the main logic of the program
@@ -727,6 +728,38 @@ public class App
         }
     }
 
+    /**
+     * getWorldPopulation generates the population of the world
+     * Added by Eoin K:14/03/21
+     * @return An hashmap containing one item, key: "world" value: <Long world population from database>
+     */
+    public HashMap<String, Number> getWorldPopulation()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT SUM(Population) AS `world_population` FROM country;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            HashMap<String, Number> worldPopulation = new HashMap<String, Number>();
+            if (rset.next()) {
+                worldPopulation.put("World", rset.getLong("world_population"));
+            }
+            return worldPopulation;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get world population");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -833,6 +866,48 @@ public class App
         cities.forEach(CI -> {
             System.out.println(String.format(CI.toFormattedString()));
         });
+    }
+
+    /**
+     * displayFormattedCities outputs location populations. It automatically formats the output.
+     * This method can handle populations at multiple levels, from world down to region.
+     * Added by Eoin K: 14/03/21
+     * @param locations An HashMap of locations, each location should have a name and a population.
+     */
+    public void displayFormattedPopulations(HashMap<String, Number> locations)
+    {
+        if(locations.size() == 0) {
+            return;
+        }
+
+        String format = "";
+        ArrayList<String> arguments = new ArrayList<String>();
+
+        // I
+        format = format.concat("%-44s ");
+        arguments.add("Place");
+
+        //
+        format = format.concat("%-10s");
+        arguments.add("Population");
+
+        // Print the headers
+        System.out.println(String.format(format, arguments.toArray()));
+        // Print the values
+        for (String i : locations.keySet()) {
+            String locationFormat = "";
+            ArrayList<String> locationArguments = new ArrayList<String>();
+
+            // The largest place value length is 44 from the largest country name
+            locationFormat = locationFormat.concat("%-44s ");
+            locationArguments.add(i);
+
+            // the largest population value is 10 digits long as the world population is 10 digits long
+            locationFormat = locationFormat.concat("%-10s");
+            locationArguments.add(String.valueOf(locations.get(i)));
+
+            System.out.println(String.format(locationFormat, locationArguments.toArray()));
+        }
     }
 
     /** main method
@@ -994,6 +1069,14 @@ public class App
         // Full Information can be displayed by uncommenting the line below
         // a.displayFormattedCities(countries42);
         System.out.println(countries42.size()); // Should be 4079
+
+        // # 32 - Added by Eoin K: 14/03/21
+        // Generate the world population
+        HashMap<String, Number> locations32 = a.getWorldPopulation();
+        // Display the raw value world population.
+        // Formatted Information can be displayed by uncommenting the line below
+        // a.displayFormattedPopulations(locations32);
+        System.out.println(locations32.get("World"));
 
         // Disconnect from database
         a.disconnect();

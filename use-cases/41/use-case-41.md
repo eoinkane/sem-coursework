@@ -46,9 +46,9 @@ The information analyst of the organisation requires information country reports
 
 ## MAIN SUCCESS SCENARIO
 
-1. The member of the organisation requires access to the country reports.
-3. The member of the organisation extracts a country report of all the countries in the world.
-4. The member of the organisation now has the information available to them in a report.
+1. The information analyst requires access to the country reports.
+3. The information analyst extracts a country report of all the countries in the world.
+4. The information analyst now has the information available to them in a report.
 
 ## EXTENSIONS
 
