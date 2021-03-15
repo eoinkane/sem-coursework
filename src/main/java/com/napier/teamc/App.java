@@ -868,6 +868,48 @@ public class App
         });
     }
 
+    /**
+     * displayFormattedCities outputs location populations. It automatically formats the output.
+     * This method can handle populations at multiple levels, from world down to region.
+     * Added by Eoin K: 14/03/21
+     * @param location An HashMap of locations, each location should have a name and a population.
+     */
+    public void displayFormattedPopulations(HashMap<String, Number> locations)
+    {
+        if(locations.size() == 0) {
+            return;
+        }
+
+        String format = "";
+        ArrayList<String> arguments = new ArrayList<String>();
+
+        // I
+        format = format.concat("%-44s ");
+        arguments.add("Place");
+
+        //
+        format = format.concat("%-10s");
+        arguments.add("Population");
+
+        // Print the headers
+        System.out.println(String.format(format, arguments.toArray()));
+        // Print the values
+        for (String i : locations.keySet()) {
+            String locationFormat = "";
+            ArrayList<String> locationArguments = new ArrayList<String>();
+
+            // The largest place value length is 44 from the largest country name
+            format = format.concat("%-44s ");
+            arguments.add(i);
+
+            // the largest population value is 10 digits long as the world population is 10 digits long
+            format = format.concat("%-10s");
+            arguments.add(String.valueOf(locations.get(i)));
+
+            System.out.println(String.format(locationFormat, locationArguments.toArray()));
+        }
+    }
+
     /** main method
      * A static method that is run upon execution. Nothing is returned and no parameters are expected in the array.
      * @param args an array that requires no entries
