@@ -1119,8 +1119,10 @@ public class App
         // # 35 - Added by Eoin K: 14/03/21
         // Generate the continents population
         HashMap<String, Number> locations35 = a.getContinentPopulation();
-        // Display the continents population.
-        a.displayFormattedPopulations(locations35);
+        // Display the size of continents population information.
+        // Formatted Information can be displayed by uncommenting the line below
+        // a.displayFormattedPopulations(locations35);
+        System.out.println(locations35.size()); // Should be 7
 
         // Disconnect from database
         a.disconnect();
