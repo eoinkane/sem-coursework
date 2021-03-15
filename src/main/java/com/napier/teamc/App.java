@@ -1070,6 +1070,12 @@ public class App
         // a.displayFormattedCities(countries42);
         System.out.println(countries42.size()); // Should be 4079
 
+        // # 32 - Added by Eoin K: 14/03/21
+        // Generate the world population
+        HashMap<String, Number> locations32 = a.getWorldPopulation();
+        // Display the world population.
+        a.displayFormattedPopulations(locations32);
+
         // Disconnect from database
         a.disconnect();
     }
