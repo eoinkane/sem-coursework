@@ -1116,6 +1116,12 @@ public class App
         // a.displayFormattedPopulations(locations32);
         System.out.println(locations32.get("World"));
 
+        // # 35 - Added by Eoin K: 14/03/21
+        // Generate the continents population
+        HashMap<String, Number> locations35 = a.getContinentPopulation();
+        // Display the continents population.
+        a.displayFormattedPopulations(locations35);
+
         // Disconnect from database
         a.disconnect();
     }
