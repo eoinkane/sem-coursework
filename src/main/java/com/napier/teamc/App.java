@@ -760,6 +760,44 @@ public class App
         }
     }
 
+    /**
+     * getWorldPopulation generates the population of the world
+     * Added by Eoin K:14/03/21
+     * @return An hashmap containing one item, key: "world" value: <Long world population from database>
+     */
+    public HashMap<String, Number> getContinentPopulation()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT Continent, SUM(Population) AS `continent_population` FROM country GROUP BY Continent;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            HashMap<String, Number> worldPopulation = new HashMap<String, Number>();
+            while (rset.next()) {
+                Number value;
+                if (rset.getLong("continent_population") <= Integer.MAX_VALUE) {
+                    value = rset.getInt("continent_population");
+                } else {
+                    value = rset.getLong("continent_population");
+                }
+                worldPopulation.put(rset.getString("continent"), value);
+            }
+            return worldPopulation;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get world population");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
