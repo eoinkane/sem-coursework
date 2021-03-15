@@ -1073,8 +1073,10 @@ public class App
         // # 32 - Added by Eoin K: 14/03/21
         // Generate the world population
         HashMap<String, Number> locations32 = a.getWorldPopulation();
-        // Display the world population.
-        a.displayFormattedPopulations(locations32);
+        // Display the raw value world population.
+        // Formatted Information can be displayed by uncommenting the line below
+        // a.displayFormattedPopulations(locations32);
+        System.out.println(locations32.get("World"));
 
         // Disconnect from database
         a.disconnect();
