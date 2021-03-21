@@ -798,6 +798,54 @@ public class App
         }
     }
 
+    /**
+     * getTopNPopulatedCitiesInARegion generates the top N populated cities,
+     *      in a Region where N is given.
+     * Added by Joe B: 20/03/21
+     * @param n the given number of N populated cities to generate
+     * @return An array of cities, each city has a name population and region attribute (ArrayList<City>)
+     */
+
+    public ArrayList<City> getTopNPopulatedCitiesinaRegion(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_cities AS (SELECT city.Name AS city_name, country.Region AS Region, city.Population, ROW_NUMBER() OVER "
+                            + "(PARTITION BY Region ORDER BY Population DESC) row_num FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code) "
+                            + "SELECT city_name, Region, Population FROM grouped_cities WHERE row_num <= <N>;";
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("city_name"),
+                        null,
+                        rset.getInt("population"),
+                        null,
+                        null,
+                        rset.getString("region")
+
+                );
+                cities.add(cty);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the top N populated cities in a region.");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1123,6 +1171,16 @@ public class App
         // Formatted Information can be displayed by uncommenting the line below
         // a.displayFormattedPopulations(locations35);
         System.out.println(locations35.size()); // Should be 7
+
+        // # 23 - Added by Joe B: 20/03/21
+        // Generate population information of all the cities,
+        //      in a Region from largest to smallest population.
+        ArrayList<City> cities23 = a.getTopNPopulatedCitiesinaRegion(3);
+        // Display amount of population information of all the cities,
+        //      in a Region from largest to smallest population.
+        // Full information can be displayed by uncommenting the line below
+        // a.displayFormattedCities(cities23);
+        System.out.println(cities23.size()); //Should be 69 - 3 cities per region.
 
         // Disconnect from database
         a.disconnect();
