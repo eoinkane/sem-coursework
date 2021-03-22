@@ -1179,8 +1179,8 @@ public class App
         // Display amount of population information of all the cities,
         //      in a Region from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
-        // a.displayFormattedCities(cities23);
-        System.out.println(cities23.size()); //Should be 69 - 3 cities per region.
+        a.displayFormattedCities(cities23);
+       // System.out.println(cities23.size()); //Should be 69 - 3 cities per region.
 
         // Disconnect from database
         a.disconnect();

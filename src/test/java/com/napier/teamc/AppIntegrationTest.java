@@ -89,4 +89,39 @@ public class AppIntegrationTest {
             assertTrue(continentPopulation.get(i) instanceof Number);
         }
     }
+
+
+    @Test
+    void CitiesInARegion()
+    {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesinaRegion(3);
+
+        assertEquals(69, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.region);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    @Test
+    void CitiesInARegion1()
+    {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesinaRegion(1);
+
+        int numofbritresults = 0;
+
+        for (int i = 0; i < cities.size(); i++) {
+
+            City C = cities.get(i);
+
+            if (C.region.equals("British Islands")) {
+                ++numofbritresults;
+
+            }
+        };
+
+        assertEquals(1, numofbritresults);
+    }
 }
