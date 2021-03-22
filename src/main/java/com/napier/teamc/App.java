@@ -853,7 +853,6 @@ public class App
      * @param n the given number of N populated cities to generate
      * @return An array of cities, each city has a name population and country attribute (ArrayList<City>)
      */
-
     public ArrayList<City> getTopNPopulatedCitiesinaCountry(int n)
     {
         try
@@ -930,6 +929,50 @@ public class App
             System.out.println("Failed to get region population");
             return null;
         }
+    }
+
+    /**
+     * getTopNPopulatedCitiesInACountry generates the top N populated cities,
+     *      in a Country where N is given.
+     * Added by Jackson A: 22/03/21
+     * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
+     */
+    public ArrayList<String> getPopulatedAndUnpopulatedCities() {
+
+        String x = null;
+
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT country.Code AS 'country_code', country.Name AS 'country_name', country.Population AS 'population', in_cities.population_in_cities, (country.Population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM country "
+                            + "JOIN (SELECT CountryCode, COUNT(*) AS 'no_of_cities', SUM(Population) AS 'population_in_cities' FROM city "
+                            + "GROUP BY CountryCode) in_cities ON in_cities.CountryCode = country.Code;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            ArrayList<String> info = new ArrayList<String>();
+            // Display
+            while (rset.next()) {
+                // Generate string
+                x = ("Name " + rset.getString("country_name") + " Total population " + rset.getString("population") + " Population in cities: " + rset.getInt("population_in_cities") + " Population not in a city: " + rset.getString("population_not_in_cities"));
+                info.add(x);
+            }
+            return info;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the population information in and out of cities.");
+            return null;
+        }
+    }
+
+    /* displayBasicStringArray takes a list of strings and outputs them.
+     * Added by Jackson A:22/03/21
+     */
+    public void displayBasicStringArray(ArrayList<String> populations)
+    {
+        populations.forEach(singleString -> System.out.println(singleString));
     }
 
     /*
@@ -1285,6 +1328,14 @@ public class App
         // Formatted Information can be displayed by uncommenting the line below
         // a.displayFormattedPopulations(regions37);
         System.out.println(regions37.size()); // Should be 25
+
+        // # 6 - Added by Jackson A: 22/03/21
+        // Generate the population of people living in and out of cities.
+        ArrayList<String> cities6 = a.getPopulatedAndUnpopulatedCities();
+        // Display the size of regions population information.
+        // Formatted Information can be displayed by uncommenting the line below
+        a.displayBasicStringArray(cities6);
+        System.out.println(cities6.size()); // Should be 232
 
         // Disconnect from database
         a.disconnect();
