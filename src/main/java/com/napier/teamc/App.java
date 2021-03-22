@@ -894,6 +894,44 @@ public class App
         }
     }
 
+    /**
+     * getRegionPopulation generates the population of each region
+     * Added by Jackson A:22/03/21
+     * @return An hashmap containing one item, key: "world" value: <Long world population from database>
+     */
+    public HashMap<String, Number> getRegionPopulation()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT region, SUM(Population) AS `region_population` FROM country GROUP BY region;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new region info if valid.
+            // Extract region information.
+            HashMap<String, Number> regionPopulation = new HashMap<String, Number>();
+            while (rset.next()) {
+                Number value;
+                if (rset.getLong("region_population") <= Integer.MAX_VALUE) {
+                    value = rset.getInt("region_population");
+                } else {
+                    value = rset.getLong("region_population");
+                }
+                regionPopulation.put(rset.getString("region"), value);
+            }
+            return regionPopulation;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get region population");
+            return null;
+        }
+    }
+
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -1240,6 +1278,14 @@ public class App
         // Full information can be displayed by uncommenting the line below
         // a.displayFormattedCities(cities21);
         System.out.println(cities21.size()); //Should be  - 3 cities per country
+
+        // # 37 - Added by Jackson A: 22/03/21
+        // Generate the regions population
+        HashMap<String, Number> regions37 = a.getRegionPopulation();
+        // Display the size of regions population information.
+        // Formatted Information can be displayed by uncommenting the line below
+        // a.displayFormattedPopulations(regions37);
+        System.out.println(regions37.size()); // Should be 25
 
         // Disconnect from database
         a.disconnect();
