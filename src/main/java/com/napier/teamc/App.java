@@ -894,6 +894,51 @@ public class App
         }
     }
 
+    /**
+     * getTopNCapitalCitiesintheWorld generates all the capital cities in the world and collates them into an ArrayList<Country>
+     * Added by Joe B: 22/03/21
+     * @return An array of capital cities, each capital city has a country, city name and population
+     */
+    public ArrayList<City> getTopNCapitalCitiesintheWorld(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_cities AS (SELECT country.Name AS CountryName, capital_city.Name as `capital_city_name`, capital_city.Population, ROW_NUMBER() OVER "
+                            + "(PARTITION BY Name ORDER BY Population DESC) row_num FROM country "
+                            + "JOIN city capital_city ON capital_city.ID = country.Capital) "
+                            + "SELECT CountryName, WHERE row_num <= <N>;";
+
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City capital_city = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        rset.getInt("population"),
+                        null,
+                        rset.getString("name"),
+                        null
+                );
+
+                cities.add(capital_city);
+            }
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get countries report");
+            return null;
+        }
+    }
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -1240,6 +1285,16 @@ public class App
         // Full information can be displayed by uncommenting the line below
         // a.displayFormattedCities(cities21);
         System.out.println(cities21.size()); //Should be  - 3 cities per country
+
+       // # 14 - Added by Joe B 22/03/2021
+        // Generate population information of the Top N Populated Capital Cities,
+        //      in the World where N is Provided by the User.
+        ArrayList<City> cities14 = a.getTopNCapitalCitiesintheWorld(5);
+        // Display amount of population information of the Top N Populated Capital Cities,
+        //      in the World where N is Provided by the User.
+        // Full information can be displayed by uncommenting the line below
+        a.displayFormattedCities(cities14);
+        // System.out.println(countries14.size()); // Should be N
 
         // Disconnect from database
         a.disconnect();
