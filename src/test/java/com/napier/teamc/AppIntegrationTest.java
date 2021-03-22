@@ -89,4 +89,18 @@ public class AppIntegrationTest {
             assertTrue(continentPopulation.get(i) instanceof Number);
         }
     }
+
+    /**
+     * Integration Test for getRegionPopulation() method in App.java
+     * Added by Jackson A: 22/03/21
+     */
+    @Test
+    void RegionPopulationIntegrationTest() {
+        Map<String, Number> regionPopulation = app.getRegionPopulation();
+
+        assertEquals(25, regionPopulation.size());
+        for (String i : regionPopulation.keySet()) {
+            assertTrue(regionPopulation.get(i) instanceof Number);
+        }
+    }
 }

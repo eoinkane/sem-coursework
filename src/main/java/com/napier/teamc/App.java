@@ -932,7 +932,6 @@ public class App
         }
     }
 
-
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1291,3 +1290,4 @@ public class App
         a.disconnect();
     }
 }
+
