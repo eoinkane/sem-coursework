@@ -1,0 +1,18 @@
+@startuml
+
+actor Member as "Information Analyst in the
+organisation"
+
+rectangle Database
+
+rectangle "Population Information System" {
+    usecase UC32 as "Get population of the world statistic."
+
+    usecase UCa as "Output the report with 1 statistic."
+
+    Member - UC32
+    UC32 ..> UCa : include
+    UC32 - Database
+}
+
+@enduml
