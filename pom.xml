@@ -6,7 +6,7 @@
 
     <groupId>com.napier.teamc</groupId>
     <artifactId>sem-coursework</artifactId>
-    <version>0.1-alpha.3</version>
+    <version>0.1-alpha.4</version>
 
     <dependencies>
         <dependency>
