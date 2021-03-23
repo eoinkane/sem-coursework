@@ -319,4 +319,18 @@ public class AppIntegrationTest {
             assertNotEquals(-1, C.population);
         });
     }
+
+
+    @Test
+    void CapitalCitiesInAContinent17() {
+        ArrayList<City> cities = app.getAllCapitalCitiesInAContinent();
+
+        assertEquals(232, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNotEquals(-1, C.population);
+        });
+    }
 }
