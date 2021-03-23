@@ -1334,7 +1334,7 @@ public class App
         ArrayList<String> cities6 = a.getPopulatedAndUnpopulatedCities();
         // Display the size of regions population information.
         // Formatted Information can be displayed by uncommenting the line below
-        a.displayBasicStringArray(cities6);
+        //a.displayBasicStringArray(cities6);
         System.out.println(cities6.size()); // Should be 232
 
         // Disconnect from database
