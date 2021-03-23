@@ -247,4 +247,37 @@ public class AppIntegrationTest {
         }
         assertEquals(1, numofregionname);
     }
+
+
+    @Test
+    void CapitalCitiesInAContinent() {
+        ArrayList<City> continents = app.getTopNCapitalCitiesinAContinent(3);
+
+        assertEquals(18, continents.size());
+
+        continents.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    @Test
+    void CapitalCitiesInAContinent1() {
+        ArrayList<City> cities = app.getTopNCapitalCitiesinAContinent(1);
+
+        int numofafrica = 0;
+
+        for (int i = 0; i < cities.size(); i++) {
+
+            City C = cities.get(i);
+            if (C.continent.equals("Africa")) {
+                ++numofafrica;
+
+
+            }
+
+        }
+        assertEquals(1,numofafrica);
+    }
 }
