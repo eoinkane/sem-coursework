@@ -1060,6 +1060,53 @@ public class App
             return null;
         }
     }
+    /**
+     * getTopNPopulatedCitiesInAContinent generates the top N populated cities,
+     *      in a Country where N is given.
+     * Added by Robbie M: 22/03/21
+     * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
+     */
+    public ArrayList<City> getTopNCapitalCitiesinAContinent(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_cities AS (SELECT country.Continent AS Continent, capital_city.Name AS `capital_city_name`, capital_city.Population AS `capital_city_population`, ROW_NUMBER() OVER \n"
+                            + "(PARTITION BY Continent ORDER BY capital_city.Population DESC) row_num FROM country \n"
+                            + "JOIN city capital_city ON capital_city.ID = country.Capital) \n"
+                            + "SELECT Continent, capital_city_name, capital_city_population FROM grouped_cities WHERE row_num <= <N>;";
+
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City capital_city = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        rset.getInt("capital_city_population"),
+                        rset.getString("continent"),
+                        null,
+                        null
+                );
+
+                cities.add(capital_city);
+            }
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get top n populated cities in ta continent");
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1441,6 +1488,16 @@ public class App
         // Full information can be displayed by uncommenting the line below
         // a.displayFormattedCities(cities11);
         System.out.println(cities11.size()); // Should be N (3) - 3 highest populated capital cities per region
+
+        // # 13 - Added by Robbie M 22/03/2021
+        // Generate population information of the Top N Populated Capital Cities,
+        //      in the a Continent where N is Provided by the User.
+        ArrayList<City> cities13 = a.getTopNCapitalCitiesinAContinent(3);
+        // Display amount of population information of the Top N Populated Capital Cities,
+        //      in the a Continent where N is Provided by the User.
+        // Full information can be displayed by uncommenting the line below
+        //a.displayFormattedCities(cities13);
+        System.out.println(cities13.size()); // Should be N (3) - e.g top 5 most populated capitals in the world
 
         // Disconnect from database
         a.disconnect();
