@@ -1,0 +1,18 @@
+@startuml
+
+actor Member as "Information Analyst in the
+organisation"
+
+rectangle Database
+
+rectangle "Population Information System" {
+    usecase UC41 as "Get Country Reports for every country."
+
+    usecase UCa as "Output the report."
+
+    Member - UC41
+    UC41 ..> UCa : include
+    UC41 - Database
+}
+
+@enduml
