@@ -1012,6 +1012,43 @@ public class App
         }
     }
 
+    /**
+     * getTopNPopulatedCitiesForContinent() find the population of people living in and out of cities,
+     *      For each Continent
+     * Added by Jackson A: 23/03/21
+     * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
+     */
+    public ArrayList<String> getPopulatedAndUnpopulatedCitiesForContinent() {
+
+        String x = null;
+
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT in_continents.continent AS 'continent_name', in_continents.continent_population, in_cities.population_in_cities, (in_continents.continent_population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM (SELECT Continent AS 'continent' , SUM(Population) AS 'continent_population' FROM country GROUP BY Continent) in_continents "
+                            + "LEFT JOIN (SELECT country.Continent AS 'continent', SUM(city.Population) AS 'population_in_cities' FROM city "
+                            + "JOIN country ON city.CountryCode = country.Code GROUP BY Continent) in_cities ON in_cities.continent = in_continents.continent;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            ArrayList<String> ContinentInfo = new ArrayList<String>();
+            // Display
+            while (rset.next()) {
+                // Generate string
+                x = ("Name " + rset.getString("continent_name") + " Total population " + rset.getString("continent_population") + " Population in cities: " + rset.getInt("population_in_cities") + " Population not in a city: " + rset.getString("population_not_in_cities"));
+                ContinentInfo.add(x);
+            }
+            return ContinentInfo;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the population information in and out of cities for each Continent.");
+            return null;
+        }
+    }
+
+
     /* displayBasicStringArray takes a list of strings and outputs them.
      * Added by Jackson A:22/03/21
      */
@@ -1391,6 +1428,14 @@ public class App
         // Full information can be displayed by uncommenting the line below
         // a.displayFormattedCities(cities14);
         System.out.println(cities14.size()); // Should be N (5) - e.g top 5 most populated capitals in the world
+
+        // # 10 - Added by Jackson A: 23/03/21
+        // Generate the population of people living in and out of cities for each Continent..
+        ArrayList<String> cities10 = a.getPopulatedAndUnpopulatedCitiesForContinent();
+        // Display the city info.
+        // Formatted Information can be displayed by uncommenting the line below
+        //a.displayBasicStringArray(cities10);
+        System.out.println(cities10.size()); //7
 
         // Disconnect from database
         a.disconnect();
