@@ -157,4 +157,24 @@ public class AppIntegrationTest {
             assertNotNull(C);
         });
     }
+
+    /**
+     * Integration Test for getPopulatedAndUnpopulatedCities() method in App.java
+     * Added by Jackson A: 22/03/21
+     */
+    @Test
+    void CityAndNonCityPopulationIntegrationTestForContinent()
+    {
+        // populate a test list
+        ArrayList<String> testLst = app.getPopulatedAndUnpopulatedCitiesForContinent();
+
+        // Size must be 7
+        assertEquals(7, testLst.size());
+
+        // Make sure the string is not null when returned.
+        testLst.forEach(C -> {
+            assertNotNull(C);
+        });
+    }
+
 }
