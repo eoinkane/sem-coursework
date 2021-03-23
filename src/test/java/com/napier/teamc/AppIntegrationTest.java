@@ -204,7 +204,7 @@ public class AppIntegrationTest {
 
             }
         }
-
+        assertEquals(1, numofseoul);
 
     }
 
@@ -245,6 +245,6 @@ public class AppIntegrationTest {
 
             }
         }
-
+        assertEquals(1, numofregionname);
     }
 }
