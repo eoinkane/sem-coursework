@@ -38,11 +38,9 @@ The member of the organisation requires information of All the capital cities in
 
 ## MAIN SUCCESS SCENARIO
 
-1. The member of the organisation requires access to this population information of the top N populated
-   capital cities in the world.
-2. The member of the organisation provides N as the given input.
-3. The member of the organisation extracts a report of All the capital cities in the world organised by largest population to smallest..
-4. The member of the organisation now has the information available to them in a report.
+1. The member of the organisation requires access toAll the capital cities in the world organised by largest population to smallest.
+2. The member of the organisation extracts a report of All the capital cities in the world organised by largest population to smallest..
+3. The member of the organisation now has the information available to them in a report.
 
 ## EXTENSIONS
 

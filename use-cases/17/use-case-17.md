@@ -39,8 +39,8 @@ The member of the organisation requires information of All the capital cities in
 ## MAIN SUCCESS SCENARIO
 
 1. The member of the organisation requires access to this population information of All the capital cities in a continent organised by largest population to smallest.
-3. The member of the organisation extracts a report of All the capital cities in a continent organised by largest population to smallest..
-4. The member of the organisation now has the information available to them in a report.
+2. The member of the organisation extracts a report of All the capital cities in a continent organised by largest population to smallest..
+3. The member of the organisation now has the information available to them in a report.
 
 ## EXTENSIONS
 
