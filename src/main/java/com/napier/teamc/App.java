@@ -1144,6 +1144,36 @@ public class App
         }
     }
 
+    public ArrayList<String> getPopulatedAndUnpopulatedCitiesForRegion() {
+
+        String x = null;
+
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT in_regions.region AS 'region_name', in_regions.region_population, in_cities.population_in_cities, (in_regions.region_population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM (SELECT Region AS 'region' , SUM(Population) AS 'region_population' \n" +
+                            "FROM country GROUP BY Region) in_regions "
+                            +"LEFT JOIN (SELECT country.Region AS 'region', SUM(city.Population) AS 'population_in_cities' "
+                            +"FROM city JOIN country ON city.CountryCode = country.Code GROUP BY Region) in_cities ON in_cities.region = in_regions.region;";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            ArrayList<String> ContinentInfo = new ArrayList<String>();
+            // Display
+            while (rset.next()) {
+                // Generate string
+                x = ("Name " + rset.getString("region_name") + " Total population " + rset.getString("region_population") + " Population in cities: " + rset.getInt("population_in_cities") + " Population not in a city: " + rset.getString("population_not_in_cities"));
+                ContinentInfo.add(x);
+            }
+            return ContinentInfo;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get the population information in and out of cities for each Continent.");
+            return null;
+        }
+    }
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1543,6 +1573,14 @@ public class App
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayBasicStringArray(cities10);
         System.out.println(cities10.size()); //7
+
+        // # 8 - Added by Robbie M: 23/03/21
+        // Generate the population of people living in and out of cities for each Continent..
+        ArrayList<String> cities8 = a.getPopulatedAndUnpopulatedCitiesForRegion();
+        // Display the city info.
+        // Formatted Information can be displayed by uncommenting the line below
+        //a.displayBasicStringArray(cities8);
+        System.out.println(cities8.size()); //7
 
         // Disconnect from database
         a.disconnect();
