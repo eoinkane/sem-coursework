@@ -977,6 +977,46 @@ public class App
         }
     }
 
+    public ArrayList<City> getTopNCapitalCitiesinaRegion(int n)
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "WITH grouped_cities AS (SELECT country.Region AS Region, capital_city.Name AS `capital_city_name`, capital_city.Population AS `capital_city_population`, ROW_NUMBER() OVER "
+                            + "(PARTITION BY Region ORDER BY capital_city.Population DESC) row_num FROM country "
+                            + "JOIN city capital_city ON capital_city.ID = country.Capital) "
+                            + "SELECT Region, capital_city_name, capital_city_population FROM grouped_cities WHERE row_num <= <N>;";
+
+            strSelect = strSelect.replace("<N>", String.valueOf(n));
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new country if valid.
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City capital_city = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        rset.getInt("capital_city_population"),
+                        null,
+                        null,
+                        rset.getString("region")
+                );
+
+                cities.add(capital_city);
+            }
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get top n populated cities in the world.");
+            return null;
+        }
+    }
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1340,6 +1380,16 @@ public class App
         // Full information can be displayed by uncommenting the line below
         // a.displayFormattedCities(cities14);
         System.out.println(cities14.size()); // Should be N (5) - e.g top 5 most populated capitals in the world
+
+        // # 11 - Added by Joe B 22/03/2021
+        // Generate population information of the Top N Populated Capital Cities,
+        //      in the a Region where N is Provided by the User.
+        ArrayList<City> cities11 = a.getTopNCapitalCitiesinaRegion(3);
+        // Display amount of population information of the Top N Populated Capital Cities,
+        //      in a Region where N is Provided by the User.
+        // Full information can be displayed by uncommenting the line below
+        // a.displayFormattedCities(cities11);
+        System.out.println(cities11.size()); // Should be N (3) - 3 highest populated capital cities per region
 
         // Disconnect from database
         a.disconnect();
