@@ -157,4 +157,35 @@ public class AppIntegrationTest {
             assertNotNull(C);
         });
     }
+
+    @Test
+    void CapitalCitiesInTheWorld() {
+        ArrayList<City> cities = app.getTopNCapitalCitiesintheWorld(5);
+
+        assertEquals(5, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.country);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    @Test
+    void CapitalCitiesInTheWorld1() {
+        ArrayList<City> cities = app.getTopNCapitalCitiesintheWorld(1);
+
+        int numofseoul = 0;
+
+        for (int i = 0; i < cities.size(); i++) {
+
+            City C = cities.get(i);
+
+            if (C.name.equals("Seoul")) {
+                ++numofseoul;
+
+            }
+        }
+        ;
+    }
 }
