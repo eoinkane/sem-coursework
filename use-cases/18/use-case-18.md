@@ -44,8 +44,7 @@ The member of the organisation requires information of All the capital cities in
 
 ## EXTENSIONS
 
-3. **N is greater than the number of capital cities in the world**
-    1. The report will contain All the capital cities in the world organised by largest population to smallest.
+None.
 
 ## SUB-VARIATIONS
 

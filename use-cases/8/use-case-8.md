@@ -34,7 +34,7 @@ A member of the organisation.
 
 ### Trigger
 
-The member of the organisation requires information on the people living in a city, and the people not living in a city in each continent.
+The member of the organisation requires information on the people living in a city, and the people not living in a city in each Region
 ## MAIN SUCCESS SCENARIO
 
 1. The member of the organisation requires access to this population information on the people living in a city, and the people not living in a city in each Region.

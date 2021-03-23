@@ -1139,7 +1139,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get top n populated cities in ta continent");
+            System.out.println("Failed to get top n populated cities in a continent");
             return null;
         }
     }
@@ -1170,7 +1170,7 @@ public class App
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get the population information in and out of cities for each Continent.");
+            System.out.println("Failed to get the population information in and out of cities for each Region.");
             return null;
         }
     }
@@ -1287,7 +1287,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get all capital cities in a continent");
+            System.out.println("Failed to get all capital cities in a Region");
             return null;
         }
     }
@@ -1721,7 +1721,7 @@ public class App
         ArrayList<City> cities16 = a.getAllCapitalCitiesInARegion();
         // Display the city info.
         // Formatted Information can be displayed by uncommenting the line below
-        a.displayFormattedCities(cities16);
+        //a.displayFormattedCities(cities16);
         System.out.println(cities16.size()); //232
 
         // Disconnect from database
