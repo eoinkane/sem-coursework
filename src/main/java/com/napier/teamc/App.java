@@ -1052,7 +1052,7 @@ public class App
     /* displayBasicStringArray takes a list of strings and outputs them.
      * Added by Jackson A:22/03/21
      */
-    public void displayBasicStringArray(ArrayList<String> populations)
+    public void displayBasicStringArray(ArrayList<City> populations)
     {
         populations.forEach(singleString -> System.out.println(singleString));
     }
@@ -1174,6 +1174,47 @@ public class App
             return null;
         }
     }
+
+    public ArrayList<City> getAllCapitalCitiesInTheWorld()
+    {
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT country.Name AS Name, capital_city.Name AS `capital_city_name`, capital_city.Population AS `capital_city_population`"
+                            + "FROM country "
+                            +"JOIN city capital_city ON capital_city.ID = country.Capital\n"
+                            +"ORDER BY capital_city_population DESC ";
+
+            // Execute SQL
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract country information.
+            ArrayList<City> cities = new ArrayList<City>();
+            while (rset.next()) {
+                City capital_city = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        rset.getInt("capital_city_population"),
+                        null,
+                        null,
+                        null
+                );
+                cities.add(capital_city);
+            }
+            // return results
+            return cities;
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get all cities in a country");
+            return null;
+        }
+    }
+
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1575,12 +1616,20 @@ public class App
         System.out.println(cities10.size()); //7
 
         // # 8 - Added by Robbie M: 23/03/21
-        // Generate the population of people living in and out of cities for each Continent..
+        // Generate the population of people living in and out of cities for each Region..
         ArrayList<String> cities8 = a.getPopulatedAndUnpopulatedCitiesForRegion();
         // Display the city info.
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayBasicStringArray(cities8);
         System.out.println(cities8.size()); //7
+
+        // # 18 - Added by Robbie M: 23/03/21
+        // Generate All the capital cities in the world organised by largest population to smallest.
+        ArrayList<City> cities18 = a.getAllCapitalCitiesInTheWorld();
+        // Display the city info.
+        // Formatted Information can be displayed by uncommenting the line below
+        //a.displayFormattedCities(cities18);
+        System.out.println(cities18.size()); //232
 
         // Disconnect from database
         a.disconnect();

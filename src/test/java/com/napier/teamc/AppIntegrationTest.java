@@ -306,4 +306,17 @@ public class AppIntegrationTest {
             assertNotNull(C);
         });
     }
+
+
+    @Test
+    void CapitalCitiesInTheWorld18() {
+        ArrayList<City> cities = app.getAllCapitalCitiesInTheWorld();
+
+        assertEquals(232, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotEquals(-1, C.population);
+        });
+    }
 }
