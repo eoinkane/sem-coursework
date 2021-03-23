@@ -104,7 +104,10 @@ public class AppIntegrationTest {
         }
     }
 
-
+    /**
+     * #23 Integration Test for getTopNPopulatedCitiesinaRegion() method in App.java
+     * Added by Joe B: 20/03/21
+     */
     @Test
     void CitiesInARegion()
     {
@@ -119,6 +122,11 @@ public class AppIntegrationTest {
         });
     }
 
+    /**
+     * #23 Integration Test for getTopNPopulatedCitiesinaRegion() method in App.java
+     * Testing to see if British Islands is shown when the method is called.
+     * Added by Joe B: 20/03/21
+     */
     @Test
     void CitiesInARegion1()
     {
@@ -158,6 +166,11 @@ public class AppIntegrationTest {
         });
     }
 
+    /**
+     * #14 Integration Test for getTopNCapitalCitiesintheWorld() method in App.java
+     * Added by Joe B: 21/03/21
+     */
+
     @Test
     void CapitalCitiesInTheWorld() {
         ArrayList<City> cities = app.getTopNCapitalCitiesintheWorld(5);
@@ -171,6 +184,11 @@ public class AppIntegrationTest {
         });
     }
 
+    /**
+     * #14 Integration Test for getTopNCapitalCitiesintheWorld() method in App.java
+     * Testing to see if Seoul is displayed when the method is called.
+     * Added by Joe B: 21/03/21
+     */
     @Test
     void CapitalCitiesInTheWorld1() {
         ArrayList<City> cities = app.getTopNCapitalCitiesintheWorld(1);
@@ -186,6 +204,47 @@ public class AppIntegrationTest {
 
             }
         }
-        ;
+
+
+    }
+
+    /**
+     * #11 Integration Test for getTopNCapitalCitiesinaRegion() method in App.java
+     * Added by Joe B: 22/03/21
+     */
+    @Test
+    void CapitalCitiesInARegion() {
+        ArrayList<City> cities = app.getTopNCapitalCitiesinaRegion(3);
+
+        assertEquals(68, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.region);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * #11 Integration Test for getTopNCapitalCitiesinaRegion() method in App.java
+     * Testing to see if the region Western Africa is displayed when the method is called.
+     * Added by Joe B: 22/03/21
+     */
+    @Test
+    void CapitalCitiesInARegion1() {
+        ArrayList<City> cities = app.getTopNCapitalCitiesinaRegion(1);
+
+        int numofregionname = 0;
+
+        for (int i = 0; i < cities.size(); i++) {
+
+            City C = cities.get(i);
+
+            if (C.region.equals("Western Africa")) {
+                ++numofregionname;
+
+            }
+        }
+
     }
 }
