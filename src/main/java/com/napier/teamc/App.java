@@ -907,10 +907,10 @@ public class App
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String strSelect =
-                    "WITH grouped_cities AS (SELECT country.Name AS CountryName, capital_city.Name as `capital_city_name`, capital_city.Population, ROW_NUMBER() OVER "
-                            + "(PARTITION BY Name ORDER BY Population DESC) row_num FROM country "
+                    "WITH grouped_cities AS (SELECT country.Name AS Name, capital_city.Name AS `capital_city_name`, capital_city.Population AS `capital_city_population`, ROW_NUMBER() OVER "
+                            + "(ORDER BY capital_city.Population DESC) row_num FROM country "
                             + "JOIN city capital_city ON capital_city.ID = country.Capital) "
-                            + "SELECT CountryName, WHERE row_num <= <N>;";
+                            + "SELECT Name, capital_city_name, capital_city_population FROM grouped_cities WHERE row_num <= <N>;";
 
             strSelect = strSelect.replace("<N>", String.valueOf(n));
             // Execute SQL statement
@@ -922,7 +922,7 @@ public class App
                 City capital_city = new City(
                         rset.getString("capital_city_name"),
                         null,
-                        rset.getInt("population"),
+                        rset.getInt("capital_city_population"),
                         null,
                         rset.getString("name"),
                         null
@@ -935,7 +935,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get countries report");
+            System.out.println("Failed to get top n populated cities in the world.");
             return null;
         }
     }
@@ -1293,8 +1293,8 @@ public class App
         // Display amount of population information of the Top N Populated Capital Cities,
         //      in the World where N is Provided by the User.
         // Full information can be displayed by uncommenting the line below
-        a.displayFormattedCities(cities14);
-        // System.out.println(countries14.size()); // Should be N
+        // a.displayFormattedCities(cities14);
+        System.out.println(cities14.size()); // Should be N (5) - e.g top 5 most populated capitals in the world
 
         // Disconnect from database
         a.disconnect();
