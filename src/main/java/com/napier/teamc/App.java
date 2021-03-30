@@ -86,6 +86,43 @@ public class App
     }
 
     /**
+     * query executes a given SQL Select query on the connected database.
+     * Added by Eoin K:30/03/21
+     * @param SQLQuery
+     * @param errorMessage
+     * @return
+     */
+    public ResultSet query(String SQLQuery, String errorMessage)
+    {
+        // If the connection to the database has not been initialised then the method should not try execute the query.
+        if (con == null) {
+            System.out.println("Application is not connected to the database");
+            return null;
+        }
+
+        // SQL query try catch section
+        try
+        {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Execute the SQL query passed to the method.
+            ResultSet rset = stmt.executeQuery(SQLQuery);
+            // Return the results of the query.
+            return rset;
+        }
+        // If an SQLException is thrown then handle the error.
+        catch (SQLException e)
+        {
+            // Output the error message generated. This message will be about what happened.
+            System.out.println(e.getMessage());
+            // Output the given error message, which is more to do with the stack trace and where the error came from.
+            System.out.println(errorMessage);
+            return null;
+        }
+
+    }
+
+    /**
      * getCountryLargestToSmallest generates populated countries from largest to smallest,
      *      in the world.
      * Added by Jackson A:01/03/21

@@ -1,5 +1,7 @@
 package com.napier.teamc;
 
+import java.sql.*;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,6 +18,66 @@ public class AppIntegrationTest {
     static void init() {
         app = new App();
         app.connect("localhost:33060");
+    }
+
+
+    /** AppQueryWhileConnectedIntegrationTest
+     *  This test tests the App.query method.
+     *  It should executes a given SQL Select query on the connected database.
+     *  Added by Eoin K:30/03/21
+     */
+    @Test
+    void AppQueryWhileConnectedIntegrationTest() {
+        String query = "SELECT * FROM country;";
+        ResultSet rset = app.query(query, "error message");
+
+        try
+        {
+            // If the result set does not contain any records then app.query() has failed tests.
+            if (!rset.next()) {
+                fail("app.query() did not return any results. Check data is available or test has failed.");
+            }
+
+        }
+        // If an SQLException is thrown then handle the error.
+        catch (SQLException e)
+        {
+            fail("Should not have thrown an SQL Exception");
+        }
+    }
+
+    /** AppQueryWhileDisconnectedIntegrationTest
+     *  This test tests the App.query method when the App is not connected to the database.
+     *  It should throw an SQL Exception.
+     *  Added by Eoin K:30/03/21
+     */
+    @Test
+    void AppQueryWhileDisconnectedIntegrationTest1() {
+        // Test setup as each test automatically connects to the database
+        app.disconnect();
+
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT * FROM country;", "error message");
+
+        // Assert that the method returns null as the database connection has been closed
+        assertEquals(null, rset);
+    }
+
+    /** AppQueryWhileDisconnectedIntegrationTest
+     *  This test tests the App.query method when the App is not connected to the database.
+     *  It should throw an SQL Exception.
+     *  Added by Eoin K:30/03/21
+     */
+    @Test
+    void AppQueryWhileDisconnectedIntegrationTest2() {
+        // Test setup as each test automatically connects to the database
+        app = new App();
+
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT * FROM country;", "error message");
+
+        // Assert that the method returns null as the database connection has not been opened
+        assertEquals(null, rset);
     }
 
     /**
