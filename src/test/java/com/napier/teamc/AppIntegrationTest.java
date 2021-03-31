@@ -61,6 +61,9 @@ public class AppIntegrationTest {
 
         // Assert that the method returns null as the database connection has been closed
         assertEquals(null, rset);
+
+        // To allow the rest of the tests to run successfully, reconnect to the database
+        app.connect("localhost:33060");
     }
 
     /** AppQueryWhileDisconnectedIntegrationTest
@@ -78,6 +81,9 @@ public class AppIntegrationTest {
 
         // Assert that the method returns null as the database connection has not been opened
         assertEquals(null, rset);
+
+        // To allow the rest of the tests to run successfully, reconnect to the database
+        app.connect("localhost:33060");
     }
 
     /**

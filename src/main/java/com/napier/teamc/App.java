@@ -105,10 +105,8 @@ public class App
         {
             // Create an SQL statement
             Statement stmt = con.createStatement();
-            // Execute the SQL query passed to the method.
-            ResultSet rset = stmt.executeQuery(SQLQuery);
-            // Return the results of the query.
-            return rset;
+            // Execute the SQL query passed to the method and return the results.
+            return stmt.executeQuery(SQLQuery);
         }
         // If an SQLException is thrown then handle the error.
         catch (SQLException e)
