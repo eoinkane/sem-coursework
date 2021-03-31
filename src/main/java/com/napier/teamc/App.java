@@ -772,20 +772,22 @@ public class App
      */
     public ArrayList<Country> getCountryReports()
     {
+        // Method initialisation
+        String strSelect =
+                "SELECT Code, country.Name, country.Continent, country.Region, country.Population, "
+                        + "capital_city.Name as `capital_city_name` FROM country JOIN city capital_city ON "
+                        + "capital_city.ID = country.Capital";
+        String errorMessage = "Failed to get countries report";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT Code, country.Name, country.Continent, country.Region, country.Population, "
-                            + "capital_city.Name as `capital_city_name` FROM country JOIN city capital_city ON "
-                            + "capital_city.ID = country.Capital";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new country if valid.
-            // Extract country information.
+            // Extract country information from query results.
             ArrayList<Country> countries = new ArrayList<Country>();
+            // Create a new country object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
                         rset.getString("capital_city_name"),
@@ -810,7 +812,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get countries report");
+            System.out.println(errorMessage);
             return null;
         }
     }

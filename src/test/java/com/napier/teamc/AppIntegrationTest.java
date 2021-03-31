@@ -418,6 +418,7 @@ public class AppIntegrationTest {
 
     /**
      * Integration Test for getCountryReports method in App.java
+     * Should test that each country has a country code, name, continent, region and population attribute
      * Added by Eoin K: 14/03/21
      */
     @Test
