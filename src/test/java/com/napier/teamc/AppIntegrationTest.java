@@ -86,6 +86,25 @@ public class AppIntegrationTest {
         app.connect("localhost:33060");
     }
 
+    /** test the getCountryLargestToSmallest method in App.java
+     *  Should test that the method returns an array of countries and each country has a name and population attribute.
+     */
+    @Test
+    void getCountryLargestToSmallestIntegrationTest() {
+        ArrayList<Country> countries = app.getCountryLargestToSmallest();
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
     /**
      * Integration Test for getCountriesInARegionByPopulation method in App.java
      * Should test that the method generates all the countries in a region organised by largest population to smallest.
