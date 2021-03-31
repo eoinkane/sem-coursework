@@ -333,6 +333,27 @@ public class AppIntegrationTest {
     }
 
     /**
+     * Integration Test for getAllCitiesInACountry method in App.java
+     * Should test that the method generates all the cities in a country organised by largest population to smallest.
+     * The method should return countries with a name, district and population attribute.
+     */
+    @Test
+    void getAllCitiesInACountryIntegrationTest() {
+        ArrayList<City> cities = app.getAllCitiesInACountry();
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.continent);
+            assertNotNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
+    /**
      * Integration Test for getCountryReports method in App.java
      * Added by Eoin K: 14/03/21
      */

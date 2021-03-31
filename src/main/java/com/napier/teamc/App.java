@@ -576,21 +576,26 @@ public class App
         }
     }
 
+    /**
+     * getAllCitiesInACountry generates the the cities,
+     *      in a country ordered by largest population to smallest.
+     * @return An array of cities, each city has a name population and country name attribute (ArrayList<City>)
+     */
     public ArrayList<City> getAllCitiesInACountry()
     {
+        // Method initialisation
+        String strSelect =
+                "SELECT city.Name AS city_name, country.name AS country_name, city.Population AS population FROM city "
+                        + "JOIN country ON city.CountryCode = country.Code "
+                        + "ORDER BY country_name, population DESC; ";
+        String errorMessage = "Failed to get all cities in a country";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT city.Name AS city_name, country.name AS country_name, city.Population AS population FROM city "
-            + "JOIN country ON city.CountryCode = country.Code "
-            + "ORDER BY country_name, population DESC; ";
-
-            // Execute SQL
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract country information.
             ArrayList<City> cities = new ArrayList<City>();
             while (rset.next()) {
                 City cty = new City(
@@ -604,13 +609,13 @@ public class App
                 );
                 cities.add(cty);
             }
-            // return results
+            // Return the results of the method.
             return cities;
         }
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get all cities in a country");
+            System.out.println(errorMessage);
             return null;
         }
     }
