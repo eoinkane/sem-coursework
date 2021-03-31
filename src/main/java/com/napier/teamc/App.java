@@ -279,20 +279,27 @@ public class App
      */
     public ArrayList<Country> getTopNPopulatedCountriesInARegion(int n)
     {
+        // Handle invalid input
+        if (n < 0) return null;
+
+        // Method initialisation
+        String strSelect =
+                "WITH grouped_countries AS (SELECT Name, Region, Population, ROW_NUMBER() OVER "
+                        + "(PARTITION BY Region ORDER BY Population DESC) row_num FROM country) "
+                        + "SELECT Name, Region, Population FROM grouped_countries WHERE row_num <= <N>;";
+        String errorMessage = "Failed to get the top N populated countries in a region";
+
+        strSelect = strSelect.replace("<N>", String.valueOf(n));
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "WITH grouped_countries AS (SELECT Name, Region, Population, ROW_NUMBER() OVER "
-                            + "(PARTITION BY Region ORDER BY Population DESC) row_num FROM country) "
-                            + "SELECT Name, Region, Population FROM grouped_countries WHERE row_num <= <N>;";
-            strSelect = strSelect.replace("<N>", String.valueOf(n));
-            // Execute SQL
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract country information.
+            // Extract country information from query results.
             ArrayList<Country> countries = new ArrayList<Country>();
+            // Create a new country object for each record in the result set and add the object to the array
             while (rset.next()) {
                 Country cntry = new Country(
                         null,
@@ -304,13 +311,15 @@ public class App
                 );
                 countries.add(cntry);
             }
-            // return results
+            // Return the results of the method.
             return countries;
         }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get the top N populated countries in a region");
+            System.out.println(errorMessage);
             return null;
         }
     }
