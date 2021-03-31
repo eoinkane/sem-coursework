@@ -439,6 +439,7 @@ public class AppIntegrationTest {
 
     /**
      * Integration Test for getCityReports method in App.java
+     * Should test that the method returns cities with a name, country, district and population.
      * Added by Eoin K: 14/03/21
      */
     @Test
