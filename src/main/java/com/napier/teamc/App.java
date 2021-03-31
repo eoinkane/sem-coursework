@@ -172,19 +172,21 @@ public class App
      */
     public ArrayList<Country> getCountriesInARegionByPopulation()
     {
+        // method initialisation
+        String strSelect =
+                "SELECT Name, Region, Population FROM country "
+                        + "ORDER BY Region, Population DESC;";
+        String errorMessage = "Failed to get countries in a region by population";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT Name, Region, Population FROM country "
-                            + "ORDER BY Region, Population DESC;";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new country if valid.
-            // Extract country information.
+            // Extract country information from query results.
             ArrayList<Country> countries = new ArrayList<Country>();
+            // Create a new country object for each record in the result set and add the object to the array
             while (rset.next()) {
                 Country cntry = new Country(
                         null,
@@ -196,12 +198,15 @@ public class App
                 );
                 countries.add(cntry);
             }
+            // Return the results of the method.
             return countries;
         }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get countries in a region by population");
+            System.out.println(errorMessage);
             return null;
         }
     }
