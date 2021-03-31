@@ -1144,25 +1144,25 @@ public class App
     }
 
     /**
-     * getTopNPopulatedCitiesInACountry generates the top N populated cities,
+     * getPopulatedAndUnpopulatedCities generates the top N populated cities,
      *      in a Country where N is given.
      * Added by Jackson A: 22/03/21
      * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
      */
     public ArrayList<String> getPopulatedAndUnpopulatedCities() {
-
+        // method initialisation
+        String strSelect =
+                "SELECT country.Code AS 'country_code', country.Name AS 'country_name', country.Population AS 'population', in_cities.population_in_cities, (country.Population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM country "
+                        + "JOIN (SELECT CountryCode, COUNT(*) AS 'no_of_cities', SUM(Population) AS 'population_in_cities' FROM city "
+                        + "GROUP BY CountryCode) in_cities ON in_cities.CountryCode = country.Code;";
+        String errorMessage = "Failed to get the population information in and out of cities.";
         String x = null;
 
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT country.Code AS 'country_code', country.Name AS 'country_name', country.Population AS 'population', in_cities.population_in_cities, (country.Population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM country "
-                            + "JOIN (SELECT CountryCode, COUNT(*) AS 'no_of_cities', SUM(Population) AS 'population_in_cities' FROM city "
-                            + "GROUP BY CountryCode) in_cities ON in_cities.CountryCode = country.Code;";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
             ArrayList<String> info = new ArrayList<String>();
             // Display
             while (rset.next()) {
@@ -1170,11 +1170,13 @@ public class App
                 x = ("Name " + rset.getString("country_name") + " Total population " + rset.getString("population") + " Population in cities: " + rset.getInt("population_in_cities") + " Population not in a city: " + rset.getString("population_not_in_cities"));
                 info.add(x);
             }
+            // Return the results of the method.
             return info;
-
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get the population information in and out of cities.");
+            System.out.println(errorMessage);
             return null;
         }
     }
