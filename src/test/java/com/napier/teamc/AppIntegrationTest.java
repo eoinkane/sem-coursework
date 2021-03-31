@@ -259,6 +259,27 @@ public class AppIntegrationTest {
     }
 
     /**
+     * Integration Test for getCountriesInAContinentByPopulation method in App.java
+     * Should test that the method generates all the countries in a continent organised by largest population to smallest.
+     * The method should return countries with a name, continent and population attribute.
+     */
+    @Test
+    void getCountriesInAContinentByPopulationIntegrationTest() {
+        ArrayList<Country> countries = app.getCountriesInAContinentByPopulation();
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
      * Integration Test for getCountryReports method in App.java
      * Added by Eoin K: 14/03/21
      */
