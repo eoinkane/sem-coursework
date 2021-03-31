@@ -668,22 +668,29 @@ public class App
         }
     }
 
+    /**
+     * getAllCitiesInARegion generates the the cities,
+     *      in a region ordered by largest population to smallest.
+     * @return An array of cities, each city has a name population and region attribute (ArrayList<City>)
+     */
     public ArrayList<City> getAllCitiesInARegion()
     {
+        // Method initialisation
+        String strSelect =
+                "SELECT city.Name AS city_name, country.region AS region, city.Population AS population FROM city "
+                        + "JOIN country ON city.CountryCode = country.Code "
+                        + "ORDER BY region, population DESC; ";
+        String errorMessage = "Failed to get all cities in a region";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT city.Name AS city_name, country.region AS region, city.Population AS population FROM city "
-                            + "JOIN country ON city.CountryCode = country.Code "
-                            + "ORDER BY region, population DESC; ";
-
-            // Execute SQL
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract country information.
+            // Extract city information from query results.
             ArrayList<City> cities = new ArrayList<City>();
+            // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City cty = new City(
                         rset.getString("city_name"),
@@ -696,13 +703,15 @@ public class App
                 );
                 cities.add(cty);
             }
-            // return results
+            // Return the results of the method.
             return cities;
         }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get all cities in a region");
+            System.out.println(errorMessage);
             return null;
         }
     }
