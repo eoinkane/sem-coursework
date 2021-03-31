@@ -195,6 +195,38 @@ public class AppIntegrationTest {
     }
 
     /**
+     * Integration Test for getTopNPopulatedCitiesintheWorld method in App.java
+     * Should test that the method generates the top N populated cities in the world.
+     * The method should return cities with a name, district and population attribute.
+     */
+    @Test
+    void getTopNPopulatedCitiesintheWorldValidInputIntegrationTest() {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesintheWorld(1);
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.continent);
+            assertNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCitiesintheWorld method in App.java with invalid input.
+     * Should test that the method handles invalid given numbers.
+     */
+    @Test
+    void getTopNPopulatedCitiesintheWorldInvalidInputIntegrationTest() {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesintheWorld(-1);
+
+        assertNull(cities);
+    }
+
+    /**
      * Integration Test for getCountryReports method in App.java
      * Added by Eoin K: 14/03/21
      */

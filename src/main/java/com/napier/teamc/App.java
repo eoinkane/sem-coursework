@@ -334,20 +334,27 @@ public class App
 
     public ArrayList<City> getTopNPopulatedCitiesintheWorld(int n)
     {
+        // Handle invalid input
+        if (n < 0) return null;
+
+        // Method initialisation
+        String strSelect =
+                "WITH grouped_cities AS (SELECT Name, District, Population, ROW_NUMBER() OVER "
+                        + "(ORDER BY Population DESC) row_num FROM city) "
+                        + "SELECT Name, District, Population FROM grouped_cities WHERE row_num <= <N>;";
+        String errorMessage = "Failed to get the top N populated cities in the world.";
+
+        strSelect = strSelect.replace("<N>", String.valueOf(n));
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "WITH grouped_cities AS (SELECT Name, District, Population, ROW_NUMBER() OVER "
-                            + "(ORDER BY Population DESC) row_num FROM city) "
-                            + "SELECT Name, District, Population FROM grouped_cities WHERE row_num <= <N>;";
-            strSelect = strSelect.replace("<N>", String.valueOf(n));
-            // Execute SQL
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract country information.
+            // Extract city information from query results.
             ArrayList<City> cities = new ArrayList<City>();
+            // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City cty = new City(
                         rset.getString("name"),
@@ -365,7 +372,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get the top N populated cities in the world.");
+            System.out.println(errorMessage);
             return null;
         }
     }
