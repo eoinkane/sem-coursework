@@ -900,24 +900,26 @@ public class App
     }
 
     /**
-     * getWorldPopulation generates the population of the world
+     * getContinentPopulation generates the population of the world
      * Added by Eoin K:14/03/21
      * @return An hashmap containing one item, key: "world" value: <Long world population from database>
      */
     public HashMap<String, Number> getContinentPopulation()
     {
+        // Method initialisation
+        String strSelect =
+                "SELECT Continent, SUM(Population) AS `continent_population` FROM country GROUP BY Continent;";
+        String errorMessage = "Failed to get continent population";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT Continent, SUM(Population) AS `continent_population` FROM country GROUP BY Continent;";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new country if valid.
-            // Extract country information.
-            HashMap<String, Number> worldPopulation = new HashMap<String, Number>();
+            // Extract continent information from query results.
+            HashMap<String, Number> continentPopulation = new HashMap<String, Number>();
+            // Check the size of the continent_population value, and treat the value as a Long or Int accordingly
             while (rset.next()) {
                 Number value;
                 if (rset.getLong("continent_population") <= Integer.MAX_VALUE) {
@@ -925,14 +927,17 @@ public class App
                 } else {
                     value = rset.getLong("continent_population");
                 }
-                worldPopulation.put(rset.getString("continent"), value);
+                continentPopulation.put(rset.getString("continent"), value);
             }
-            return worldPopulation;
+            // Return the results of the method.
+            return continentPopulation;
         }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get world population");
+            System.out.println(errorMessage);
             return null;
         }
     }
