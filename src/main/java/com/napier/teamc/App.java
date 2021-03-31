@@ -1062,18 +1062,20 @@ public class App
      */
     public HashMap<String, Number> getRegionPopulation()
     {
+        // method initialisation
+        String strSelect =
+                "SELECT region, SUM(Population) AS `region_population` FROM country GROUP BY region;";
+        String errorMessage = "Failed to get the top N populated cities in a country.";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT region, SUM(Population) AS `region_population` FROM country GROUP BY region;";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new region info if valid.
-            // Extract region information.
+            // Extract region information from query results.
             HashMap<String, Number> regionPopulation = new HashMap<String, Number>();
+            // Check the size of the region_population value, and treat the value as a Long or Int accordingly
             while (rset.next()) {
                 Number value;
                 if (rset.getLong("region_population") <= Integer.MAX_VALUE) {
@@ -1083,8 +1085,11 @@ public class App
                 }
                 regionPopulation.put(rset.getString("region"), value);
             }
+            // Return the results of the method.
             return regionPopulation;
         }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         catch (SQLException e)
         {
             System.out.println(e.getMessage());

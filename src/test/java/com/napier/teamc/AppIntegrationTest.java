@@ -481,7 +481,7 @@ public class AppIntegrationTest {
 
         assertEquals(7, continentPopulation.size());
         for (String i : continentPopulation.keySet()) {
-            assertTrue(continentPopulation.get(i) instanceof Number);
+            assertNotNull(continentPopulation.get(i));
         }
     }
 
@@ -495,7 +495,7 @@ public class AppIntegrationTest {
 
         assertEquals(25, regionPopulation.size());
         for (String i : regionPopulation.keySet()) {
-            assertTrue(regionPopulation.get(i) instanceof Number);
+            assertNotNull(regionPopulation.get(i));
         }
     }
 
