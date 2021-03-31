@@ -386,18 +386,24 @@ public class App
      */
     public ArrayList<Country> getTopNPopulatedCountriesInTheWorld(int n)
     {
+        // Handle invalid input
+        if (n < 0) return null;
+
+        // method initialisation
+        String strSelect =
+                "WITH all_countries AS (SELECT Name, Population, ROW_NUMBER() OVER "
+                        + "(ORDER BY Population DESC) row_num FROM country) "
+                        + "SELECT Name, Population FROM all_countries WHERE row_num <= <N>;";
+        String errorMessage = "Failed to get the top N populated countries in the World.";
+
+        strSelect = strSelect.replace("<N>", String.valueOf(n));
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "WITH all_countries AS (SELECT Name, Population, ROW_NUMBER() OVER "
-                            + "(ORDER BY Population DESC) row_num FROM country) "
-                            + "SELECT Name, Population FROM all_countries WHERE row_num <= <N>;";
-            strSelect = strSelect.replace("<N>", String.valueOf(n));
-            // Execute SQL
-            ResultSet rset = stmt.executeQuery(strSelect);
             // Extract country information.
             ArrayList<Country> countries = new ArrayList<Country>();
             while (rset.next()) {
@@ -417,7 +423,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get the top N populated countries in the World.");
+            System.out.println(errorMessage);
             return null;
         }
     }
