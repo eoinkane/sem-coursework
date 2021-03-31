@@ -870,27 +870,31 @@ public class App
      */
     public HashMap<String, Number> getWorldPopulation()
     {
+        // Method initialisation
+        String strSelect =
+                "SELECT SUM(Population) AS `world_population` FROM country;";
+        String errorMessage = "Failed to get world population";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT SUM(Population) AS `world_population` FROM country;";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Return new country if valid.
-            // Extract country information.
+            // Extract world information from query results.
             HashMap<String, Number> worldPopulation = new HashMap<String, Number>();
             if (rset.next()) {
                 worldPopulation.put("World", rset.getLong("world_population"));
             }
+            // Return the results of the method.
             return worldPopulation;
         }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get world population");
+            System.out.println(errorMessage);
             return null;
         }
     }
