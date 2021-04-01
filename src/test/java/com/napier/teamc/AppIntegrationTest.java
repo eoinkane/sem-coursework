@@ -242,6 +242,48 @@ public class AppIntegrationTest {
         assertNull(cities);
     }
 
+    /** handleResultSetCityWithNameContinentAndPopulationWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameContinentAndPopulation method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of city objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameContinentAndPopulationWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT city.Name AS city_name, country.continent AS continent, " +
+                "city.Population AS population FROM city JOIN country ON city.CountryCode = country.Code LIMIT 5;",
+                "error message"
+        );
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
+
+        assertEquals(5, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.country);
+        });
+    }
+
+    /** handleResultSetCityWithNameContinentAndPopulationErrorIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameContinentAndPopulation method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameContinentAndPopulationErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
+
+        assertNull(cities);
+    }
+
     /** test the getCountryLargestToSmallest method in App.java
      *  Should test that the method returns an array of countries and each country has a name and population attribute.
      */

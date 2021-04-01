@@ -270,6 +270,43 @@ public class App
         }
     }
 
+    /** handleResultSetCityWithNameContinentAndPopulation will take in a ResultSet and output the records in a ArrayList<City>
+     * This method only populates City Name, Population & continent attributes
+     * Added by Eoin K:01/04/21
+     * @param rset: the result set from the SQL query
+     * @param errorMessage: the error message to print if an SQL Exception is caught.
+     * @return an array list of city objects with a name, continent and population attribute
+     */
+    public ArrayList<City> handleResultSetCityWithNameContinentAndPopulation(ResultSet rset, String errorMessage) {
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<City> cities = new ArrayList<City>();
+            // Create a new city object for each record in the result set and add the object to the array.
+            while (rset.next()) {
+                City cty = new City(
+                        rset.getString("city_name"),
+                        null,
+                        rset.getInt("population"),
+                        rset.getString("continent"),
+                        null,
+                        null
+                );
+                cities.add(cty);
+            }
+            // Return the results of the method.
+            return cities;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
     /**
      * getCountryLargestToSmallest generates populated countries from largest to smallest,
      *      in the world.
@@ -468,35 +505,7 @@ public class App
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        // While dealing with the result set, catch any SQLException that can be thrown
-        try
-        {
-            // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
-            // Create a new city object for each record in the result set and add the object to the array
-            while (rset.next()) {
-                City cty = new City(
-                        rset.getString("city_name"),
-                        null,
-                        rset.getInt("population"),
-                        rset.getString("continent"),
-                        null,
-                        null
-
-                );
-                cities.add(cty);
-            }
-            // Return the results of the method.
-            return cities;
-        }
-        // If an error occurs while handling the result set then don't crash the application,
-        // instead return null and print an error message
-        catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(errorMessage);
-            return null;
-        }
+        return handleResultSetCityWithNameContinentAndPopulation(rset, errorMessage);
     }
 
     /**
@@ -580,35 +589,7 @@ public class App
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        // While dealing with the result set, catch any SQLException that can be thrown
-        try
-        {
-            // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
-            // Create a new city object for each record in the result set and add the object to the array
-            while (rset.next()) {
-                City cty = new City(
-                        rset.getString("city_name"),
-                        null,
-                        rset.getInt("population"),
-                        rset.getString("continent"),
-                        null,
-                        null
-
-                );
-                cities.add(cty);
-            }
-            // Return the results of the method.
-            return cities;
-        }
-        // If an error occurs while handling the result set then don't crash the application,
-        // instead return null and print an error message
-        catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(errorMessage);
-            return null;
-        }
+        return handleResultSetCityWithNameContinentAndPopulation(rset, errorMessage);
     }
 
     /**
