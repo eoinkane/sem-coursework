@@ -203,6 +203,45 @@ public class AppIntegrationTest {
         assertNull(countries);
     }
 
+    /** handleResultSetCityWithNameDistrictAndPopulationWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameDistrictAndPopulation method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of city objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameDistrictAndPopulationWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT Name, Population, District FROM city LIMIT 5;", "error message");
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
+
+        assertEquals(5, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNull(C.region);
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.country);
+        });
+    }
+
+    /** handleResultSetCityWithNameDistrictAndPopulationErrorIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameDistrictAndPopulation method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameDistrictAndPopulationErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
+
+        assertNull(cities);
+    }
+
     /** test the getCountryLargestToSmallest method in App.java
      *  Should test that the method returns an array of countries and each country has a name and population attribute.
      */
