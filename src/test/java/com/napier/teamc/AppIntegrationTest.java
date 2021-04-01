@@ -1,5 +1,7 @@
 package com.napier.teamc;
 
+import java.sql.*;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,8 +20,645 @@ public class AppIntegrationTest {
         app.connect("localhost:33060");
     }
 
+
+    /** AppQueryWhileConnectedIntegrationTest
+     *  This test tests the App.query method.
+     *  It should executes a given SQL Select query on the connected database.
+     *  Added by Eoin K:30/03/21
+     */
+    @Test
+    void AppQueryWhileConnectedIntegrationTest() {
+        String query = "SELECT * FROM country;";
+        ResultSet rset = app.query(query, "error message");
+
+        try
+        {
+            // If the result set does not contain any records then app.query() has failed tests.
+            if (!rset.next()) {
+                fail("app.query() did not return any results. Check data is available or test has failed.");
+            }
+
+        }
+        // If an SQLException is thrown then handle the error.
+        catch (SQLException e)
+        {
+            fail("Should not have thrown an SQL Exception");
+        }
+    }
+
+    /** AppQueryWhileDisconnectedIntegrationTest
+     *  This test tests the App.query method when the App is not connected to the database.
+     *  It should throw an SQL Exception.
+     *  Added by Eoin K:30/03/21
+     */
+    @Test
+    void AppQueryWhileDisconnectedIntegrationTest1() {
+        // Test setup as each test automatically connects to the database
+        app.disconnect();
+
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT * FROM country;", "error message");
+
+        // Assert that the method returns null as the database connection has been closed
+        assertEquals(null, rset);
+
+        // To allow the rest of the tests to run successfully, reconnect to the database
+        app.connect("localhost:33060");
+    }
+
+    /** AppQueryWhileDisconnectedIntegrationTest
+     *  This test tests the App.query method when the App is not connected to the database.
+     *  It should throw an SQL Exception.
+     *  Added by Eoin K:30/03/21
+     */
+    @Test
+    void AppQueryWhileDisconnectedIntegrationTest2() {
+        // Test setup as each test automatically connects to the database
+        app = new App();
+
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT * FROM country;", "error message");
+
+        // Assert that the method returns null as the database connection has not been opened
+        assertEquals(null, rset);
+
+        // To allow the rest of the tests to run successfully, reconnect to the database
+        app.connect("localhost:33060");
+    }
+
+    /** handleResultSetCountryWithNameAndPopulationWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNameAndPopulation method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of country objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNameAndPopulationWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNameAndPopulation(rset, "error message");
+
+        assertEquals(5, countries.size());
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /** handleResultSetCountryWithNameAndPopulationErrorIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNameAndPopulation method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNameAndPopulationErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNameAndPopulation(rset, "error message");
+
+        assertNull(countries);
+    }
+
+    /** handleResultSetCountryWithNamePopulationAndRegionWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndRegion method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of country objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndRegionWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT Name, Region, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
+
+        assertEquals(5, countries.size());
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNotNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /** handleResultSetCountryWithNamePopulationAndRegionErrorIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndRegion method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndRegionErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
+
+        assertNull(countries);
+    }
+
+    /** handleResultSetCountryWithNamePopulationAndContinentWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndContinent method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of country objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndContinentWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT Name, Continent, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
+
+        assertEquals(5, countries.size());
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /** handleResultSetCountryWithNamePopulationAndContinentErrorIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndContinent method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndContinentErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
+
+        assertNull(countries);
+    }
+
+    /** handleResultSetCityWithNameDistrictAndPopulationWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameDistrictAndPopulation method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of city objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameDistrictAndPopulationWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT Name, Population, District FROM city LIMIT 5;", "error message");
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
+
+        assertEquals(5, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNull(C.region);
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.country);
+        });
+    }
+
+    /** handleResultSetCityWithNameDistrictAndPopulationErrorIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameDistrictAndPopulation method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameDistrictAndPopulationErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
+
+        assertNull(cities);
+    }
+
+    /** handleResultSetCityWithNameContinentAndPopulationWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameContinentAndPopulation method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of city objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameContinentAndPopulationWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT city.Name AS city_name, country.continent AS continent, " +
+                "city.Population AS population FROM city JOIN country ON city.CountryCode = country.Code LIMIT 5;",
+                "error message"
+        );
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
+
+        assertEquals(5, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.country);
+        });
+    }
+
+    /** handleResultSetCityWithNameContinentAndPopulationErrorIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameContinentAndPopulation method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameContinentAndPopulationErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
+
+        assertNull(cities);
+    }
+
+    /** handleResultSetCityWithNameRegionAndPopulationWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameRegionAndPopulation method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of city objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameRegionAndPopulationWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT city.Name AS city_name, country.region AS region, " +
+                        "city.Population AS population FROM city JOIN country ON city.CountryCode = country.Code LIMIT 5;",
+                "error message"
+        );
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameRegionAndPopulation(rset, "error message");
+
+        assertEquals(5, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNotNull(C.region);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.country);
+        });
+    }
+
+    /** handleResultSetCityWithNameRegionAndPopulationErrorIntegrationTest
+     *  This test tests the App.handleResultSetCityWithNameRegionAndPopulation method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCityWithNameRegionAndPopulationErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
+
+        ArrayList<City> cities = app.handleResultSetCityWithNameRegionAndPopulation(rset, "error message");
+
+        assertNull(cities);
+    }
+
+    /** test the getCountryLargestToSmallest method in App.java
+     *  Should test that the method returns an array of countries and each country has a name and population attribute.
+     */
+    @Test
+    void getCountryLargestToSmallestIntegrationTest() {
+        ArrayList<Country> countries = app.getCountryLargestToSmallest();
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * Integration Test for getCountriesInARegionByPopulation method in App.java
+     * Should test that the method generates all the countries in a region organised by largest population to smallest.
+     * Added by Eoin K: 31/03/21
+     */
+    @Test
+    void getCountriesInARegionByPopulationIntegrationTest() {
+        ArrayList<Country> countries = app.getCountriesInARegionByPopulation();
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNotNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCountriesInAContinent method in App.java
+     * Should test that the method generates the top N populated countries in a continent.
+     * The method should return countries with a name, continent and population attribute.
+     * Added by Eoin K: 31/03/21
+     */
+    @Test
+    void getTopNPopulatedCountriesInAContinentValidInputIntegrationTest() {
+        ArrayList<Country> countries = app.getTopNPopulatedCountriesInAContinent(1);
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCountriesInAContinent method in App.java with invalid input.
+     * Should test that the method handles invalid given numbers.
+     * Added by Eoin K: 31/03/21
+     */
+    @Test
+    void getTopNPopulatedCountriesInAContinentInvalidInputIntegrationTest() {
+        ArrayList<Country> countries = app.getTopNPopulatedCountriesInAContinent(-1);
+
+        assertNull(countries);
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCountriesInARegion method in App.java
+     * Should test that the method generates the top N populated countries in a region.
+     * The method should return countries with a name, region and population attribute.
+     * Added by Eoin K: 31/03/21
+     */
+    @Test
+    void getTopNPopulatedCountriesInARegionValidInputIntegrationTest() {
+        ArrayList<Country> countries = app.getTopNPopulatedCountriesInARegion(1);
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNotNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCountriesInARegion method in App.java with invalid input.
+     * Should test that the method handles invalid given numbers.
+     * Added by Eoin K: 31/03/21
+     */
+    @Test
+    void getTopNPopulatedCountriesInARegionInvalidInputIntegrationTest() {
+        ArrayList<Country> countries = app.getTopNPopulatedCountriesInARegion(-1);
+
+        assertNull(countries);
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCitiesintheWorld method in App.java
+     * Should test that the method generates the top N populated cities in the world.
+     * The method should return cities with a name, district and population attribute.
+     */
+    @Test
+    void getTopNPopulatedCitiesintheWorldValidInputIntegrationTest() {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesintheWorld(1);
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.continent);
+            assertNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCitiesintheWorld method in App.java with invalid input.
+     * Should test that the method handles invalid given numbers.
+     */
+    @Test
+    void getTopNPopulatedCitiesintheWorldInvalidInputIntegrationTest() {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesintheWorld(-1);
+
+        assertNull(cities);
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCountriesInTheWorld method in App.java
+     * Should test that the method generates the top N populated countries in the world where N is given.
+     * The method should return countries with a name and population attribute.
+     */
+    @Test
+    void getTopNPopulatedCountriesInTheWorldValidInputIntegrationTest() {
+        ArrayList<Country> countries = app.getTopNPopulatedCountriesInTheWorld(1);
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCountriesInTheWorld method in App.java with invalid input.
+     * Should test that the method handles invalid given numbers.
+     */
+    @Test
+    void getTopNPopulatedCountriesInTheWorldInvalidInputIntegrationTest() {
+        ArrayList<Country> countries = app.getTopNPopulatedCountriesInTheWorld(-1);
+
+        assertNull(countries);
+    }
+
+    /**
+     * Integration Test for getCountriesInAContinentByPopulation method in App.java
+     * Should test that the method generates all the countries in a continent organised by largest population to smallest.
+     * The method should return countries with a name, continent and population attribute.
+     */
+    @Test
+    void getCountriesInAContinentByPopulationIntegrationTest() {
+        ArrayList<Country> countries = app.getCountriesInAContinentByPopulation();
+
+        assertTrue(countries.size() >= 1);
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCitiesinaContinent method in App.java
+     * Should test that the method generates the top N populated cities in a continent.
+     * The method should return cities with a name, continent and population attribute.
+     */
+    @Test
+    void getTopNPopulatedCitiesinaContinentValidInputIntegrationTest() {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesinaContinent(1);
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNotNull(C.continent);
+            assertNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
+    /**
+     * Integration Test for getTopNPopulatedCitiesinaContinent method in App.java with invalid input.
+     * Should test that the method handles invalid given numbers.
+     */
+    @Test
+    void getTopNPopulatedCitiesinaContinentInvalidInputIntegrationTest() {
+        ArrayList<City> cities = app.getTopNPopulatedCitiesinaContinent(-1);
+
+        assertNull(cities);
+    }
+
+    /**
+     * Integration Test for getAllCitiesinADistrictLargetoSmall method in App.java
+     * Should test that the method generates all the cities in a district organised by largest population to smallest.
+     * The method should return countries with a name, district and population attribute.
+     */
+    @Test
+    void getAllCitiesinADistrictLargetoSmallIntegrationTest() {
+        ArrayList<City> cities = app.getAllCitiesinADistrictLargetoSmall();
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.continent);
+            assertNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
+    /**
+     * Integration Test for getAllCitiesInACountry method in App.java
+     * Should test that the method generates all the cities in a country organised by largest population to smallest.
+     * The method should return countries with a name, district and population attribute.
+     */
+    @Test
+    void getAllCitiesInACountryIntegrationTest() {
+        ArrayList<City> cities = app.getAllCitiesInACountry();
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.continent);
+            assertNotNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
+    /**
+     * Integration Test for getAllCitiesInAContinent method in App.java
+     * Should test that the method generates all the cities in a continent organised by largest population to smallest.
+     * The method should return countries with a name, continent and population attribute.
+     */
+    @Test
+    void getAllCitiesInAContinentIntegrationTest() {
+        ArrayList<City> cities = app.getAllCitiesInAContinent();
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNotNull(C.continent);
+            assertNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
+    /**
+     * Integration Test for getAllCitiesInARegion method in App.java
+     * Should test that the method generates all the cities in a region organised by largest population to smallest.
+     * The method should return countries with a name, region and population attribute.
+     */
+    @Test
+    void getAllCitiesInARegionIntegrationTest() {
+        ArrayList<City> cities = app.getAllCitiesInARegion();
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.continent);
+            assertNull(C.country);
+            assertNotNull(C.region);
+        });
+    }
+
+    /**
+     * Integration Test for getAllCitiesInTheWorld method in App.java
+     * Should test that the method generates all the cities in the world organised by largest population to smallest.
+     * The method should return countries with a name and population attribute.
+     */
+    @Test
+    void getAllCitiesInTheWorldIntegrationTest() {
+        ArrayList<City> cities = app.getAllCitiesInTheWorld();
+
+        assertTrue(cities.size() >= 1);
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNull(C.district);
+            assertNotEquals(-1, C.population);
+            assertNull(C.continent);
+            assertNull(C.country);
+            assertNull(C.region);
+        });
+    }
+
     /**
      * Integration Test for getCountryReports method in App.java
+     * Should test that each country has a country code, name, continent, region and population attribute
      * Added by Eoin K: 14/03/21
      */
     @Test
@@ -40,6 +679,7 @@ public class AppIntegrationTest {
 
     /**
      * Integration Test for getCityReports method in App.java
+     * Should test that the method returns cities with a name, country, district and population.
      * Added by Eoin K: 14/03/21
      */
     @Test
@@ -67,7 +707,7 @@ public class AppIntegrationTest {
         assertEquals(1, worldPopulation.size());
         for (String i : worldPopulation.keySet()) {
             assertEquals("World", i);
-            assertEquals(6078749450L, worldPopulation.get(i));
+            assertNotNull(worldPopulation.get(i));
         }
     }
 
@@ -81,7 +721,7 @@ public class AppIntegrationTest {
 
         assertEquals(7, continentPopulation.size());
         for (String i : continentPopulation.keySet()) {
-            assertTrue(continentPopulation.get(i) instanceof Number);
+            assertNotNull(continentPopulation.get(i));
         }
     }
 
@@ -95,7 +735,7 @@ public class AppIntegrationTest {
 
         assertEquals(25, regionPopulation.size());
         for (String i : regionPopulation.keySet()) {
-            assertTrue(regionPopulation.get(i) instanceof Number);
+            assertNotNull(regionPopulation.get(i));
         }
     }
 
