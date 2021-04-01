@@ -610,6 +610,7 @@ public class App
         ResultSet rset = query(strSelect, errorMessage);
 
         // While dealing with the result set, catch any SQLException that can be thrown
+        // FIX
         try
         {
             // Extract city information from query results.
@@ -893,6 +894,7 @@ public class App
         ResultSet rset = query(strSelect, errorMessage);
 
         // While dealing with the result set, catch any SQLException that can be thrown
+        // FIX
         try
         {
             // Extract city information from query results.
@@ -1432,6 +1434,9 @@ public class App
      */
     public void displayFormattedCountries(ArrayList<Country> countries)
     {
+        // Handle empty input arrays
+        if (countries.size() == 0) return;
+
         // Use the first country in the ArrayList to generate the headers
         // This method presumes that all countries in the ArrayList are identical in format.
         Country firstCountry = countries.get(0);
@@ -1469,6 +1474,9 @@ public class App
             arguments.add("Capital City");
         }
 
+        // Handle empty objects
+        if (format == "") return;
+
         // Print the headers
         System.out.println(String.format(format, arguments.toArray()));
         // Print the values
@@ -1486,6 +1494,9 @@ public class App
      */
     public void displayFormattedCities(ArrayList<City> cities)
     {
+        // Handle empty input arrays
+        if (cities.size() == 0) return;
+
         // Use the first city in the ArrayList to generate the headers
         // This method presumes that all cities in the ArrayList are identical in format.
         City firstCity = cities.get(0);
@@ -1522,6 +1533,9 @@ public class App
             format = format.concat("%-" + City.fieldLengths.get(5) + "s");
             arguments.add("Region");
         }
+
+        // Handle empty objects
+        if (format == "") return;
 
         // Print the headers
         System.out.println(String.format(format, arguments.toArray()));
