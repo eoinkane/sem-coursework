@@ -88,9 +88,9 @@ public class App
     /**
      * query executes a given SQL Select query on the connected database.
      * Added by Eoin K:30/03/21
-     * @param SQLQuery
-     * @param errorMessage
-     * @return
+     * @param SQLQuery a string of the sql query to execute
+     * @param errorMessage a string of the error message to display for more information if an SQL Exception is caught.
+     * @return the result set of the executed query/ or null if an exception is caught during execution.
      */
     public ResultSet query(String SQLQuery, String errorMessage)
     {
