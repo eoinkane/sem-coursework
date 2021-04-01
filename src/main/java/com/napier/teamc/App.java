@@ -1190,25 +1190,25 @@ public class App
     }
 
     /**
-     * getTopNPopulatedCitiesForContinent() find the population of people living in and out of cities,
+     * getPopulatedAndUnpopulatedCitiesForContinent() find the population of people living in and out of cities,
      *      For each Continent
      * Added by Jackson A: 23/03/21
      * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
      */
     public ArrayList<String> getPopulatedAndUnpopulatedCitiesForContinent() {
-
+        // method initialisation
+        String strSelect =
+                "SELECT in_continents.continent AS 'continent_name', in_continents.continent_population, in_cities.population_in_cities, (in_continents.continent_population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM (SELECT Continent AS 'continent' , SUM(Population) AS 'continent_population' FROM country GROUP BY Continent) in_continents "
+                        + "LEFT JOIN (SELECT country.Continent AS 'continent', SUM(city.Population) AS 'population_in_cities' FROM city "
+                        + "JOIN country ON city.CountryCode = country.Code GROUP BY Continent) in_cities ON in_cities.continent = in_continents.continent;";
+        String errorMessage = "Failed to get the population information in and out of cities.";
         String x = null;
 
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT in_continents.continent AS 'continent_name', in_continents.continent_population, in_cities.population_in_cities, (in_continents.continent_population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM (SELECT Continent AS 'continent' , SUM(Population) AS 'continent_population' FROM country GROUP BY Continent) in_continents "
-                            + "LEFT JOIN (SELECT country.Continent AS 'continent', SUM(city.Population) AS 'population_in_cities' FROM city "
-                            + "JOIN country ON city.CountryCode = country.Code GROUP BY Continent) in_cities ON in_cities.continent = in_continents.continent;";
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
             ArrayList<String> ContinentInfo = new ArrayList<String>();
             // Display
             while (rset.next()) {
@@ -1216,8 +1216,10 @@ public class App
                 x = ("Name " + rset.getString("continent_name") + " Total population " + rset.getString("continent_population") + " Population in cities: " + rset.getInt("population_in_cities") + " Population not in a city: " + rset.getString("population_not_in_cities"));
                 ContinentInfo.add(x);
             }
+            // Return the results of the method.
             return ContinentInfo;
-
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("Failed to get the population information in and out of cities for each Continent.");
