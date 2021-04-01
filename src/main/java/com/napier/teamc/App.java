@@ -1065,7 +1065,7 @@ public class App
         // method initialisation
         String strSelect =
                 "SELECT region, SUM(Population) AS `region_population` FROM country GROUP BY region;";
-        String errorMessage = "Failed to get the top N populated cities in a country.";
+        String errorMessage = "Failed to get region population";
 
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
@@ -1093,7 +1093,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get region population");
+            System.out.println(errorMessage);
             return null;
         }
     }
@@ -1201,7 +1201,7 @@ public class App
                 "SELECT in_continents.continent AS 'continent_name', in_continents.continent_population, in_cities.population_in_cities, (in_continents.continent_population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM (SELECT Continent AS 'continent' , SUM(Population) AS 'continent_population' FROM country GROUP BY Continent) in_continents "
                         + "LEFT JOIN (SELECT country.Continent AS 'continent', SUM(city.Population) AS 'population_in_cities' FROM city "
                         + "JOIN country ON city.CountryCode = country.Code GROUP BY Continent) in_cities ON in_cities.continent = in_continents.continent;";
-        String errorMessage = "Failed to get the population information in and out of cities.";
+        String errorMessage = "Failed to get the population information in and out of cities for each Continent.";
         String x = null;
 
         // Execute query on the connected database, and if something goes wrong print the given error message
@@ -1222,7 +1222,7 @@ public class App
         // instead return null and print an error message
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get the population information in and out of cities for each Continent.");
+            System.out.println(errorMessage);
             return null;
         }
     }
@@ -1346,7 +1346,7 @@ public class App
                         "FROM country GROUP BY Region) in_regions "
                         +"LEFT JOIN (SELECT country.Region AS 'region', SUM(city.Population) AS 'population_in_cities' "
                         +"FROM city JOIN country ON city.CountryCode = country.Code GROUP BY Region) in_cities ON in_cities.region = in_regions.region;";
-        String errorMessage = "Failed to get the population information in and out of cities.";
+        String errorMessage = "Failed to get the population information in and out of cities for each Region.";
         String x = null;
 
         // Execute query on the connected database, and if something goes wrong print the given error message
@@ -1365,7 +1365,7 @@ public class App
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get the population information in and out of cities for each Region.");
+            System.out.println(errorMessage);
             return null;
         }
     }
@@ -1378,7 +1378,7 @@ public class App
                         + "FROM country "
                         +"JOIN city capital_city ON capital_city.ID = country.Capital\n"
                         +"ORDER BY capital_city_population DESC ";
-        String errorMessage = "Failed to get top n populated cities in a continent";
+        String errorMessage = "Failed to get all capital cities";
 
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
@@ -1408,7 +1408,7 @@ public class App
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
-            System.out.println("Failed to get all capital cities");
+            System.out.println(errorMessage);
             return null;
         }
     }
