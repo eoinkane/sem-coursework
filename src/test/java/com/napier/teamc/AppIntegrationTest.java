@@ -125,6 +125,45 @@ public class AppIntegrationTest {
         assertNull(countries);
     }
 
+    /** handleResultSetCountryWithNamePopulationAndRegionWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndRegion method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of country objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndRegionWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT Name, Region, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
+
+        assertEquals(5, countries.size());
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNull(C.continent);
+            assertNotNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /** handleResultSetCountryWithNamePopulationAndRegionErrorIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndRegion method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndRegionErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
+
+        assertNull(countries);
+    }
+
     /** test the getCountryLargestToSmallest method in App.java
      *  Should test that the method returns an array of countries and each country has a name and population attribute.
      */
