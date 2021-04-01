@@ -196,6 +196,43 @@ public class App
         }
     }
 
+    /** handleResultSetCountryWithNamePopulationAndContinent will take in a ResultSet and output the records in a ArrayList<Country>
+     * This method only populates Country Name, Population & Continent attributes
+     * Added by Eoin K:01/04/21
+     * @param rset: the result set from the SQL query
+     * @param errorMessage: the error message to print if an SQL Exception is caught.
+     * @return an array list of country objects with a name, continent and population attribute
+     */
+    public ArrayList<Country> handleResultSetCountryWithNamePopulationAndContinent(ResultSet rset, String errorMessage) {
+        try
+        {
+            // Extract country information from query results.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            // Create a new country object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                Country cntry = new Country(
+                        null,
+                        rset.getString("name"),
+                        Country.Continents.customValueOf(rset.getString("continent")),
+                        null,
+                        rset.getInt("population"),
+                        null
+                );
+                countries.add(cntry);
+            }
+            // Return the results of the method.
+            return countries;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
     /**
      * getCountryLargestToSmallest generates populated countries from largest to smallest,
      *      in the world.
@@ -262,34 +299,8 @@ public class App
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        // While dealing with the result set, catch any SQLException that can be thrown
-        try
-        {
-            // Extract country information from query results.
-            ArrayList<Country> countries = new ArrayList<Country>();
-            // Create a new country object for each record in the result set and add the object to the array
-            while (rset.next()) {
-                Country cntry = new Country(
-                        null,
-                        rset.getString("name"),
-                        Country.Continents.customValueOf(rset.getString("continent")),
-                        null,
-                        rset.getInt("population"),
-                        null
-                );
-                countries.add(cntry);
-            }
-            // Return the results of the method.
-            return countries;
-        }
-        // If an error occurs while handling the result set then don't crash the application,
-        // instead return null and print an error message
-        catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(errorMessage);
-            return null;
-        }
+        // FIX
+        return handleResultSetCountryWithNamePopulationAndContinent(rset, errorMessage);
     }
 
     /**
@@ -417,34 +428,8 @@ public class App
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        // While dealing with the result set, catch any SQLException that can be thrown
-        try
-        {
-            // Extract country information from query results.
-            ArrayList<Country> countries = new ArrayList<Country>();
-            // Create a new country object for each record in the result set and add the object to the array
-            while (rset.next()) {
-                Country cntry = new Country(
-                        null,
-                        rset.getString("name"),
-                        Country.Continents.customValueOf(rset.getString("continent")),
-                        null,
-                        rset.getInt("population"),
-                        null
-                );
-                countries.add(cntry);
-            }
-            // Return the results of the method.
-            return countries;
-        }
-        // If an error occurs while handling the result set then don't crash the application,
-        // instead return null and print an error message
-        catch (SQLException e)
-        {
-            System.out.println(e.getMessage());
-            System.out.println(errorMessage);
-            return null;
-        }
+        // FIX
+        return handleResultSetCountryWithNamePopulationAndContinent(rset, errorMessage);
     }
 
     /**

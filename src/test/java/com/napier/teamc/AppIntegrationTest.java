@@ -164,6 +164,45 @@ public class AppIntegrationTest {
         assertNull(countries);
     }
 
+    /** handleResultSetCountryWithNamePopulationAndContinentWhileConnectedIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndContinent method.
+     *  The method should take the result of a query (ResultSet) and populates an array list of country objects
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndContinentWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        ResultSet rset = app.query("SELECT Name, Continent, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
+
+        assertEquals(5, countries.size());
+
+        countries.forEach(C -> {
+            assertNull(C.country_code);
+            assertNotNull(C.name);
+            assertNotNull(C.continent);
+            assertNull(C.region);
+            assertNull(C.capital_city);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /** handleResultSetCountryWithNamePopulationAndContinentErrorIntegrationTest
+     *  This test tests the App.handleResultSetCountryWithNamePopulationAndContinent method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void handleResultSetCountryWithNamePopulationAndContinentErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
+
+        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
+
+        assertNull(countries);
+    }
+
     /** test the getCountryLargestToSmallest method in App.java
      *  Should test that the method returns an array of countries and each country has a name and population attribute.
      */
