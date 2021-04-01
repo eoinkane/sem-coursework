@@ -433,6 +433,11 @@ class AppTest
         app.displayFormattedCities(cities);
     }
 
+    /** displayFormattedPopulationsPopulatedTest
+     * Test app.displayFormattedPopulations with a populated HashMap<String, Number>
+     *  This test will not assert anything as no values are returned
+     *  Added by Eoin K:01/04/21
+     */
     @Test
     void displayFormattedPopulationsPopulatedTest()
     {
@@ -442,6 +447,24 @@ class AppTest
         // Mock Objects
         HashMap<String, Number> locations = new HashMap<String, Number>();
         locations.put("World", 1);
+
+        // Test
+        app.displayFormattedPopulations(locations);
+    }
+
+    /** displayFormattedPopulationsEmptyTest
+     * Test app.displayFormattedPopulations with a empty HashMap<String, Number>
+     *  This test will not assert anything as no values are returned
+     *  Added by Eoin K:01/04/21
+     */
+    @Test
+    void displayFormattedPopulationsEmptyTest()
+    {
+        // Test setup
+        App app = new App();
+
+        // Mock Objects
+        HashMap<String, Number> locations = new HashMap<String, Number>();
 
         // Test
         app.displayFormattedPopulations(locations);
