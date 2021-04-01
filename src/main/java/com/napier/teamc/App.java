@@ -1372,21 +1372,23 @@ public class App
 
     public ArrayList<City> getAllCapitalCitiesInTheWorld()
     {
+        // method initialisation
+        String strSelect =
+                "SELECT country.Name AS Name, capital_city.Name AS `capital_city_name`, capital_city.Population AS `capital_city_population`"
+                        + "FROM country "
+                        +"JOIN city capital_city ON capital_city.ID = country.Capital\n"
+                        +"ORDER BY capital_city_population DESC ";
+        String errorMessage = "Failed to get top n populated cities in a continent";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-            // Create string for SQL statement
-            String strSelect =
-                    "SELECT country.Name AS Name, capital_city.Name AS `capital_city_name`, capital_city.Population AS `capital_city_population`"
-                            + "FROM country "
-                            +"JOIN city capital_city ON capital_city.ID = country.Capital\n"
-                            +"ORDER BY capital_city_population DESC ";
-
-            // Execute SQL
-            ResultSet rset = stmt.executeQuery(strSelect);
-            // Extract country information.
+            // Extract city information from query results.
             ArrayList<City> cities = new ArrayList<City>();
+            // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
                         rset.getString("capital_city_name"),
@@ -1398,9 +1400,11 @@ public class App
                 );
                 cities.add(capital_city);
             }
-            // return results
+            // Return the results of the method.
             return cities;
         }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
         catch (SQLException e)
         {
             System.out.println(e.getMessage());
