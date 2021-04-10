@@ -2,6 +2,7 @@ package com.napier.teamc;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /** Application Class
@@ -1564,6 +1565,44 @@ public class App
             locationArguments.add(String.valueOf(locations.get(i)));
 
             System.out.println(String.format(locationFormat, locationArguments.toArray()));
+        }
+    }
+
+    /**
+     * displayFormattedReports outputs the content of a report. It automatically formats the output.
+     * This method can handle a report with any number of values (columns)
+     * Added by Eoin K: 10/04/21
+     * @param report An ArrayList of the report, the 1st item should be the headers and the rest should be values.
+     */
+    public void displayFormattedReports(ArrayList<String[]> report)
+    {
+        // If the report is empty or only contains a header row there is nothing to display
+        if(report.size() <= 1) {
+            return;
+        }
+
+        // Method initialisation
+        String format = "";
+        ArrayList<String> arguments = new ArrayList<>();
+
+        // Store the first array as the headers
+        ArrayList<String> headers = new ArrayList<>(Arrays.asList(report.get(0)));
+
+        // Construct the
+        for (String header : headers) {
+            // Use each header to construct the sizing of the display. If the first header is 5 characters long then,
+            //  that column will become 5 characters wide.
+            format = format.concat("%-" + header.length() + "s ");
+            // Add the current header to the list of arguments to be displayed.
+            arguments.add(header);
+        }
+
+        // Print the headers using the format and arguments
+        System.out.println(String.format(format, arguments.toArray()));
+        // Print the values using the existing format and the argument of each sub array
+        for (int i = 1; i < report.size(); i++) {
+            ArrayList<String> reportRow = new ArrayList<>(Arrays.asList(report.get(i)));
+            System.out.println(String.format(format, reportRow.toArray()));
         }
     }
 
