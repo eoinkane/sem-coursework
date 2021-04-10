@@ -1940,6 +1940,12 @@ public class App
         //a.displayFormattedCities(cities16);
         System.out.println(cities16.size()); //232
 
+        // # 30 - Added by Eoin K: 10/04/21
+        // Generate the number of people who speak certain languages in number form and percentage form.
+        ArrayList<String[]> languagesReport30 = a.getLanguagesPopulationReport();
+        // Display the languages population report
+        a.displayFormattedReports(languagesReport30);
+
         // Disconnect from database
         a.disconnect();
     }
