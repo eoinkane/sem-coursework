@@ -1406,6 +1406,58 @@ public class App
         }
     }
 
+    /**
+     * getLanguagesPopulationReport provides the number of people who speak the folloiwng languages,
+     * from greatest number to smallest, including the percentage of the world population:
+     * Chinese, English, Hindi, Spanish, Arabic
+     * Added by Eoin K:10/04/21
+     * @return An hashmap containing one item, key: "world" value: <Long world population from database>
+     */
+    public ArrayList<String[]> getLanguagesPopulationReport()
+    {
+        // Method initialisation
+        String strSelect =
+                "SELECT Language, ROUND(number_of_people) AS 'number_of_people', "
+                        + "ROUND((number_of_people / world.population) * 100, 2) AS 'percentage_of_world' FROM "
+                        + "(SELECT Language, SUM(((Percentage / 100) * country.Population)) as 'number_of_people' "
+                        + "FROM countrylanguage JOIN country ON country.Code = countrylanguage.CountryCode WHERE "
+                        + "Language IN ('Chinese', 'English', 'Hindi', 'Spanish', 'Arabic') GROUP BY Language) AS "
+                        + "languages_spoken JOIN (SELECT SUM(Population) AS population "
+                        + "FROM country) AS world ORDER BY languages_spoken.number_of_people DESC;";
+        String errorMessage = "Failed to get language population report";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
+        try
+        {
+            // Extract language report information from query results.
+            ArrayList<String[]> languagePopulationReport = new ArrayList<>();
+            languagePopulationReport.add(new String[]{"Language", "Number of People", "Spoken by Percentage of World Population"});
+            // Handle the results
+            while (rset.next()) {
+                // Add a sub array to the return array containing the 3 values of each record
+                languagePopulationReport.add(new String []{
+                        rset.getString("language"),
+                        String.valueOf(rset.getInt("number_of_people")),
+                        String.valueOf(rset.getFloat("percentage_of_world"))
+                });
+            }
+
+            // Return the results of the method.
+            return languagePopulationReport;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
