@@ -986,4 +986,30 @@ public class AppIntegrationTest {
             assertNotEquals(-1, C.population);
         });
     }
+
+    /** getLanguagesPopulationReportIntegrationTest
+     *  This test tests the App.getLanguagesPopulationReport method.
+     *  The method should generate the number of people who speak certain languages in number form and percentage form.
+     *  This test should test that each row does not have more values than the number of headers, and the size of the report.
+     *  Added by Eoin K:10/04/21
+     */
+    @Test
+    void getLanguagesPopulationReportIntegrationTest() {
+        ArrayList<String[]> report = app.getLanguagesPopulationReport();
+
+        // The report is based off 5 languages, so 5 plus 1 row for headers is 6.
+        assertEquals(6, report.size());
+
+        // Test that each sub array does not have more values than the first
+        int numOfHeaders = report.get(0).length;
+
+        // Iterate over the report but start from counter 1 as the first sub array is the headers.
+        for (int i = 1; i < report.size() ; i++) {
+            String[] currentRecord = report.get(i);
+
+            // Assert that the number of value from the first sub array is equal to the number of values in,
+            //  the current sub array.
+            assertEquals(numOfHeaders,currentRecord.length);
+        }
+    }
 }
