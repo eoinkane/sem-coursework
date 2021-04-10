@@ -1944,7 +1944,9 @@ public class App
         // Generate the number of people who speak certain languages in number form and percentage form.
         ArrayList<String[]> languagesReport30 = a.getLanguagesPopulationReport();
         // Display the languages population report
-        a.displayFormattedReports(languagesReport30);
+        // Formatted Information can be displayed by uncommenting the line below
+        //a.displayFormattedReports(languagesReport30);
+        System.out.println(languagesReport30.size()); // Should display 6, (5 results and 1 header sub array)
 
         // Disconnect from database
         a.disconnect();
