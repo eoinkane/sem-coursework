@@ -1405,6 +1405,52 @@ public class App
         }
     }
 
+    /**
+     * populationOfACity generates all the cities and collates them into an ArrayList<City>
+     * Added by Joe B: 20/04/2021
+     * @return An array of countries, each city has a name, country, district and population (ArrayList<City>)
+     */
+    public ArrayList<City> populationOfACity()
+    {
+        // Method initialisation
+        String strSelect =
+                "SELECT Name, Population "
+                + "FROM city "
+                + "ORDER BY Name ASC ";
+        String errorMessage = "Failed to get populations of cities";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<City> cities = new ArrayList<City>();
+            // Create a new city object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                City city = new City(
+                        rset.getString("name"),
+                        null,
+                        rset.getInt("population"),
+                        null,
+                        null,
+                        null
+                );
+                cities.add(city);
+            }
+            // Return the results of the method.
+            return cities;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1848,6 +1894,14 @@ public class App
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities16);
         System.out.println(cities16.size()); //232
+
+        // #40 - Added by Joe B: 20/04/21
+        // Generate All the cities populations in the world organised by alphabetical order.
+        ArrayList<City> cities40 = a.populationOfACity();
+        //Display all cities populations.
+        //Formatted Information can be displayed by uncommenting the line below.
+        // a.displayFormattedCities(cities40);
+        System.out.println(cities40.size()); //Should be 4079.
 
         // Disconnect from database
         a.disconnect();
