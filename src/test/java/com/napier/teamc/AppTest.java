@@ -469,4 +469,62 @@ class AppTest
         // Test
         app.displayFormattedPopulations(locations);
     }
+
+    /** displayFormattedReportsPopulatedTest
+     * Test app.displayFormattedPopulations with a populated HashMap<String, Number>
+     *  This test will not assert anything as no values are returned
+     *  Added by Eoin K:10/04/21
+     */
+    @Test
+    void displayFormattedReportsPopulatedTest()
+    {
+        // Test setup
+        App app = new App();
+
+        // Mock Objects
+        ArrayList<String[]> report = new ArrayList<>();
+        report.add(new String[]{"Header 1", "Header 2"});
+        report.add(new String[]{"Value 1", "Value 2"});
+
+        // Test
+        app.displayFormattedReports(report);
+    }
+
+    /** displayFormattedReportsEmptyWithoutHeadersTest
+     * Test app.displayFormattedPopulations with a populated ArrayList<String[]> that has not been populated at all.
+     * This test will not assert anything as no values are returned
+     * Added by Eoin K:10/04/21
+     */
+    @Test
+    void displayFormattedReportsEmptyWithoutHeadersTest()
+    {
+        // Test setup
+        App app = new App();
+
+        // Mock Objects
+        ArrayList<String[]> report = new ArrayList<>();
+
+        // Test
+        app.displayFormattedReports(report);
+    }
+
+    /** displayFormattedReportsEmptyWithHeadersTest
+     * Test app.displayFormattedPopulations with a populated ArrayList<String[]> that has only been populated,
+     *   with a header row.
+     * This test will not assert anything as no values are returned
+     * Added by Eoin K:10/04/21
+     */
+    @Test
+    void displayFormattedReportsEmptyWithHeadersTest()
+    {
+        // Test setup
+        App app = new App();
+
+        // Mock Objects
+        ArrayList<String[]> report = new ArrayList<>();
+        report.add(new String[]{"Header 1", "Header 2"});
+
+        // Test
+        app.displayFormattedReports(report);
+    }
 }
