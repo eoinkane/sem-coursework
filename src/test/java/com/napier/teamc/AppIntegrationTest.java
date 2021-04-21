@@ -374,6 +374,53 @@ public class AppIntegrationTest {
         assertNull(countries);
     }
 
+    /** generateCityReportWhileConnectedIntegrationTest
+     *  This test tests the App.generateCityReport method.
+     *  Should test that the method takes the result of a query (ResultSet) and fully populates an array list of city objects
+     *  Added by Eoin K:21/04/21
+     */
+    @Test
+    void generateCityReportWhileConnectedIntegrationTest() {
+        // Call app.query() with a query and error message
+        String query = "SELECT city.Name, District, city.Population, country.Name as country_name FROM city "
+                + "JOIN country ON city.CountryCode = country.Code LIMIT 1; ";
+        ResultSet rset = app.query(query,"error message");
+        ResultSet testRset = app.query(query,"error message");;
+
+        ArrayList<City> cities = app.generateCityReport(rset, "error message");
+
+        assertEquals(1, cities.size());
+
+        cities.forEach(C -> {
+            try {
+                testRset.next();
+                assertEquals(testRset.getString("name"), C.name);
+                assertEquals(testRset.getString("district"), C.district);
+                assertEquals(testRset.getInt("population"), C.population);
+                assertEquals(null, C.continent);
+                assertEquals(testRset.getString("country_name"), C.country);
+                assertEquals(null, C.region);
+            } catch (SQLException error) {
+                fail(error);
+            }
+        });
+    }
+
+    /** generateCityReportErrorIntegrationTest
+     *  This test tests the App.generateCityReport method.
+     *  The method should return null when an error occurs
+     *  Added by Eoin K:21/04/21
+     */
+    @Test
+    void generateCityReportErrorIntegrationTest() {
+        // Call app.query() with a query and error message to get a mock result set
+        ResultSet rset = app.query("SELECT Name FROM country LIMIT 1;", "error message");
+
+        ArrayList<City> cities = app.generateCityReport(rset, "error message");
+
+        assertNull(cities);
+    }
+
     /** test the getCountryLargestToSmallest method in App.java
      *  Should test that the method returns an array of countries and each country has a name and population attribute.
      */
