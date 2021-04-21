@@ -501,14 +501,14 @@ public class App
     {
         // method initialisation
         String strSelect =
-                "SELECT Name, Region, Population FROM country "
-                        + "ORDER BY Region, Population DESC;";
+                "SELECT Code, country.Name, Continent, Region, country.Population, city.Name as capital_city_name "
+                        + "FROM country JOIN city ON country.Capital = city.ID ORDER BY Region, country.Population DESC;";
         String errorMessage = "Failed to get countries in a region by population";
 
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        return handleResultSetCountryWithNamePopulationAndRegion(rset, errorMessage);
+        return generateCountryReport(rset, errorMessage);
     }
 
     /**
