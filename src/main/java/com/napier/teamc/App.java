@@ -397,7 +397,7 @@ public class App
      * generateCityReport
      * This method should takes the result of a query (ResultSet) and fully populates an array list of city objects
      * Added by Eoin K:21/04/21
-     * @param rset result of the database query. Must have Code, Name, District, Population & country_name columns
+     * @param rset result of the database query. Must have  Name, District, Population & country_name columns
      * @param errorMessage error message to display if an error occurs
      * @return The City Report. An array of fully populated city objects
      */
@@ -411,6 +411,44 @@ public class App
                 City city = new City(
                         rset.getString("name"),
                         rset.getString("district"),
+                        rset.getInt("population"),
+                        null,
+                        rset.getString("country_name"),
+                        null
+                );
+                cities.add(city);
+            }
+            // Return the results of the method.
+            return cities;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    /**
+     * generateCapitalCityReport
+     * This method should takes the result of a query (ResultSet) and fully populates an array list of city objects
+     * Added by Eoin K:21/04/21
+     * @param rset result of the database query. Must have Name, Population & country_name columns
+     * @param errorMessage error message to display if an error occurs
+     * @return The Capital City Report. An array of fully populated city objects which are capital cities.
+     */
+    public ArrayList<City> generateCapitalCityReport(ResultSet rset, String errorMessage) {
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<City> cities = new ArrayList<>();
+            // Create a new city object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                City city = new City(
+                        rset.getString("name"),
+                        null,
                         rset.getInt("population"),
                         null,
                         rset.getString("country_name"),
