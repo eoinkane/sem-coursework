@@ -37,7 +37,7 @@
 | 23    | The population of people, people living in cities, and people not living in cities in each continent. | ? | ? | image | |
 | 24    | The population of people, people living in cities, and people not living in cities in each region. | ? | ? | image | |
 | 25    | The population of people, people living in cities, and people not living in cities in each country. | ? | ? | image | |
-| 26    | The population of the world. | ? | ? | image | |
+| 26    | The population of the world. | Yes | getWorldPopulation | [Screenshot](images/getWorldPopulation.png) | [#32](https://github.com/eoinkane/sem-coursework/issues/32) |
 | 27    | The population of a continent. | ? | ? | image | |
 | 28    | The population of a region. | ? | ? | image | |
 | 29    | The population of a country. | ? | ? | image | |
