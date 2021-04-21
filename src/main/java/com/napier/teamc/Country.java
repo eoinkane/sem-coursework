@@ -2,6 +2,7 @@ package com.napier.teamc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents a Country
@@ -48,15 +49,15 @@ public class Country
          * @return a Continents enum.
          */
         public static Continents customValueOf(String name) {
-            name = name.toUpperCase();
-            switch (name)
+            String upperCaseName = name.toUpperCase();
+            switch (upperCaseName)
             {
                 case "NORTH AMERICA":
                     return Continents.valueOf("NORTH_AMERICA");
                 case "SOUTH AMERICA":
                     return Continents.valueOf("SOUTH_AMERICA");
                 default:
-                    return Continents.valueOf(name);
+                    return Continents.valueOf(upperCaseName);
             }
         }
     }
@@ -68,7 +69,7 @@ public class Country
      * Added by Eoin K:27/02/21
      * Updated by Eoin K:14/03/21 (updated Code value length)
      */
-    public static  ArrayList<String> fieldLengths = new ArrayList<String>(Arrays.asList(
+    public static List<String> fieldLengths = new ArrayList<String>(Arrays.asList(
             "12", // The header for Country Code, 'Country Code' is longer than the max value length of 3 use the length of the header.
             "44", // The largest Country Name value length is 44.
             "13", // The largest Country Continent value length is 13.
