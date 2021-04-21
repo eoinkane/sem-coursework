@@ -4,9 +4,8 @@ import java.sql.*;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,7 +95,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message
         ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
 
-        ArrayList<Country> countries = app.handleResultSetCountryWithNameAndPopulation(rset, "error message");
+        List<Country> countries = app.handleResultSetCountryWithNameAndPopulation(rset, "error message");
 
         assertEquals(5, countries.size());
 
@@ -120,7 +119,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name FROM country LIMIT 5;", "error message");
 
-        ArrayList<Country> countries = app.handleResultSetCountryWithNameAndPopulation(rset, "error message");
+        List<Country> countries = app.handleResultSetCountryWithNameAndPopulation(rset, "error message");
 
         assertNull(countries);
     }
@@ -135,7 +134,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message
         ResultSet rset = app.query("SELECT Name, Region, Population FROM country LIMIT 5;", "error message");
 
-        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
+        List<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
 
         assertEquals(5, countries.size());
 
@@ -159,7 +158,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
 
-        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
+        List<Country> countries = app.handleResultSetCountryWithNamePopulationAndRegion(rset, "error message");
 
         assertNull(countries);
     }
@@ -174,7 +173,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message
         ResultSet rset = app.query("SELECT Name, Continent, Population FROM country LIMIT 5;", "error message");
 
-        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
+        List<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
 
         assertEquals(5, countries.size());
 
@@ -198,7 +197,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name, Population FROM country LIMIT 5;", "error message");
 
-        ArrayList<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
+        List<Country> countries = app.handleResultSetCountryWithNamePopulationAndContinent(rset, "error message");
 
         assertNull(countries);
     }
@@ -213,7 +212,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message
         ResultSet rset = app.query("SELECT Name, Population, District FROM city LIMIT 5;", "error message");
 
-        ArrayList<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
+        List<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
 
         assertEquals(5, cities.size());
 
@@ -237,7 +236,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
 
-        ArrayList<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
+        List<City> cities = app.handleResultSetCityWithNameDistrictAndPopulation(rset, "error message");
 
         assertNull(cities);
     }
@@ -255,7 +254,7 @@ public class AppIntegrationTest {
                 "error message"
         );
 
-        ArrayList<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
+        List<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
 
         assertEquals(5, cities.size());
 
@@ -279,7 +278,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
 
-        ArrayList<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
+        List<City> cities = app.handleResultSetCityWithNameContinentAndPopulation(rset, "error message");
 
         assertNull(cities);
     }
@@ -297,7 +296,7 @@ public class AppIntegrationTest {
                 "error message"
         );
 
-        ArrayList<City> cities = app.handleResultSetCityWithNameRegionAndPopulation(rset, "error message");
+        List<City> cities = app.handleResultSetCityWithNameRegionAndPopulation(rset, "error message");
 
         assertEquals(5, cities.size());
 
@@ -321,7 +320,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name, Population FROM city LIMIT 5;", "error message");
 
-        ArrayList<City> cities = app.handleResultSetCityWithNameRegionAndPopulation(rset, "error message");
+        List<City> cities = app.handleResultSetCityWithNameRegionAndPopulation(rset, "error message");
 
         assertNull(cities);
     }
@@ -339,20 +338,21 @@ public class AppIntegrationTest {
         ResultSet rset = app.query(query,"error message");
         ResultSet testRset = app.query(query,"error message");;
 
-        ArrayList<Country> countries = app.generateCountryReport(rset, "error message");
+        List<Country> countries = app.generateCountryReport(rset, "error message");
 
         assertEquals(1, countries.size());
 
 
         countries.forEach(C -> {
             try {
-                testRset.next();
-                assertEquals(testRset.getString("code"), C.country_code);
-                assertEquals(testRset.getString("name"), C.name);
-                assertEquals(Country.Continents.customValueOf(testRset.getString("continent")), C.continent);
-                assertEquals(testRset.getString("region"), C.region);
-                assertEquals(testRset.getInt("population"), C.population);
-                assertEquals(testRset.getString("capital_city_name"), C.capital_city.name);
+                if (testRset.next()) {
+                    assertEquals(testRset.getString("code"), C.country_code);
+                    assertEquals(testRset.getString("name"), C.name);
+                    assertEquals(Country.Continents.customValueOf(testRset.getString("continent")), C.continent);
+                    assertEquals(testRset.getString("region"), C.region);
+                    assertEquals(testRset.getInt("population"), C.population);
+                    assertEquals(testRset.getString("capital_city_name"), C.capital_city.name);
+                }
             } catch (SQLException error) {
                 fail(error);
             }
@@ -369,7 +369,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name FROM city LIMIT 1;", "error message");
 
-        ArrayList<Country> countries = app.generateCountryReport(rset, "error message");
+        List<Country> countries = app.generateCountryReport(rset, "error message");
 
         assertNull(countries);
     }
@@ -387,19 +387,20 @@ public class AppIntegrationTest {
         ResultSet rset = app.query(query,"error message");
         ResultSet testRset = app.query(query,"error message");;
 
-        ArrayList<City> cities = app.generateCityReport(rset, "error message");
+        List<City> cities = app.generateCityReport(rset, "error message");
 
         assertEquals(1, cities.size());
 
         cities.forEach(C -> {
             try {
-                testRset.next();
-                assertEquals(testRset.getString("name"), C.name);
-                assertEquals(testRset.getString("district"), C.district);
-                assertEquals(testRset.getInt("population"), C.population);
-                assertEquals(null, C.continent);
-                assertEquals(testRset.getString("country_name"), C.country);
-                assertEquals(null, C.region);
+                if (testRset.next()) {
+                    assertEquals(testRset.getString("name"), C.name);
+                    assertEquals(testRset.getString("district"), C.district);
+                    assertEquals(testRset.getInt("population"), C.population);
+                    assertEquals(null, C.continent);
+                    assertEquals(testRset.getString("country_name"), C.country);
+                    assertEquals(null, C.region);
+                }
             } catch (SQLException error) {
                 fail(error);
             }
@@ -416,7 +417,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name FROM country LIMIT 1;", "error message");
 
-        ArrayList<City> cities = app.generateCityReport(rset, "error message");
+        List<City> cities = app.generateCityReport(rset, "error message");
 
         assertNull(cities);
     }
@@ -434,19 +435,20 @@ public class AppIntegrationTest {
         ResultSet rset = app.query(query,"error message");
         ResultSet testRset = app.query(query,"error message");;
 
-        ArrayList<City> cities = app.generateCapitalCityReport(rset, "error message");
+        List<City> cities = app.generateCapitalCityReport(rset, "error message");
 
         assertEquals(1, cities.size());
 
         cities.forEach(C -> {
             try {
-                testRset.next();
-                assertEquals(testRset.getString("name"), C.name);
-                assertEquals(null, C.district);
-                assertEquals(testRset.getInt("population"), C.population);
-                assertEquals(null, C.continent);
-                assertEquals(testRset.getString("country_name"), C.country);
-                assertEquals(null, C.region);
+                if (testRset.next()) {
+                    assertEquals(testRset.getString("name"), C.name);
+                    assertEquals(null, C.district);
+                    assertEquals(testRset.getInt("population"), C.population);
+                    assertEquals(null, C.continent);
+                    assertEquals(testRset.getString("country_name"), C.country);
+                    assertEquals(null, C.region);
+                }
             } catch (SQLException error) {
                 fail(error);
             }
@@ -463,7 +465,7 @@ public class AppIntegrationTest {
         // Call app.query() with a query and error message to get a mock result set
         ResultSet rset = app.query("SELECT Name FROM country LIMIT 1;", "error message");
 
-        ArrayList<City> cities = app.generateCapitalCityReport(rset, "error message");
+        List<City> cities = app.generateCapitalCityReport(rset, "error message");
 
         assertNull(cities);
     }
@@ -473,9 +475,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getCountryLargestToSmallestIntegrationTest() {
-        ArrayList<Country> countries = app.getCountryLargestToSmallest();
+        List<Country> countries = app.getCountryLargestToSmallest();
 
-        assertTrue(countries.size() >= 1);
+        assertFalse(countries.isEmpty());
 
         countries.forEach(C -> {
             assertNull(C.country_code);
@@ -494,9 +496,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getCountriesInARegionByPopulationIntegrationTest() {
-        ArrayList<Country> countries = app.getCountriesInARegionByPopulation();
+        List<Country> countries = app.getCountriesInARegionByPopulation();
 
-        assertTrue(countries.size() >= 1);
+        assertFalse(countries.isEmpty());
 
         countries.forEach(C -> {
             assertNotNull(C.country_code);
@@ -516,9 +518,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCountriesInAContinentValidInputIntegrationTest() {
-        ArrayList<Country> countries = app.getTopNPopulatedCountriesInAContinent(1);
+        List<Country> countries = app.getTopNPopulatedCountriesInAContinent(1);
 
-        assertTrue(countries.size() >= 1);
+        assertFalse(countries.isEmpty());
 
         countries.forEach(C -> {
             assertNotNull(C.country_code);
@@ -537,7 +539,7 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCountriesInAContinentInvalidInputIntegrationTest() {
-        ArrayList<Country> countries = app.getTopNPopulatedCountriesInAContinent(-1);
+        List<Country> countries = app.getTopNPopulatedCountriesInAContinent(-1);
 
         assertNull(countries);
     }
@@ -550,9 +552,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCountriesInARegionValidInputIntegrationTest() {
-        ArrayList<Country> countries = app.getTopNPopulatedCountriesInARegion(1);
+        List<Country> countries = app.getTopNPopulatedCountriesInARegion(1);
 
-        assertTrue(countries.size() >= 1);
+        assertFalse(countries.isEmpty());
 
         countries.forEach(C -> {
             assertNotNull(C.country_code);
@@ -571,7 +573,7 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCountriesInARegionInvalidInputIntegrationTest() {
-        ArrayList<Country> countries = app.getTopNPopulatedCountriesInARegion(-1);
+        List<Country> countries = app.getTopNPopulatedCountriesInARegion(-1);
 
         assertNull(countries);
     }
@@ -583,9 +585,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCitiesintheWorldValidInputIntegrationTest() {
-        ArrayList<City> cities = app.getTopNPopulatedCitiesintheWorld(1);
+        List<City> cities = app.getTopNPopulatedCitiesintheWorld(1);
 
-        assertTrue(cities.size() >= 1);
+        assertFalse(cities.isEmpty());
 
         cities.forEach(C -> {
             assertNotNull(C.name);
@@ -603,7 +605,7 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCitiesintheWorldInvalidInputIntegrationTest() {
-        ArrayList<City> cities = app.getTopNPopulatedCitiesintheWorld(-1);
+        List<City> cities = app.getTopNPopulatedCitiesintheWorld(-1);
 
         assertNull(cities);
     }
@@ -615,9 +617,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCountriesInTheWorldValidInputIntegrationTest() {
-        ArrayList<Country> countries = app.getTopNPopulatedCountriesInTheWorld(1);
+        List<Country> countries = app.getTopNPopulatedCountriesInTheWorld(1);
 
-        assertTrue(countries.size() >= 1);
+        assertFalse(countries.isEmpty());
 
         countries.forEach(C -> {
             assertNull(C.country_code);
@@ -635,7 +637,7 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCountriesInTheWorldInvalidInputIntegrationTest() {
-        ArrayList<Country> countries = app.getTopNPopulatedCountriesInTheWorld(-1);
+        List<Country> countries = app.getTopNPopulatedCountriesInTheWorld(-1);
 
         assertNull(countries);
     }
@@ -647,9 +649,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getCountriesInAContinentByPopulationIntegrationTest() {
-        ArrayList<Country> countries = app.getCountriesInAContinentByPopulation();
+        List<Country> countries = app.getCountriesInAContinentByPopulation();
 
-        assertTrue(countries.size() >= 1);
+        assertFalse(countries.isEmpty());
 
         countries.forEach(C -> {
             assertNull(C.country_code);
@@ -668,9 +670,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCitiesinaContinentValidInputIntegrationTest() {
-        ArrayList<City> cities = app.getTopNPopulatedCitiesinaContinent(1);
+        List<City> cities = app.getTopNPopulatedCitiesinaContinent(1);
 
-        assertTrue(cities.size() >= 1);
+        assertFalse(cities.isEmpty());
 
         cities.forEach(C -> {
             assertNotNull(C.name);
@@ -688,7 +690,7 @@ public class AppIntegrationTest {
      */
     @Test
     void getTopNPopulatedCitiesinaContinentInvalidInputIntegrationTest() {
-        ArrayList<City> cities = app.getTopNPopulatedCitiesinaContinent(-1);
+        List<City> cities = app.getTopNPopulatedCitiesinaContinent(-1);
 
         assertNull(cities);
     }
@@ -700,9 +702,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getAllCitiesinADistrictLargetoSmallIntegrationTest() {
-        ArrayList<City> cities = app.getAllCitiesinADistrictLargetoSmall();
+        List<City> cities = app.getAllCitiesinADistrictLargetoSmall();
 
-        assertTrue(cities.size() >= 1);
+        assertFalse(cities.isEmpty());
 
         cities.forEach(C -> {
             assertNotNull(C.name);
@@ -721,9 +723,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getAllCitiesInACountryIntegrationTest() {
-        ArrayList<City> cities = app.getAllCitiesInACountry();
+        List<City> cities = app.getAllCitiesInACountry();
 
-        assertTrue(cities.size() >= 1);
+        assertFalse(cities.isEmpty());
 
         cities.forEach(C -> {
             assertNotNull(C.name);
@@ -742,9 +744,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getAllCitiesInAContinentIntegrationTest() {
-        ArrayList<City> cities = app.getAllCitiesInAContinent();
+        List<City> cities = app.getAllCitiesInAContinent();
 
-        assertTrue(cities.size() >= 1);
+        assertFalse(cities.isEmpty());
 
         cities.forEach(C -> {
             assertNotNull(C.name);
@@ -763,9 +765,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getAllCitiesInARegionIntegrationTest() {
-        ArrayList<City> cities = app.getAllCitiesInARegion();
+        List<City> cities = app.getAllCitiesInARegion();
 
-        assertTrue(cities.size() >= 1);
+        assertFalse(cities.isEmpty());
 
         cities.forEach(C -> {
             assertNotNull(C.name);
@@ -784,9 +786,9 @@ public class AppIntegrationTest {
      */
     @Test
     void getAllCitiesInTheWorldIntegrationTest() {
-        ArrayList<City> cities = app.getAllCitiesInTheWorld();
+        List<City> cities = app.getAllCitiesInTheWorld();
 
-        assertTrue(cities.size() >= 1);
+        assertFalse(cities.isEmpty());
 
         cities.forEach(C -> {
             assertNotNull(C.name);
@@ -805,7 +807,7 @@ public class AppIntegrationTest {
      */
     @Test
     void CountryReportIntegrationTest() {
-        ArrayList<Country> countries = app.getCountryReports();
+        List<Country> countries = app.getCountryReports();
 
         assertEquals(232, countries.size());
 
@@ -826,7 +828,7 @@ public class AppIntegrationTest {
      */
     @Test
     void CityReportIntegrationTest() {
-        ArrayList<City> cities = app.getCityReports();
+        List<City> cities = app.getCityReports();
 
         assertEquals(4079, cities.size());
 
@@ -887,7 +889,7 @@ public class AppIntegrationTest {
      */
     @Test
     void CitiesInARegion() {
-        ArrayList<City> cities = app.getTopNPopulatedCitiesinaRegion(3);
+        List<City> cities = app.getTopNPopulatedCitiesinaRegion(3);
 
         assertEquals(69, cities.size());
 
@@ -905,17 +907,13 @@ public class AppIntegrationTest {
      */
     @Test
     void CitiesInARegion1() {
-        ArrayList<City> cities = app.getTopNPopulatedCitiesinaRegion(1);
+        List<City> cities = app.getTopNPopulatedCitiesinaRegion(1);
 
         int numofbritresults = 0;
 
-        for (int i = 0; i < cities.size(); i++) {
-
-            City C = cities.get(i);
-
-            if (C.region.equals("British Islands")) {
+        for (City C : cities) {
+            if ("British Islands".equals(C.region)) {
                 ++numofbritresults;
-
             }
         }
         ;
@@ -930,7 +928,7 @@ public class AppIntegrationTest {
     @Test
     void CityAndNonCityPopulationIntegrationTest() {
         // populate a test list
-        ArrayList<String> testLst = app.getPopulatedAndUnpopulatedCities();
+        List<String> testLst = app.getPopulatedAndUnpopulatedCities();
 
         // Size must be 232
         assertEquals(232, testLst.size());
@@ -948,7 +946,7 @@ public class AppIntegrationTest {
 
     @Test
     void CapitalCitiesInTheWorld() {
-        ArrayList<City> cities = app.getTopNCapitalCitiesintheWorld(5);
+        List<City> cities = app.getTopNCapitalCitiesintheWorld(5);
 
         assertEquals(5, cities.size());
 
@@ -966,17 +964,13 @@ public class AppIntegrationTest {
      */
     @Test
     void CapitalCitiesInTheWorld1() {
-        ArrayList<City> cities = app.getTopNCapitalCitiesintheWorld(1);
+        List<City> cities = app.getTopNCapitalCitiesintheWorld(1);
 
         int numofseoul = 0;
 
-        for (int i = 0; i < cities.size(); i++) {
-
-            City C = cities.get(i);
-
-            if (C.name.equals("Seoul")) {
+        for (City C : cities) {
+            if ("Seoul".equals(C.name)) {
                 ++numofseoul;
-
             }
         }
         assertEquals(1, numofseoul);
@@ -989,7 +983,7 @@ public class AppIntegrationTest {
      */
     @Test
     void CapitalCitiesInARegion() {
-        ArrayList<City> cities = app.getTopNCapitalCitiesinaRegion(3);
+        List<City> cities = app.getTopNCapitalCitiesinaRegion(3);
 
         assertEquals(68, cities.size());
 
@@ -1007,17 +1001,13 @@ public class AppIntegrationTest {
      */
     @Test
     void CapitalCitiesInARegion1() {
-        ArrayList<City> cities = app.getTopNCapitalCitiesinaRegion(1);
+        List<City> cities = app.getTopNCapitalCitiesinaRegion(1);
 
         int numofregionname = 0;
 
-        for (int i = 0; i < cities.size(); i++) {
-
-            City C = cities.get(i);
-
-            if (C.region.equals("Western Africa")) {
+        for (City C : cities) {
+            if ("Western Africa".equals(C.region)) {
                 ++numofregionname;
-
             }
         }
         assertEquals(1, numofregionname);
@@ -1030,7 +1020,7 @@ public class AppIntegrationTest {
     @Test
     void CityAndNonCityPopulationIntegrationTestForContinent() {
         // populate a test list
-        ArrayList<String> testLst = app.getPopulatedAndUnpopulatedCitiesForContinent();
+        List<String> testLst = app.getPopulatedAndUnpopulatedCitiesForContinent();
 
         // Size must be 7
         assertEquals(7, testLst.size());
@@ -1044,7 +1034,7 @@ public class AppIntegrationTest {
 
     @Test
     void CapitalCitiesInAContinent() {
-        ArrayList<City> continents = app.getTopNCapitalCitiesinAContinent(3);
+        List<City> continents = app.getTopNCapitalCitiesinAContinent(3);
 
         assertEquals(18, continents.size());
 
@@ -1057,19 +1047,14 @@ public class AppIntegrationTest {
 
     @Test
     void CapitalCitiesInAContinent1() {
-        ArrayList<City> cities = app.getTopNCapitalCitiesinAContinent(1);
+        List<City> cities = app.getTopNCapitalCitiesinAContinent(1);
 
         int numofafrica = 0;
 
-        for (int i = 0; i < cities.size(); i++) {
-
-            City C = cities.get(i);
-            if (C.continent.equals("Africa")) {
+        for (City C : cities) {
+            if ("Africa".equals(C.continent)) {
                 ++numofafrica;
-
-
             }
-
         }
         assertEquals(1, numofafrica);
     }
@@ -1078,7 +1063,7 @@ public class AppIntegrationTest {
     @Test
     void CityAndNonCityPopulationIntegrationTestForRegion() {
         // populate a test list
-        ArrayList<String> testLst = app.getPopulatedAndUnpopulatedCitiesForRegion();
+        List<String> testLst = app.getPopulatedAndUnpopulatedCitiesForRegion();
 
         // Size must be 25
         assertEquals(25, testLst.size());
@@ -1092,7 +1077,7 @@ public class AppIntegrationTest {
 
     @Test
     void CapitalCitiesInTheWorld18() {
-        ArrayList<City> cities = app.getAllCapitalCitiesInTheWorld();
+        List<City> cities = app.getAllCapitalCitiesInTheWorld();
 
         assertEquals(232, cities.size());
 
@@ -1105,7 +1090,7 @@ public class AppIntegrationTest {
 
     @Test
     void CapitalCitiesInAContinent17() {
-        ArrayList<City> cities = app.getAllCapitalCitiesInAContinent();
+        List<City> cities = app.getAllCapitalCitiesInAContinent();
 
         assertEquals(232, cities.size());
 
@@ -1118,7 +1103,7 @@ public class AppIntegrationTest {
 
     @Test
     void CapitalCitiesInARegion16() {
-        ArrayList<City> cities = app.getAllCapitalCitiesInARegion();
+        List<City> cities = app.getAllCapitalCitiesInARegion();
 
         assertEquals(232, cities.size());
 
@@ -1137,7 +1122,7 @@ public class AppIntegrationTest {
      */
     @Test
     void getLanguagesPopulationReportIntegrationTest() {
-        ArrayList<String[]> report = app.getLanguagesPopulationReport();
+        List<String[]> report = app.getLanguagesPopulationReport();
 
         // The report is based off 5 languages, so 5 plus 1 row for headers is 6.
         assertEquals(6, report.size());
