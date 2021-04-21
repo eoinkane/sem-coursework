@@ -525,9 +525,9 @@ public class App
 
         // method initialisation
         String strSelect =
-                "WITH grouped_countries AS (SELECT Name, Continent, Population, ROW_NUMBER() OVER "
-                        + "(PARTITION BY Continent ORDER BY Population DESC) row_num FROM country) "
-                        + "SELECT Name, Continent, Population FROM grouped_countries WHERE row_num <= <N>;";
+                "WITH grouped_countries AS (SELECT Code, country.Name, Continent, Region, country.Population, city.Name AS capital_city_name, ROW_NUMBER() OVER "
+                        + "(PARTITION BY Continent ORDER BY Population DESC) row_num FROM country JOIN city ON country.Capital = city.ID) "
+                        + "SELECT Code, Name, Continent, Region, Population, capital_city_name FROM grouped_countries WHERE row_num <= <N>;";
         String errorMessage = "Failed to get the top N populated countries in a continent";
 
         strSelect = strSelect.replace("<N>", String.valueOf(n));
@@ -535,7 +535,7 @@ public class App
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        return handleResultSetCountryWithNamePopulationAndContinent(rset, errorMessage);
+        return generateCountryReport(rset, errorMessage);
     }
 
     /**
