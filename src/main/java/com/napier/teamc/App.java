@@ -346,6 +346,53 @@ public class App
         }
     }
 
+
+    /**
+     * generateCountryReport
+     * This method should takes the result of a query (ResultSet) and fully populates an array list of country objects
+     * Added by Eoin K:21/04/21
+     * @param rset result of the database query. Must have Code, Name, Continent, Region, Population & capital_city_name columns
+     * @param errorMessage error message to display if an error occurs
+     * @return
+     */
+    public ArrayList<Country> generateCountryReport(ResultSet rset, String errorMessage) {
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<Country> countries = new ArrayList<>();
+            // Create a new country object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                City capitalCity = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        -1,
+                        null,
+                        null,
+                        null
+                );
+                Country country = new Country(
+                        rset.getString("code"),
+                        rset.getString("name"),
+                        Country.Continents.customValueOf(rset.getString("continent")),
+                        rset.getString("region"),
+                        rset.getInt("population"),
+                        capitalCity
+                );
+                countries.add(country);
+            }
+            // Return the results of the method.
+            return countries;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
     /**
      * getCountryLargestToSmallest generates populated countries from largest to smallest,
      *      in the world.
