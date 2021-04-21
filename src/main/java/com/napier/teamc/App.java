@@ -552,9 +552,10 @@ public class App
 
         // Method initialisation
         String strSelect =
-                "WITH grouped_countries AS (SELECT Name, Region, Population, ROW_NUMBER() OVER "
-                        + "(PARTITION BY Region ORDER BY Population DESC) row_num FROM country) "
-                        + "SELECT Name, Region, Population FROM grouped_countries WHERE row_num <= <N>;";
+                "WITH grouped_countries AS (SELECT Code, country.Name, Continent, Region, country.Population, city.Name "
+                        + "AS capital_city_name, ROW_NUMBER() OVER (PARTITION BY Region ORDER BY Population DESC) "
+                        + "row_num FROM country JOIN city ON country.Capital = city.ID) SELECT Code, Name, Continent, "
+                        + "Region, Population, capital_city_name  FROM grouped_countries WHERE row_num <= <N>;";
         String errorMessage = "Failed to get the top N populated countries in a region";
 
         strSelect = strSelect.replace("<N>", String.valueOf(n));
@@ -563,7 +564,7 @@ public class App
         ResultSet rset = query(strSelect, errorMessage);
 
         // While dealing with the result set, catch any SQLException that can be thrown
-        return handleResultSetCountryWithNamePopulationAndRegion(rset, errorMessage);
+        return generateCountryReport(rset, errorMessage);
     }
 
     /**

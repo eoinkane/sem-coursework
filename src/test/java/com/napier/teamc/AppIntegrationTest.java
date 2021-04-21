@@ -555,11 +555,11 @@ public class AppIntegrationTest {
         assertTrue(countries.size() >= 1);
 
         countries.forEach(C -> {
-            assertNull(C.country_code);
+            assertNotNull(C.country_code);
             assertNotNull(C.name);
-            assertNull(C.continent);
+            assertNotNull(C.continent);
             assertNotNull(C.region);
-            assertNull(C.capital_city);
+            assertNotNull(C.capital_city);
             assertNotEquals(-1, C.population);
         });
     }
