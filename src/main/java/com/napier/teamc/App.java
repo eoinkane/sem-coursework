@@ -126,12 +126,12 @@ public class App
      * @param errorMessage: the error message to print if an SQL Exception is caught.
      * @return an array list of country objects with a name and population attribute
      */
-    public ArrayList<Country> handleResultSetCountryWithNameAndPopulation(ResultSet rset, String errorMessage) {
+    public List<Country> handleResultSetCountryWithNameAndPopulation(ResultSet rset, String errorMessage) {
         // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
             // Extract country information from query results.
-            ArrayList<Country> countries = new ArrayList<Country>();
+            ArrayList<Country> countries = new ArrayList<>();
             // Create a new country object for each record in the result set and add the object to the array
             while (rset.next()) {
                 Country cntry = new Country(
@@ -164,12 +164,12 @@ public class App
      * @param errorMessage: the error message to print if an SQL Exception is caught.
      * @return an array list of country objects with a name, region and population attribute
      */
-    public ArrayList<Country> handleResultSetCountryWithNamePopulationAndRegion(ResultSet rset, String errorMessage) {
+    public List<Country> handleResultSetCountryWithNamePopulationAndRegion(ResultSet rset, String errorMessage) {
         // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
             // Extract country information from query results.
-            ArrayList<Country> countries = new ArrayList<Country>();
+            ArrayList<Country> countries = new ArrayList<>();
             // Create a new country object for each record in the result set and add the object to the array
             while (rset.next()) {
                 Country cntry = new Country(
@@ -202,11 +202,11 @@ public class App
      * @param errorMessage: the error message to print if an SQL Exception is caught.
      * @return an array list of country objects with a name, continent and population attribute
      */
-    public ArrayList<Country> handleResultSetCountryWithNamePopulationAndContinent(ResultSet rset, String errorMessage) {
+    public List<Country> handleResultSetCountryWithNamePopulationAndContinent(ResultSet rset, String errorMessage) {
         try
         {
             // Extract country information from query results.
-            ArrayList<Country> countries = new ArrayList<Country>();
+            ArrayList<Country> countries = new ArrayList<>();
             // Create a new country object for each record in the result set and add the object to the array
             while (rset.next()) {
                 Country cntry = new Country(
@@ -239,11 +239,11 @@ public class App
      * @param errorMessage: the error message to print if an SQL Exception is caught.
      * @return an array list of city objects with a name, district and population attribute
      */
-    public ArrayList<City> handleResultSetCityWithNameDistrictAndPopulation(ResultSet rset, String errorMessage) {
+    public List<City> handleResultSetCityWithNameDistrictAndPopulation(ResultSet rset, String errorMessage) {
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array.
             while (rset.next()) {
                 City cty = new City(
@@ -276,11 +276,11 @@ public class App
      * @param errorMessage: the error message to print if an SQL Exception is caught.
      * @return an array list of city objects with a name, continent and population attribute
      */
-    public ArrayList<City> handleResultSetCityWithNameContinentAndPopulation(ResultSet rset, String errorMessage) {
+    public List<City> handleResultSetCityWithNameContinentAndPopulation(ResultSet rset, String errorMessage) {
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array.
             while (rset.next()) {
                 City cty = new City(
@@ -313,11 +313,11 @@ public class App
      * @param errorMessage: the error message to print if an SQL Exception is caught.
      * @return an array list of city objects with a name, region and population attribute
      */
-    public ArrayList<City> handleResultSetCityWithNameRegionAndPopulation(ResultSet rset, String errorMessage) {
+    public List<City> handleResultSetCityWithNameRegionAndPopulation(ResultSet rset, String errorMessage) {
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City cty = new City(
@@ -344,13 +344,136 @@ public class App
         }
     }
 
+
+    /**
+     * generateCountryReport
+     * This method should takes the result of a query (ResultSet) and fully populates an array list of country objects
+     * Added by Eoin K:21/04/21
+     * @param rset result of the database query. Must have Code, Name, Continent, Region, Population & capital_city_name columns
+     * @param errorMessage error message to display if an error occurs
+     * @return The Country Report. An array of fully populated country objects
+     */
+    public List<Country> generateCountryReport(ResultSet rset, String errorMessage) {
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<Country> countries = new ArrayList<>();
+            // Create a new country object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                City capitalCity = new City(
+                        rset.getString("capital_city_name"),
+                        null,
+                        -1,
+                        null,
+                        null,
+                        null
+                );
+                Country country = new Country(
+                        rset.getString("code"),
+                        rset.getString("name"),
+                        Country.Continents.customValueOf(rset.getString("continent")),
+                        rset.getString("region"),
+                        rset.getInt("population"),
+                        capitalCity
+                );
+                countries.add(country);
+            }
+            // Return the results of the method.
+            return countries;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    /**
+     * generateCityReport
+     * This method should takes the result of a query (ResultSet) and fully populates an array list of city objects
+     * Added by Eoin K:21/04/21
+     * @param rset result of the database query. Must have  Name, District, Population & country_name columns
+     * @param errorMessage error message to display if an error occurs
+     * @return The City Report. An array of fully populated city objects
+     */
+    public List<City> generateCityReport(ResultSet rset, String errorMessage) {
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<City> cities = new ArrayList<>();
+            // Create a new city object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                City city = new City(
+                        rset.getString("name"),
+                        rset.getString("district"),
+                        rset.getInt("population"),
+                        null,
+                        rset.getString("country_name"),
+                        null
+                );
+                cities.add(city);
+            }
+            // Return the results of the method.
+            return cities;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    /**
+     * generateCapitalCityReport
+     * This method should takes the result of a query (ResultSet) and fully populates an array list of city objects
+     * Added by Eoin K:21/04/21
+     * @param rset result of the database query. Must have Name, Population & country_name columns
+     * @param errorMessage error message to display if an error occurs
+     * @return The Capital City Report. An array of fully populated city objects which are capital cities.
+     */
+    public List<City> generateCapitalCityReport(ResultSet rset, String errorMessage) {
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<City> cities = new ArrayList<>();
+            // Create a new city object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                City city = new City(
+                        rset.getString("name"),
+                        null,
+                        rset.getInt("population"),
+                        null,
+                        rset.getString("country_name"),
+                        null
+                );
+                cities.add(city);
+            }
+            // Return the results of the method.
+            return cities;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
     /**
      * getCountryLargestToSmallest generates populated countries from largest to smallest,
      *      in the world.
      * Added by Jackson A:01/03/21
      * @return An array of countries, each country has a name and population attribute (ArrayList<Country>)
      */
-    public ArrayList<Country> getCountryLargestToSmallest()
+    public List<Country> getCountryLargestToSmallest()
     {
         // method initialisation
         String strSelect =
@@ -372,18 +495,18 @@ public class App
      * Updated by Eoin K:27/02/21 (Updated Country constructor to use null continent)
      * @return An array of countries, each country has a name, region and population attribute (ArrayList<Country>)
      */
-    public ArrayList<Country> getCountriesInARegionByPopulation()
+    public List<Country> getCountriesInARegionByPopulation()
     {
         // method initialisation
         String strSelect =
-                "SELECT Name, Region, Population FROM country "
-                        + "ORDER BY Region, Population DESC;";
+                "SELECT Code, country.Name, Continent, Region, country.Population, city.Name as capital_city_name "
+                        + "FROM country JOIN city ON country.Capital = city.ID ORDER BY Region, country.Population DESC;";
         String errorMessage = "Failed to get countries in a region by population";
 
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        return handleResultSetCountryWithNamePopulationAndRegion(rset, errorMessage);
+        return generateCountryReport(rset, errorMessage);
     }
 
     /**
@@ -393,16 +516,16 @@ public class App
      * @param n the given number of N populated countries to generate
      * @return An array of countries, each country has a name, continent and population attribute (ArrayList<Country>)
      */
-    public ArrayList<Country> getTopNPopulatedCountriesInAContinent(int n)
+    public List<Country> getTopNPopulatedCountriesInAContinent(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
 
         // method initialisation
         String strSelect =
-                "WITH grouped_countries AS (SELECT Name, Continent, Population, ROW_NUMBER() OVER "
-                        + "(PARTITION BY Continent ORDER BY Population DESC) row_num FROM country) "
-                        + "SELECT Name, Continent, Population FROM grouped_countries WHERE row_num <= <N>;";
+                "WITH grouped_countries AS (SELECT Code, country.Name, Continent, Region, country.Population, city.Name AS capital_city_name, ROW_NUMBER() OVER "
+                        + "(PARTITION BY Continent ORDER BY Population DESC) row_num FROM country JOIN city ON country.Capital = city.ID) "
+                        + "SELECT Code, Name, Continent, Region, Population, capital_city_name FROM grouped_countries WHERE row_num <= <N>;";
         String errorMessage = "Failed to get the top N populated countries in a continent";
 
         strSelect = strSelect.replace("<N>", String.valueOf(n));
@@ -410,7 +533,7 @@ public class App
         // Execute query on the connected database, and if something goes wrong print the given error message
         ResultSet rset = query(strSelect, errorMessage);
 
-        return handleResultSetCountryWithNamePopulationAndContinent(rset, errorMessage);
+        return generateCountryReport(rset, errorMessage);
     }
 
     /**
@@ -420,16 +543,17 @@ public class App
      * @param n the given number of N populated countries to generate
      * @return An array of countries, each country has a name, region and population attribute (ArrayList<Country>)
      */
-    public ArrayList<Country> getTopNPopulatedCountriesInARegion(int n)
+    public List<Country> getTopNPopulatedCountriesInARegion(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
 
         // Method initialisation
         String strSelect =
-                "WITH grouped_countries AS (SELECT Name, Region, Population, ROW_NUMBER() OVER "
-                        + "(PARTITION BY Region ORDER BY Population DESC) row_num FROM country) "
-                        + "SELECT Name, Region, Population FROM grouped_countries WHERE row_num <= <N>;";
+                "WITH grouped_countries AS (SELECT Code, country.Name, Continent, Region, country.Population, city.Name "
+                        + "AS capital_city_name, ROW_NUMBER() OVER (PARTITION BY Region ORDER BY Population DESC) "
+                        + "row_num FROM country JOIN city ON country.Capital = city.ID) SELECT Code, Name, Continent, "
+                        + "Region, Population, capital_city_name  FROM grouped_countries WHERE row_num <= <N>;";
         String errorMessage = "Failed to get the top N populated countries in a region";
 
         strSelect = strSelect.replace("<N>", String.valueOf(n));
@@ -438,7 +562,7 @@ public class App
         ResultSet rset = query(strSelect, errorMessage);
 
         // While dealing with the result set, catch any SQLException that can be thrown
-        return handleResultSetCountryWithNamePopulationAndRegion(rset, errorMessage);
+        return generateCountryReport(rset, errorMessage);
     }
 
     /**
@@ -449,7 +573,7 @@ public class App
      * @return An array of cities, each city has a name, district and population attribute (ArrayList<City>)
      */
 
-    public ArrayList<City> getTopNPopulatedCitiesintheWorld(int n)
+    public List<City> getTopNPopulatedCitiesintheWorld(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -477,7 +601,7 @@ public class App
      * @param n the given number of N populated countries to generate
      * @return An array of countries, each country has a name and population attribute (ArrayList<Country>)
      */
-    public ArrayList<Country> getTopNPopulatedCountriesInTheWorld(int n)
+    public List<Country> getTopNPopulatedCountriesInTheWorld(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -504,7 +628,7 @@ public class App
      * Added by Jackson A:01/03/21
      * @return An array of countries, each country has a name, continent and population attribute (ArrayList<Country>)
      */
-    public ArrayList<Country> getCountriesInAContinentByPopulation()
+    public List<Country> getCountriesInAContinentByPopulation()
     {
         String strSelect =
                 "SELECT Name, Continent, Population FROM country "
@@ -524,7 +648,7 @@ public class App
      * @param n the given number of N populated cities to generate
      * @return An array of cities, each city has a name population and continent attribute (ArrayList<City>)
      */
-    public ArrayList<City> getTopNPopulatedCitiesinaContinent(int n)
+    public List<City> getTopNPopulatedCitiesinaContinent(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -550,7 +674,7 @@ public class App
      *      in a District order by largest population to smallest.
      * @return An array of cities, each city has a name population and district attribute (ArrayList<City>)
      */
-    public ArrayList<City> getAllCitiesinADistrictLargetoSmall()
+    public List<City> getAllCitiesinADistrictLargetoSmall()
     {
         // Method initialisation
         String strSelect =
@@ -570,7 +694,7 @@ public class App
      *      in a country ordered by largest population to smallest.
      * @return An array of cities, each city has a name population and country name attribute (ArrayList<City>)
      */
-    public ArrayList<City> getAllCitiesInACountry()
+    public List<City> getAllCitiesInACountry()
     {
         // Method initialisation
         String strSelect =
@@ -585,7 +709,7 @@ public class App
         // While dealing with the result set, catch any SQLException that can be thrown
         try
         {
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             while (rset.next()) {
                 City cty = new City(
                         rset.getString("city_name"),
@@ -614,7 +738,7 @@ public class App
      *      in a continent ordered by largest population to smallest.
      * @return An array of cities, each city has a name population and continent attribute (ArrayList<City>)
      */
-    public ArrayList<City> getAllCitiesInAContinent()
+    public List<City> getAllCitiesInAContinent()
     {
         // Method initialisation
         String strSelect =
@@ -634,7 +758,7 @@ public class App
      *      in a region ordered by largest population to smallest.
      * @return An array of cities, each city has a name population and region attribute (ArrayList<City>)
      */
-    public ArrayList<City> getAllCitiesInARegion()
+    public List<City> getAllCitiesInARegion()
     {
         // Method initialisation
         String strSelect =
@@ -654,7 +778,7 @@ public class App
      *      in the world ordered by largest population to smallest.
      * @return An array of cities, each city has a name and population attribute (ArrayList<City>)
      */
-    public ArrayList<City> getAllCitiesInTheWorld()
+    public List<City> getAllCitiesInTheWorld()
     {
         // Method initialisation
         String strSelect =
@@ -670,7 +794,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City cty = new City(
@@ -703,7 +827,7 @@ public class App
      * @return An array of countries, each country has a country code, name, continent, region, population
      *      and capital city attribute (ArrayList<Country>)
      */
-    public ArrayList<Country> getCountryReports()
+    public List<Country> getCountryReports()
     {
         // Method initialisation
         String strSelect =
@@ -719,7 +843,7 @@ public class App
         try
         {
             // Extract country information from query results.
-            ArrayList<Country> countries = new ArrayList<Country>();
+            ArrayList<Country> countries = new ArrayList<>();
             // Create a new country object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
@@ -755,7 +879,7 @@ public class App
      * Added by Eoin K:14/03/21
      * @return An array of countries, each city has a name, country, district and population (ArrayList<City>)
      */
-    public ArrayList<City> getCityReports()
+    public List<City> getCityReports()
     {
         // Method initialisation
         String strSelect =
@@ -770,7 +894,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City city = new City(
@@ -801,7 +925,7 @@ public class App
      * Added by Eoin K:14/03/21
      * @return An hashmap containing one item, key: "world" value: <Long world population from database>
      */
-    public HashMap<String, Number> getWorldPopulation()
+    public Map<String, Number> getWorldPopulation()
     {
         // Method initialisation
         String strSelect =
@@ -815,7 +939,7 @@ public class App
         try
         {
             // Extract world information from query results.
-            HashMap<String, Number> worldPopulation = new HashMap<String, Number>();
+            HashMap<String, Number> worldPopulation = new HashMap<>();
             if (rset.next()) {
                 worldPopulation.put("World", rset.getLong("world_population"));
             }
@@ -837,7 +961,7 @@ public class App
      * Added by Eoin K:14/03/21
      * @return An hashmap containing one item, key: "world" value: <Long world population from database>
      */
-    public HashMap<String, Number> getContinentPopulation()
+    public Map<String, Number> getContinentPopulation()
     {
         // Method initialisation
         String strSelect =
@@ -851,7 +975,7 @@ public class App
         try
         {
             // Extract continent information from query results.
-            HashMap<String, Number> continentPopulation = new HashMap<String, Number>();
+            HashMap<String, Number> continentPopulation = new HashMap<>();
             // Check the size of the continent_population value, and treat the value as a Long or Int accordingly
             while (rset.next()) {
                 Number value;
@@ -883,7 +1007,7 @@ public class App
      * @return An array of cities, each city has a name population and region attribute (ArrayList<City>)
      */
 
-    public ArrayList<City> getTopNPopulatedCitiesinaRegion(int n)
+    public List<City> getTopNPopulatedCitiesinaRegion(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -911,7 +1035,7 @@ public class App
      * @param n the given number of N populated cities to generate
      * @return An array of cities, each city has a name population and country attribute (ArrayList<City>)
      */
-    public ArrayList<City> getTopNPopulatedCitiesinaCountry(int n)
+    public List<City> getTopNPopulatedCitiesinaCountry(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -933,7 +1057,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City cty = new City(
@@ -965,7 +1089,7 @@ public class App
      * Added by Jackson A:22/03/21
      * @return An hashmap containing one item, key: "world" value: <Long world population from database>
      */
-    public HashMap<String, Number> getRegionPopulation()
+    public Map<String, Number> getRegionPopulation()
     {
         // method initialisation
         String strSelect =
@@ -979,7 +1103,7 @@ public class App
         try
         {
             // Extract region information from query results.
-            HashMap<String, Number> regionPopulation = new HashMap<String, Number>();
+            HashMap<String, Number> regionPopulation = new HashMap<>();
             // Check the size of the region_population value, and treat the value as a Long or Int accordingly
             while (rset.next()) {
                 Number value;
@@ -1007,7 +1131,7 @@ public class App
      * Added by Joe B: 22/03/21
      * @return An array of capital cities, each capital city has a country, city name and population
      */
-    public ArrayList<City> getTopNCapitalCitiesintheWorld(int n)
+    public List<City> getTopNCapitalCitiesintheWorld(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -1029,7 +1153,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
@@ -1062,7 +1186,7 @@ public class App
      * Added by Jackson A: 22/03/21
      * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
      */
-    public ArrayList<String> getPopulatedAndUnpopulatedCities() {
+    public List<String> getPopulatedAndUnpopulatedCities() {
         // method initialisation
         String strSelect =
                 "SELECT country.Code AS 'country_code', country.Name AS 'country_name', country.Population AS 'population', in_cities.population_in_cities, (country.Population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM country "
@@ -1076,7 +1200,7 @@ public class App
 
         // While dealing with the result set, catch any SQLException that can be thrown
         try {
-            ArrayList<String> info = new ArrayList<String>();
+            ArrayList<String> info = new ArrayList<>();
             // Display
             while (rset.next()) {
                 // Generate string
@@ -1085,8 +1209,8 @@ public class App
             }
             // Return the results of the method.
             return info;
-        // If an error occurs while handling the result set then don't crash the application,
-        // instead return null and print an error message
+            // If an error occurs while handling the result set then don't crash the application,
+            // instead return null and print an error message
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(errorMessage);
@@ -1100,7 +1224,7 @@ public class App
      * Added by Jackson A: 23/03/21
      * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
      */
-    public ArrayList<String> getPopulatedAndUnpopulatedCitiesForContinent() {
+    public List<String> getPopulatedAndUnpopulatedCitiesForContinent() {
         // method initialisation
         String strSelect =
                 "SELECT in_continents.continent AS 'continent_name', in_continents.continent_population, in_cities.population_in_cities, (in_continents.continent_population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM (SELECT Continent AS 'continent' , SUM(Population) AS 'continent_population' FROM country GROUP BY Continent) in_continents "
@@ -1114,7 +1238,7 @@ public class App
 
         // While dealing with the result set, catch any SQLException that can be thrown
         try {
-            ArrayList<String> ContinentInfo = new ArrayList<String>();
+            ArrayList<String> ContinentInfo = new ArrayList<>();
             // Display
             while (rset.next()) {
                 // Generate string
@@ -1123,8 +1247,8 @@ public class App
             }
             // Return the results of the method.
             return ContinentInfo;
-        // If an error occurs while handling the result set then don't crash the application,
-        // instead return null and print an error message
+            // If an error occurs while handling the result set then don't crash the application,
+            // instead return null and print an error message
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(errorMessage);
@@ -1136,12 +1260,12 @@ public class App
     /* displayBasicStringArray takes a list of strings and outputs them.
      * Added by Jackson A:22/03/21
      */
-    public void displayBasicStringArray(ArrayList<City> populations)
+    public void displayBasicStringArray(List<City> populations)
     {
-        populations.forEach(singleString -> System.out.println(singleString));
+        populations.forEach(System.out::println);
     }
 
-    public ArrayList<City> getTopNCapitalCitiesinaRegion(int n)
+    public List<City> getTopNCapitalCitiesinaRegion(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -1163,7 +1287,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
@@ -1195,7 +1319,7 @@ public class App
      * Added by Robbie M: 22/03/21
      * @return An array of strings, each string stores data of that which cannot be stored in any object such as specific data passed from the database.
      */
-    public ArrayList<City> getTopNCapitalCitiesinAContinent(int n)
+    public List<City> getTopNCapitalCitiesinAContinent(int n)
     {
         // Handle invalid input
         if (n < 0) return null;
@@ -1217,7 +1341,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
@@ -1244,7 +1368,7 @@ public class App
         }
     }
 
-    public ArrayList<String> getPopulatedAndUnpopulatedCitiesForRegion() {
+    public List<String> getPopulatedAndUnpopulatedCitiesForRegion() {
         // method initialisation
         String strSelect =
                 "SELECT in_regions.region AS 'region_name', in_regions.region_population, in_cities.population_in_cities, (in_regions.region_population - in_cities.population_in_cities) AS 'population_not_in_cities' FROM (SELECT Region AS 'region' , SUM(Population) AS 'region_population' \n" +
@@ -1259,7 +1383,7 @@ public class App
 
         // While dealing with the result set, catch any SQLException that can be thrown
         try {
-            ArrayList<String> ContinentInfo = new ArrayList<String>();
+            ArrayList<String> ContinentInfo = new ArrayList<>();
             // Display
             while (rset.next()) {
                 // Generate string
@@ -1275,7 +1399,7 @@ public class App
         }
     }
 
-    public ArrayList<City> getAllCapitalCitiesInTheWorld()
+    public List<City> getAllCapitalCitiesInTheWorld()
     {
         // method initialisation
         String strSelect =
@@ -1292,7 +1416,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
@@ -1318,7 +1442,7 @@ public class App
         }
     }
 
-    public ArrayList<City> getAllCapitalCitiesInAContinent()
+    public List<City> getAllCapitalCitiesInAContinent()
     {
         // method initialisation
         String strSelect =
@@ -1335,7 +1459,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
@@ -1361,7 +1485,7 @@ public class App
         }
     }
 
-    public ArrayList<City> getAllCapitalCitiesInARegion()
+    public List<City> getAllCapitalCitiesInARegion()
     {
         // method initialisation
         String strSelect =
@@ -1378,7 +1502,7 @@ public class App
         try
         {
             // Extract city information from query results.
-            ArrayList<City> cities = new ArrayList<City>();
+            ArrayList<City> cities = new ArrayList<>();
             // Create a new city object for each record in the result set and add the object to the array
             while (rset.next()) {
                 City capital_city = new City(
@@ -1456,6 +1580,7 @@ public class App
         }
     }
 
+
     /**
      * populationOfACity generates all the cities and collates them into an ArrayList<City>
      * Added by Joe B: 20/04/2021
@@ -1466,8 +1591,8 @@ public class App
         // Method initialisation
         String strSelect =
                 "SELECT Name, Population "
-                + "FROM city "
-                + "ORDER BY Name ASC ";
+                        + "FROM city "
+                        + "ORDER BY Name ASC ";
         String errorMessage = "Failed to get populations of cities";
 
         // Execute query on the connected database, and if something goes wrong print the given error message
@@ -1502,6 +1627,8 @@ public class App
             return null;
         }
     }
+
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -1509,16 +1636,16 @@ public class App
      * Updated by Eoin K:14/03/21
      * @param countries An array of countries, each country should be identical in attribute format.
      */
-    public void displayFormattedCountries(ArrayList<Country> countries)
+    public void displayFormattedCountries(List<Country> countries)
     {
         // Handle empty input arrays
-        if (countries.size() == 0) return;
+        if (countries.isEmpty()) return;
 
         // Use the first country in the ArrayList to generate the headers
         // This method presumes that all countries in the ArrayList are identical in format.
         Country firstCountry = countries.get(0);
         String format = "";
-        ArrayList<String> arguments = new ArrayList<String>();
+        ArrayList<String> arguments = new ArrayList<>();
 
         // If countries ArrayList contains country codes then display a Country Code heading.
         if (firstCountry.country_code != null) {
@@ -1552,7 +1679,7 @@ public class App
         }
 
         // Handle empty objects
-        if (format == "") return;
+        if ("".equals(format)) return;
 
         // Print the headers
         System.out.println(String.format(format, arguments.toArray()));
@@ -1569,16 +1696,16 @@ public class App
      * Modified by Joe B: 01/03/21
      * @param countries An array of cities, each city should be identical in attribute format.
      */
-    public void displayFormattedCities(ArrayList<City> cities)
+    public void displayFormattedCities(List<City> cities)
     {
         // Handle empty input arrays
-        if (cities.size() == 0) return;
+        if (cities.isEmpty()) return;
 
         // Use the first city in the ArrayList to generate the headers
         // This method presumes that all cities in the ArrayList are identical in format.
         City firstCity = cities.get(0);
         String format = "";
-        ArrayList<String> arguments = new ArrayList<String>();
+        ArrayList<String> arguments = new ArrayList<>();
 
         // If cities ArrayList contains city names then display a Name heading.
         if (firstCity.name != null) {
@@ -1612,7 +1739,7 @@ public class App
         }
 
         // Handle empty objects
-        if (format == "") return;
+        if ("".equals(format)) return;
 
         // Print the headers
         System.out.println(String.format(format, arguments.toArray()));
@@ -1628,14 +1755,14 @@ public class App
      * Added by Eoin K: 14/03/21
      * @param locations An HashMap of locations, each location should have a name and a population.
      */
-    public void displayFormattedPopulations(HashMap<String, Number> locations)
+    public void displayFormattedPopulations(Map<String, Number> locations)
     {
-        if(locations.size() == 0) {
+        if(locations.isEmpty()) {
             return;
         }
 
         String format = "";
-        ArrayList<String> arguments = new ArrayList<String>();
+        ArrayList<String> arguments = new ArrayList<>();
 
         // I
         format = format.concat("%-44s ");
@@ -1650,7 +1777,7 @@ public class App
         // Print the values
         for (String i : locations.keySet()) {
             String locationFormat = "";
-            ArrayList<String> locationArguments = new ArrayList<String>();
+            ArrayList<String> locationArguments = new ArrayList<>();
 
             // The largest place value length is 44 from the largest country name
             locationFormat = locationFormat.concat("%-44s ");
@@ -1724,7 +1851,7 @@ public class App
         // # 5 - Added by Jackson A 23/02/2021
         // Refactored by Jackson A 02/03/2021
         // Generate population information of Countries In the World ordered by population.
-        ArrayList<Country> countries5 = a.getCountryLargestToSmallest();
+        List<Country> countries5 = a.getCountryLargestToSmallest();
         // Display amount of population information of Countries In the World ordered by population
         // Full Information can be displayed by uncommenting the line below
         //a.displayFormattedCountries(countries5);
@@ -1732,7 +1859,7 @@ public class App
 
         // # 9
         // Generate population information of Countries In A Region Ordered By Population
-        ArrayList<Country> countries9 = a.getCountriesInARegionByPopulation();
+        List<Country> countries9 = a.getCountriesInARegionByPopulation();
         // Display amount of population information of Countries In A Region Ordered By Population
         // Full Information can be displayed by uncommenting the line below
         // a.displayFormattedCountries(countries9);
@@ -1741,7 +1868,7 @@ public class App
         // # 15
         // Generate population information of the Top N Populated Countries,
         //      in a Continent where N is Provided by the User.
-        ArrayList<Country> countries15 = a.getTopNPopulatedCountriesInAContinent(3);
+        List<Country> countries15 = a.getTopNPopulatedCountriesInAContinent(3);
         // Display amount of population information of the Top N Populated Countries,
         //      in a Continent where N is Provided by the User.
         // Full Information can be displayed by uncommenting the line below
@@ -1751,7 +1878,7 @@ public class App
         // # 19
         // Generate population information of the Top N Populated Countries,
         //      in a Region where N is Provided by the User.
-        ArrayList<Country> countries19 = a.getTopNPopulatedCountriesInARegion(2);
+        List<Country> countries19 = a.getTopNPopulatedCountriesInARegion(2);
         // Display amount of population information of the Top N Populated Countries,
         //      in a Region where N is Provided by the User.
         // Full Information can be displayed by uncommenting the line below
@@ -1761,7 +1888,7 @@ public class App
         // # 26 - Added by Joe B 27/02/2021
         // Generate population information of the Top N Populated Cities,
         //      in the World where N is Provided by the User.
-        ArrayList<City> cities26 = a.getTopNPopulatedCitiesintheWorld(6);
+        List<City> cities26 = a.getTopNPopulatedCitiesintheWorld(6);
         // Display amount of population information of the Top N Populated Cities,
         //      in the World where N is Provided by the User.
         // Full information can be displayed by uncommenting the line below
@@ -1771,7 +1898,7 @@ public class App
         // # 12 - Added by Jackson A 01/03/2021
         // Generate population information of the Top N Populated Countries,
         //      in the World where N is Provided by the User.
-        ArrayList<Country> countries12 = a.getTopNPopulatedCountriesInTheWorld(5);
+        List<Country> countries12 = a.getTopNPopulatedCountriesInTheWorld(5);
         // Display amount of population information of the Top N Populated Countries,
         //      in the World where N is Provided by the User.
         // Full information can be displayed by uncommenting the line below
@@ -1780,7 +1907,7 @@ public class App
 
         // # 7 - Added by Jackson A 01/03/21
         // Generate population information of Countries In A Continent Ordered By Population
-        ArrayList<Country> countries7 = a.getCountriesInAContinentByPopulation();
+        List<Country> countries7 = a.getCountriesInAContinentByPopulation();
         // Display amount of population information of Countries In A Continent Ordered By Population
         // Full Information can be displayed by uncommenting the line below
         //a.displayFormattedCountries(countries7);
@@ -1789,7 +1916,7 @@ public class App
         // # 25 - Added by Joe B 01/03/21
         // Generate population information of the Top N Populated Cities,
         //      in a Continent where N is Provided by the User.
-        ArrayList<City> cities25 = a.getTopNPopulatedCitiesinaContinent(5);
+        List<City> cities25 = a.getTopNPopulatedCitiesinaContinent(5);
         // Display amount of population information of the Top N Populated Cities,
         //      in a Continent where N is Provided by the User.
         // Full information can be displayed by uncommenting the line below
@@ -1799,7 +1926,7 @@ public class App
         // #27 - Added by Joe B: 01/03/21
         // Generate population information of all the cities,
         //      in a District from largest to smallest population.
-        ArrayList<City> cities27 = a.getAllCitiesinADistrictLargetoSmall();
+        List<City> cities27 = a.getAllCitiesinADistrictLargetoSmall();
         // Display amount of population information of all the cities,
         //      in a District from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
@@ -1809,17 +1936,17 @@ public class App
         // #29 - Added by Robbie M: 01/03/21
         // Generating population information of all the cities,
         //  in a Country from largest to smallest population.
-        ArrayList<City> cities29 = a.getAllCitiesInACountry();
+        List<City> cities29 = a.getAllCitiesInACountry();
         // Display amount of population information of all the cities,
         // in a Country from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities29);
-         System.out.println(cities29.size()); //should be 4079
+        System.out.println(cities29.size()); //should be 4079
 
         // #24 - Added by Robbie M: 01/03/21
         // Generating population information of all the cities,
         //  in a Continent from largest to smallest population.
-        ArrayList<City> cities24 = a.getAllCitiesInAContinent();
+        List<City> cities24 = a.getAllCitiesInAContinent();
         // Display amount of population information of all the cities,
         // in a Continent from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
@@ -1829,7 +1956,7 @@ public class App
         // #28 - Added by Robbie M: 01/03/21
         // Generating population information of all the cities,
         //  in a region from largest to smallest population.
-        ArrayList<City> cities28 = a.getAllCitiesInARegion();
+        List<City> cities28 = a.getAllCitiesInARegion();
         // Display amount of population information of all the cities,
         // in a region from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
@@ -1839,7 +1966,7 @@ public class App
         // #22 - Added by Robbie M: 01/03/21
         // Generating population information of all the cities,
         //  in the world from largest to smallest population.
-        ArrayList<City> cities22 = a.getAllCitiesInTheWorld();
+        List<City> cities22 = a.getAllCitiesInTheWorld();
         // Display amount of population information of all the cities,
         // in the world from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
@@ -1848,7 +1975,7 @@ public class App
 
         // # 41 - Added by Eoin K: 14/03/21
         // Generate country report of all the countries in the world
-        ArrayList<Country> countries41 = a.getCountryReports();
+        List<Country> countries41 = a.getCountryReports();
         // Display size of country report generated.
         // Full Information can be displayed by uncommenting the line below
         // a.displayFormattedCountries(countries41);
@@ -1856,7 +1983,7 @@ public class App
 
         // # 42 - Added by Eoin K: 14/03/21
         // Generate city report of all the cities in the world
-        ArrayList<City> countries42 = a.getCityReports();
+        List<City> countries42 = a.getCityReports();
         // Display size of city report generated.
         // Full Information can be displayed by uncommenting the line below
         // a.displayFormattedCities(countries42);
@@ -1864,7 +1991,7 @@ public class App
 
         // # 32 - Added by Eoin K: 14/03/21
         // Generate the world population
-        HashMap<String, Number> locations32 = a.getWorldPopulation();
+        Map<String, Number> locations32 = a.getWorldPopulation();
         // Display the raw value world population.
         // Formatted Information can be displayed by uncommenting the line below
         // a.displayFormattedPopulations(locations32);
@@ -1872,7 +1999,7 @@ public class App
 
         // # 35 - Added by Eoin K: 14/03/21
         // Generate the continents population
-        HashMap<String, Number> locations35 = a.getContinentPopulation();
+        Map<String, Number> locations35 = a.getContinentPopulation();
         // Display the size of continents population information.
         // Formatted Information can be displayed by uncommenting the line below
         // a.displayFormattedPopulations(locations35);
@@ -1881,7 +2008,7 @@ public class App
         // # 23 - Added by Joe B: 20/03/21
         // Generate population information of all the cities,
         //      in a Region from largest to smallest population.
-        ArrayList<City> cities23 = a.getTopNPopulatedCitiesinaRegion(3);
+        List<City> cities23 = a.getTopNPopulatedCitiesinaRegion(3);
         // Display amount of population information of all the cities,
         //      in a Region from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
@@ -1891,7 +2018,7 @@ public class App
         // # 21 - Added by Joe B: 21/03/21
         // Generate population information of all the cities,
         //      in a Country from largest to smallest population.
-        ArrayList<City> cities21 = a.getTopNPopulatedCitiesinaCountry(3);
+        List<City> cities21 = a.getTopNPopulatedCitiesinaCountry(3);
         // Display amount of population information of all the cities,
         //      in a Country from largest to smallest population.
         // Full information can be displayed by uncommenting the line below
@@ -1900,7 +2027,7 @@ public class App
 
         // # 37 - Added by Jackson A: 22/03/21
         // Generate the regions population
-        HashMap<String, Number> regions37 = a.getRegionPopulation();
+        Map<String, Number> regions37 = a.getRegionPopulation();
         // Display the size of regions population information.
         // Formatted Information can be displayed by uncommenting the line below
         // a.displayFormattedPopulations(regions37);
@@ -1908,16 +2035,16 @@ public class App
 
         // # 6 - Added by Jackson A: 22/03/21
         // Generate the population of people living in and out of cities.
-        ArrayList<String> cities6 = a.getPopulatedAndUnpopulatedCities();
+        List<String> cities6 = a.getPopulatedAndUnpopulatedCities();
         // Display the size of regions population information.
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayBasicStringArray(cities6);
         System.out.println(cities6.size()); // Should be 232
 
-       // # 14 - Added by Joe B 22/03/2021
+        // # 14 - Added by Joe B 22/03/2021
         // Generate population information of the Top N Populated Capital Cities,
         //      in the World where N is Provided by the User.
-        ArrayList<City> cities14 = a.getTopNCapitalCitiesintheWorld(5);
+        List<City> cities14 = a.getTopNCapitalCitiesintheWorld(5);
         // Display amount of population information of the Top N Populated Capital Cities,
         //      in the World where N is Provided by the User.
         // Full information can be displayed by uncommenting the line below
@@ -1927,7 +2054,7 @@ public class App
         // # 11 - Added by Joe B 22/03/2021
         // Generate population information of the Top N Populated Capital Cities,
         //      in the a Region where N is Provided by the User.
-        ArrayList<City> cities11 = a.getTopNCapitalCitiesinaRegion(3);
+        List<City> cities11 = a.getTopNCapitalCitiesinaRegion(3);
         // Display amount of population information of the Top N Populated Capital Cities,
         //      in a Region where N is Provided by the User.
         // Full information can be displayed by uncommenting the line below
@@ -1937,7 +2064,7 @@ public class App
         // # 13 - Added by Robbie M 22/03/2021
         // Generate population information of the Top N Populated Capital Cities,
         //      in the a Continent where N is Provided by the User.
-        ArrayList<City> cities13 = a.getTopNCapitalCitiesinAContinent(3);
+        List<City> cities13 = a.getTopNCapitalCitiesinAContinent(3);
         // Display amount of population information of the Top N Populated Capital Cities,
         //      in the a Continent where N is Provided by the User.
         // Full information can be displayed by uncommenting the line below
@@ -1946,7 +2073,7 @@ public class App
 
         // # 10 - Added by Jackson A: 23/03/21
         // Generate the population of people living in and out of cities for each Continent..
-        ArrayList<String> cities10 = a.getPopulatedAndUnpopulatedCitiesForContinent();
+        List<String> cities10 = a.getPopulatedAndUnpopulatedCitiesForContinent();
         // Display the city info.
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayBasicStringArray(cities10);
@@ -1954,7 +2081,7 @@ public class App
 
         // # 8 - Added by Robbie M: 23/03/21
         // Generate the population of people living in and out of cities for each Region..
-        ArrayList<String> cities8 = a.getPopulatedAndUnpopulatedCitiesForRegion();
+        List<String> cities8 = a.getPopulatedAndUnpopulatedCitiesForRegion();
         // Display the city info.
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayBasicStringArray(cities8);
@@ -1962,7 +2089,7 @@ public class App
 
         // # 18 - Added by Robbie M: 23/03/21
         // Generate All the capital cities in the world organised by largest population to smallest.
-        ArrayList<City> cities18 = a.getAllCapitalCitiesInTheWorld();
+        List<City> cities18 = a.getAllCapitalCitiesInTheWorld();
         // Display the city info.
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities18);
@@ -1970,7 +2097,7 @@ public class App
 
         // # 17 - Added by Robbie M: 23/03/21
         // Generate All the capital cities in a Continent organised by largest population to smallest.
-        ArrayList<City> cities17 = a.getAllCapitalCitiesInAContinent();
+        List<City> cities17 = a.getAllCapitalCitiesInAContinent();
         // Display the city info.
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities17);
@@ -1978,7 +2105,7 @@ public class App
 
         // # 16 - Added by Robbie M: 23/03/21
         // Generate All the capital cities in a Region organised by largest population to smallest.
-        ArrayList<City> cities16 = a.getAllCapitalCitiesInARegion();
+        List<City> cities16 = a.getAllCapitalCitiesInARegion();
         // Display the city info.
         // Formatted Information can be displayed by uncommenting the line below
         //a.displayFormattedCities(cities16);
@@ -2004,4 +2131,3 @@ public class App
         a.disconnect();
     }
 }
-

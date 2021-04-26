@@ -1139,4 +1139,45 @@ public class AppIntegrationTest {
             assertEquals(numOfHeaders,currentRecord.length);
         }
     }
+
+    /**
+     * #40 Integration Test for populationOfACity() method in App.java
+     * Added by Joe B: 25/04/21
+     */
+    @Test
+    void populationOfCity() {
+        List<City> cities = app.populationOfACity();
+
+        assertEquals(4079, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * #40 Integration Test for populationOfACity() method in App.java
+     * Testing to see if the city 'Berlin' is displayed when the method is called.
+     * Added by Joe B: 25/04/21
+     */
+
+    @Test
+    void populationOfCity1() {
+        List<City> cities = app.populationOfACity();
+
+        int numofcityname = 0;
+
+        for (int i = 0; i < cities.size(); i++) {
+
+            City C = cities.get(i);
+
+            if (C.name.equals("Berlin")) {
+                ++numofcityname;
+
+            }
+        }
+        assertEquals(1, numofcityname);
+    }
+
 }
