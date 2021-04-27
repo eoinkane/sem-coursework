@@ -1675,6 +1675,33 @@ public class App
         }
     }
 
+    /**
+     * getTopNPopulatedCitiesInADistrict generates the top N populated cities,
+     *      in a District where N is given.
+     * Added by Joe B: 27/04/21
+     * @param n the given number of N populated cities to generate
+     * @return An array of cities, each city has a name population and district attribute (List<City>)
+     */
+    public List<City> getTopNPopulatedCitiesInADistrict(int n)
+    {
+        // Handle invalid input
+        if (n < 0) return null;
+
+        // Method initialisation
+        String strSelect =
+                "WITH grouped_cities AS (SELECT Name, District, Population, ROW_NUMBER() OVER "
+                        + "(PARTITION BY District ORDER BY Population DESC) row_num FROM city) "
+                        + "SELECT Name, District, Population FROM grouped_cities WHERE row_num <= <N>;";
+        String errorMessage = "Failed to get the top N populated cities in a continent.";
+
+        strSelect = strSelect.replace("<N>", String.valueOf(n));
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        return handleResultSetCityWithNameDistrictAndPopulation(rset, errorMessage);
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -2180,6 +2207,14 @@ public class App
         //a.displayFormattedCountries(countries38);
         System.out.println(countries38.size()); //Should be 239
         // Disconnect from database
+
+        // #20 - Added by Joe B: 27/04/21
+        // Generate All the cities populations in the world organised by alphabetical order.
+        List<City> cities20 = a.getTopNPopulatedCitiesInADistrict(3);
+        //Display all cities populations.
+        //Formatted Information can be displayed by uncommenting the line below.
+        //a.displayFormattedCities(cities20);
+        System.out.println(cities20.size()); //Should be 2261
         a.disconnect();
     }
 }
