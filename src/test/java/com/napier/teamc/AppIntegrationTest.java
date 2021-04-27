@@ -1219,5 +1219,45 @@ public class AppIntegrationTest {
         assertEquals(1, numofcountryname);
     }
 
+    /**
+     * #20 Integration Test for getTopNPopulatedCitiesInADistrict() method in App.java
+     * Added by Joe B: 27/04/21
+     */
+    @Test
+    void cityPopulationDistrict() {
+        List<City> cities = app.getTopNPopulatedCitiesInADistrict(3);
+
+        assertEquals(2261, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * #20 Integration Test for getTopNPopulatedCitiesInADistrict() method in App.java
+     * Testing to see if the city 'Berlin' is displayed when the method is called.
+     * Added by Joe B: 25/04/21
+     */
+
+    @Test
+    void cityPopulationDistrict1() {
+        List<City> cities = app.getTopNPopulatedCitiesInADistrict(1);
+
+        int numofdistrictname = 0;
+
+        for (int i = 0; i < cities.size(); i++) {
+
+            City C = cities.get(i);
+
+            if (C.district.equals("New South Wales")) {
+                ++numofdistrictname;
+
+            }
+        }
+        assertEquals(1, numofdistrictname);
+    }
 
 }
