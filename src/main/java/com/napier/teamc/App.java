@@ -1702,6 +1702,49 @@ public class App
         return handleResultSetCityWithNameDistrictAndPopulation(rset, errorMessage);
     }
 
+    public ArrayList<City> populationOfADistrict()
+    {
+        // Method initialisation
+        String strSelect =
+                "SELECT District, SUM(Population) AS Population "
+                        + "FROM city "
+                        +"GROUP BY District "
+                        +"ORDER BY District ASC ; ";
+        String errorMessage = "Failed to get populations of districts";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
+        try
+        {
+            // Extract city information from query results.
+            ArrayList<City> cities = new ArrayList<City>();
+            // Create a new city object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                City city = new City(
+                        null,
+                        rset.getString("district"),
+                        rset.getInt("population"),
+                        null,
+                        null,
+                        null
+                );
+                cities.add(city);
+            }
+            // Return the results of the method.
+            return cities;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
      * Removes duplication of display methods. This method can handle results from all get methods.
@@ -2215,6 +2258,16 @@ public class App
         //Formatted Information can be displayed by uncommenting the line below.
         //a.displayFormattedCities(cities20);
         System.out.println(cities20.size()); //Should be 2261
+
+
+        // #39 - Added by Robbie M: 26/04/21
+        // Generate All the cities populations in the world organised by alphabetical order.
+        ArrayList<City> cities39 = a.populationOfADistrict();
+        //Display all cities populations.
+        //Formatted Information can be displayed by uncommenting the line below.
+        //a.displayFormattedCities(cities39);
+        System.out.println(cities39.size()); //Should be 1367.
+
         a.disconnect();
     }
 }
