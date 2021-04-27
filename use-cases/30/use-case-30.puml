@@ -1,0 +1,19 @@
+@startuml
+
+actor Member as "Information Analyst in the
+organisation"
+
+rectangle Database
+
+rectangle "Population Information System" {
+    usecase UC30 as "Get the number of people who speak one the selected languages from the greatest
+    number to smallest, including the percentage of the world population."
+
+    usecase UCa as "Output the report with 5 entries."
+
+    Member - UC30
+    UC30 ..> UCa : include
+    UC30 - Database
+}
+
+@enduml

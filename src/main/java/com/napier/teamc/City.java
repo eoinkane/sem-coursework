@@ -2,6 +2,7 @@ package com.napier.teamc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents a City
@@ -10,7 +11,7 @@ import java.util.Arrays;
 
 public class City {
 
-    public static ArrayList<String> fieldLengths = new ArrayList<String>(Arrays.asList(
+    public static List<String> fieldLengths = new ArrayList<String>(Arrays.asList(
             "34", // The largest City Name value length is 34.
             "22", // The largest District value length is 22.
             "8", // The largest Population value length is 8.
