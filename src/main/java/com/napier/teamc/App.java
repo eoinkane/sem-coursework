@@ -1628,6 +1628,52 @@ public class App
         }
     }
 
+    /**
+     * populationOfACountry generates all the country data and collates them into an ArrayList<Country>
+     * Added by Jackson A: 26/04/2021
+     * @return An array of countries
+     */
+    public ArrayList<Country> populationOfACountry()
+    {
+        // Method initialisation
+        String strSelect =
+                "SELECT Name, Population "
+                        + "FROM country "
+                        + "ORDER BY Name ASC ";
+        String errorMessage = "Failed to get populations of countries";
+
+        // Execute query on the connected database, and if something goes wrong print the given error message
+        ResultSet rset = query(strSelect, errorMessage);
+
+        // While dealing with the result set, catch any SQLException that can be thrown
+        try
+        {
+            // Extract country information from query results.
+            ArrayList<Country> countries = new ArrayList<Country>();
+            // Create a new country object for each record in the result set and add the object to the array
+            while (rset.next()) {
+                Country country = new Country(
+                        null,
+                        rset.getString("Name"),
+                        null,
+                        null,
+                        rset.getInt("population"),
+                        null
+                );
+                countries.add(country);
+            }
+            // Return the results of the method.
+            return countries;
+        }
+        // If an error occurs while handling the result set then don't crash the application,
+        // instead return null and print an error message
+        catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
 
     /*
      * displayFormattedCountries outputs country details. It automatically hides uninitialised attributes.
@@ -2127,6 +2173,12 @@ public class App
         // a.displayFormattedCities(cities40);
         System.out.println(cities40.size()); //Should be 4079.
 
+        // #38 - Added by Jackson A: 26/04/21
+        // Generate All the countries populations in the world.
+        ArrayList<Country> countries38 = a.populationOfACountry();
+        //Formatted information can be displayed by uncommenting the line below.
+        //a.displayFormattedCountries(countries38);
+        System.out.println(countries38.size()); //Should be 239
         // Disconnect from database
         a.disconnect();
     }
