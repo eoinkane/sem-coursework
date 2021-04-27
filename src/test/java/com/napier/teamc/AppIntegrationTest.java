@@ -1180,4 +1180,44 @@ public class AppIntegrationTest {
         assertEquals(1, numofcityname);
     }
 
+    /**
+     * #38 Integration Test for populationOfACountry() method in App.java
+     * Added by Jackson A: 27/04/21
+     */
+    @Test
+    void populationOfACountry() {
+        List<Country> countries = app.populationOfACountry();
+
+        assertEquals(239, countries.size());
+
+        countries.forEach(C -> {
+            assertNotNull(C.name);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * #38 Integration Test for populationOfACountry() method in App.java
+     * Testing to see if the country 'United Kingdom' is displayed when the method is called.
+     * Added by Jackson Allan: 27/04/21
+     */
+    @Test
+    void populationOfACountry1() {
+        List<Country> countries = app.populationOfACountry();
+
+        int numofcountryname = 0;
+
+        for (int i = 0; i < countries.size(); i++) {
+
+            Country C = countries.get(i);
+
+            if (C.name.equals("United Kingdom")) {
+                ++numofcountryname;
+
+            }
+        }
+        assertEquals(1, numofcountryname);
+    }
+
+
 }
