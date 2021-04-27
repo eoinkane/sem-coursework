@@ -1260,4 +1260,38 @@ public class AppIntegrationTest {
         assertEquals(1, numofdistrictname);
     }
 
+    void populationOfADistrict() {
+        List<City> cities = app.populationOfADistrict();
+
+        assertEquals(1367, cities.size());
+
+        cities.forEach(C -> {
+            assertNotNull(C.district);
+            assertNotEquals(-1, C.population);
+        });
+    }
+
+    /**
+     * #39 Integration Test for populationOfADistrict() method in App.java
+     * Testing to see if the District 'Acre' is displayed when the method is called.
+     * Added by Robbie MacBride: 27/04/21
+     */
+    @Test
+    void populationOfADistrict1() {
+        List<City> cities = app.populationOfADistrict();
+
+        int numofdistrictname = 0;
+
+        for (int i = 0; i < cities.size(); i++) {
+
+            City C = cities.get(i);
+
+            if (C.district.equals("Acre")) {
+                ++numofdistrictname;
+
+            }
+        }
+        assertEquals(1, numofdistrictname);
+    }
+
 }
