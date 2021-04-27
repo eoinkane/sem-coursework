@@ -1,0 +1,18 @@
+@startuml
+
+actor Member as "Member of the
+organisation"
+
+rectangle Database
+
+rectangle "Population Information System" {
+    usecase UC38 as "Get the population of a country"
+
+    usecase UCa as "Output the report."
+
+    Member - UC38
+    UC38 ..> UCa : include
+    UC38 - Database
+}
+
+@enduml
