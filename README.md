@@ -40,7 +40,7 @@
 | 26    | The population of the world. | Yes | getWorldPopulation | [Screenshot](images/getWorldPopulation.png) | [#32](https://github.com/eoinkane/sem-coursework/issues/32) |
 | 27    | The population of a continent. | Yes | getContinentPopulation | [Screenshot](images/getContinentPopulation.png) | [#35](https://github.com/eoinkane/sem-coursework/issues/35) |
 | 28    | The population of a region. | ? | ? | image | |
-| 29    | The population of a country. | ? | ? | image | |
+| 29    | The population of a country. | Yes | populationOfACountry | [Screenshot](images/populationOfACountry.PNG) | [#38](https://github.com/eoinkane/sem-coursework/issues/38) |
 | 30    | The population of a district. | ? | ? | image | |
 | 31    | The population of a city. | ? | ? | image | |
 | 32    | The number of people who speak the following the following languages from greatest number to smallest, including the percentage of the world population: Chinese, English, Hindi, Spanish, Arabic.| Yes | getLanguagesPopulationReport | [Screenshot](images/getLanguagesPopulationReport.png) | [#30](https://github.com/eoinkane/sem-coursework/issues/30) |
