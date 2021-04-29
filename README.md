@@ -34,7 +34,7 @@
 | 20    | The top N populated capital cities in the world where N is provided by the user. | Yes | getTopNCapitalCitiesintheWorld | [Screenshot](images/getTopNCapitalCitiesintheWorld.PNG) | [#14](https://github.com/eoinkane/sem-coursework/issues/14) |
 | 21    | The top N populated capital cities in a continent where N is provided by the user. | ? | ? | image | |
 | 22    | The top N populated capital cities in a region where N is provided by the user. | ? | ? | image | |
-| 23    | The population of people, people living in cities, and people not living in cities in each continent. | ? | ? | image | |
+| 23    | The population of people, people living in cities, and people not living in cities in each continent. | Yes | getPopulatedAndUnpopulatedCitiesForContinent | [Screenshot](images/getPopulatedAndUnpopulatedCitiesForContinent.PNG) | [#10](https://github.com/eoinkane/sem-coursework/issues/10) |
 | 24    | The population of people, people living in cities, and people not living in cities in each region. | ? | ? | image | |
 | 25    | The population of people, people living in cities, and people not living in cities in each country. | ? | ? | image | |
 | 26    | The population of the world. | Yes | getWorldPopulation | [Screenshot](images/getWorldPopulation.png) | [#32](https://github.com/eoinkane/sem-coursework/issues/32) |
