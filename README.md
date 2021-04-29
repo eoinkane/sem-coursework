@@ -20,7 +20,7 @@
 | 6     | The top N populated countries in a region where N is provided by the user. | Yes | getTopNPopulatedCountriesInARegion | [Screenshot](images/getTopNPopulatedCountriesInARegion.png) | [#19](https://github.com/eoinkane/sem-coursework/issues/19) |
 | 7     | All the cities in the world organised by largest population to smallest. | ? | ? | image | |
 | 8     | All the cities in a continent organised by largest population to smallest. | Yes | getAllCitiesInAContinent | [Screenshot](images/getAllCitiesInAContinent.PNG) |[#24](https://github.com/eoinkane/sem-coursework/issues/24) |
-| 9     | All the cities in a region organised by largest population to smallest. | Yes | getAllCitiesInARegion | Screenshot](images/getAllCitiesInARegion.PNG) |[#28](https://github.com/eoinkane/sem-coursework/issues/28) |
+| 9     | All the cities in a region organised by largest population to smallest. | Yes | getAllCitiesInARegion | [Screenshot](images/getAllCitiesInARegion.PNG) |[#28](https://github.com/eoinkane/sem-coursework/issues/28) |
 | 10    | All the cities in a country organised by largest population to smallest. | Yes | getAllCitiesInACountry | [Screenshot](images/getAllCitiesInACountry.PNG) | [#29](https://github.com/eoinkane/sem-coursework/issues/29) |
 | 11    | All the cities in a district organised by largest population to smallest. | Yes | getAllCitiesinADistrictLargetoSmall | [Screenshot](images/getAllCitiesinADistrictLargetoSmall.PNG)| [#27](https://github.com/eoinkane/sem-coursework/issues/27)
 | 12    | The top N populated cities in the world where N is provided by the user.|  Yes | getTopNPopulatedCitiesintheWorld | [Screenshot](images/getTopNPopulatedCitiesintheWorld.PNG)| [#26](https://github.com/eoinkane/sem-coursework/issues/26) |
