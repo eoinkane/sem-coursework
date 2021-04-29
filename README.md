@@ -15,7 +15,7 @@
 | 1     | All the countries in the world organised by largest population to smallest. | ? | ? |image | |
 | 2     | All the countries in a continent organised by largest population to smallest. | Yes | getCountriesInAContinentByPopulation | [Screenshot](images/getCountriesInAContinentByPopulation.PNG) | [#7](https://github.com/eoinkane/sem-coursework/issues/7) |
 | 3     | All the countries in a region organised by largest population to smallest. | Yes | getCountriesInARegionByPopulation | [Screenshot](images/getCountriesInARegionByPopulation.png) | [#9](https://github.com/eoinkane/sem-coursework/issues/9) |
-| 4     | The top N populated countries in the world where N is provided by the user. | ? | ? | image | |
+| 4     | The top N populated countries in the world where N is provided by the user. | Yes | getTopNPopulatedCountriesInTheWorld(5) | [Screenshot](images/getTopNPopulatedCountriesInTheWorld(5).PNG) | [#12](https://github.com/eoinkane/sem-coursework/issues/12) |
 | 5     | The top N populated countries in a continent where N is provided by the user. | Yes | getTopNPopulatedCountriesInAContinent | [Screenshot](images/getTopNPopulatedCountriesInAContinent.png) | [#15](https://github.com/eoinkane/sem-coursework/issues/15)|
 | 6     | The top N populated countries in a region where N is provided by the user. | Yes | getTopNPopulatedCountriesInARegion | [Screenshot](images/getTopNPopulatedCountriesInARegion.png) | [#19](https://github.com/eoinkane/sem-coursework/issues/19) |
 | 7     | All the cities in the world organised by largest population to smallest. | ? | ? | image | |
