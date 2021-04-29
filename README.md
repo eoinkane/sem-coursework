@@ -42,5 +42,5 @@
 | 28    | The population of a region. | ? | ? | image | |
 | 29    | The population of a country. | Yes | populationOfACountry | [Screenshot](images/populationOfACountry.PNG) | [#38](https://github.com/eoinkane/sem-coursework/issues/38) |
 | 30    | The population of a district. | ? | ? | image | |
-| 31    | The population of a city. | ? | ? | image | |
+| 31    | The population of a city. | Yes | populationOfACity | [Screenshot](images/populationOfACity.PNG) | [#40](https://github.com/eoinkane/sem-coursework/issues/40) |
 | 32    | The number of people who speak the following the following languages from greatest number to smallest, including the percentage of the world population: Chinese, English, Hindi, Spanish, Arabic.| Yes | getLanguagesPopulationReport | [Screenshot](images/getLanguagesPopulationReport.png) | [#30](https://github.com/eoinkane/sem-coursework/issues/30) |
