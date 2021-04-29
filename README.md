@@ -26,7 +26,7 @@
 | 12    | The top N populated cities in the world where N is provided by the user.|  Yes | getTopNPopulatedCitiesintheWorld | [Screenshot](images/getTopNPopulatedCitiesintheWorld.PNG)| [#26](https://github.com/eoinkane/sem-coursework/issues/26) |
 | 13    | The top N populated cities in a continent where N is provided by the user. | Yes | getTopNPopulatedCitiesinaContinent | [Screenshot](images/getTopNPopulatedCitiesinaContinent.PNG) | [#25](https://github.com/eoinkane/sem-coursework/issues/25) |
 | 14    | The top N populated cities in a region where N is provided by the user. | Yes | getTopNPopulatedCitiesinaRegion | [ScreenShot](images/getTopNPopulatedCitiesinaRegion.PNG) | [#23](https://github.com/eoinkane/sem-coursework/issues/23) |
-| 15    | The top N populated cities in a country where N is provided by the user. | ? | ? | image | |
+| 15    | The top N populated cities in a country where N is provided by the user. | Yes | getTopNPopulatedCitiesinaCountry | [Screenshot](images/getTopNPopulatedCitiesinaCountry.PNG) | [#21](https://github.com/eoinkane/sem-coursework/issues/21) |
 | 16    | The top N populated cities in a district where N is provided by the user. | ? | ? | image | |
 | 17    | All the capital cities in the world organised by largest population to smallest. | ? | ? | image | |
 | 18    | All the capital cities in a continent organised by largest population to smallest. | ? | ? | image | |
