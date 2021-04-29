@@ -39,7 +39,7 @@
 | 25    | The population of people, people living in cities, and people not living in cities in each country. | Yes | getPopulatedAndUnpopulatedCities | [Screenshot](images/getPopulatedAndUnpopulatedCities.PNG) | [#6](https://github.com/eoinkane/sem-coursework/issues/6) |
 | 26    | The population of the world. | Yes | getWorldPopulation | [Screenshot](images/getWorldPopulation.png) | [#32](https://github.com/eoinkane/sem-coursework/issues/32) |
 | 27    | The population of a continent. | Yes | getContinentPopulation | [Screenshot](images/getContinentPopulation.png) | [#35](https://github.com/eoinkane/sem-coursework/issues/35) |
-| 28    | The population of a region. | ? | ? | image | |
+| 28    | The population of a region. | Yes | getRegionPopulation | [Screenshot](images/getRegionPopulation.PNG) | [#37](https://github.com/eoinkane/sem-coursework/issues/37) |
 | 29    | The population of a country. | Yes | populationOfACountry | [Screenshot](images/populationOfACountry.PNG) | [#38](https://github.com/eoinkane/sem-coursework/issues/38) |
 | 30    | The population of a district. | ? | ? | image | |
 | 31    | The population of a city. | Yes | populationOfACity | [Screenshot](images/populationOfACity.PNG) | [#40](https://github.com/eoinkane/sem-coursework/issues/40) |
